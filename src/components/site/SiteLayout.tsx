@@ -33,19 +33,20 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           className="pointer-events-none fixed inset-0 -z-20 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: `url("${bgImage}")`,
-            filter: "blur(28px) saturate(115%)",
+            filter: "blur(18px) saturate(120%)",
             transform: "scale(1.15)",
-            opacity: 0.75,
+            opacity: 1,
           }}
         />
       )}
       {/* Decorative overlay — kept lighter so the photo dominates */}
       <div
         aria-hidden
-        className="bg-hero-pattern pointer-events-none fixed inset-0 -z-10 opacity-30 mix-blend-multiply"
+        className="bg-hero-pattern pointer-events-none fixed inset-0 -z-10 opacity-15 mix-blend-overlay"
       />
       {/* Subtle darkening for legibility */}
-      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 bg-background/45" />
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 bg-background/25" />
+
 
       <header className="sticky top-0 z-40 border-b border-border/40 bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
