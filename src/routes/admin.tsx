@@ -178,8 +178,8 @@ function SectionEditor({ page, sectionKey, label, fields }: { page: string; sect
 
   const save = useMutation({
     mutationFn: async () => {
-      const payload = { page, section_key: sectionKey, content: form };
-      const { error } = await supabase.from("page_sections").upsert(payload, { onConflict: "page,section_key" });
+      const payload = { page, section_key: sectionKey, content: form as never };
+      const { error } = await supabase.from("page_sections").upsert(payload as never, { onConflict: "page,section_key" });
       if (error) throw error;
     },
     onSuccess: () => {
