@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useSection, useCollection, type ContentItem } from "@/lib/cms";
+import { SmartImage } from "@/components/site/SmartImage";
 
 type Header = { title: string; body: string };
 
@@ -20,8 +21,15 @@ function makePage(collection: string, page: string) {
             {items?.map((it: ContentItem) => (
               <article key={it.id} className="overflow-hidden rounded-xl border border-border/60 bg-card/60 backdrop-blur">
                 {it.image_url && (
-                  <div className="aspect-[16/10] overflow-hidden">
-                    <img src={it.image_url} alt={it.title} loading="lazy" className="h-full w-full object-cover" />
+                  <div className="flex min-h-[14rem] items-center justify-center overflow-hidden bg-background/60 p-2">
+                    <SmartImage
+                      src={it.image_url}
+                      alt={it.title}
+                      loading="lazy"
+                      fallbackLabel={it.title}
+                      className="max-h-[28rem] w-auto max-w-full object-contain"
+                      wrapperClassName="flex items-center justify-center"
+                    />
                   </div>
                 )}
                 <div className="p-6">

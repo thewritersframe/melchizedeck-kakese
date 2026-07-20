@@ -65,19 +65,116 @@ export function useIsAdmin() {
   });
 }
 
-export async function uploadMedia(file: File): Promise<string> {
-  const ext = file.name.split(".").pop() || "jpg";
-  const path = `${crypto.randomUUID()}.${ext}`;
-  const { error } = await supabase.storage.from("media").upload(path, file, {
-    cacheControl: "31536000",
-    upsert: false,
-    contentType: file.type,
+export const ALLOWED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "image/avif",
+  "image/svg+xml",
+];
+export const MAX_IMAGE_BYTES = 10 * 1024 * 1024; // 10MB
+
+export type UploadOptions = {
+  onProgress?: (percent: number) => void;
+  signal?: AbortSignal;
+  maxRetries?: number;
+};
+
+function sleep(ms: number) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+async function uploadOnce(
+  path: string,
+  file: File,
+  token: string,
+  onProgress?: (p: number) => void,
+  signal?: AbortSignal,
+): Promise<void> {
+  const url = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/media/${path}`;
+  const apikey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
+  await new Promise<void>((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", url);
+    xhr.setRequestHeader("apikey", apikey);
+    xhr.setRequestHeader("Authorization", `Bearer ${token}`);
+    xhr.setRequestHeader("x-upsert", "false");
+    xhr.setRequestHeader("cache-control", "31536000");
+    if (file.type) xhr.setRequestHeader("content-type", file.type);
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable && onProgress) onProgress(Math.round((e.loaded / e.total) * 100));
+    };
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) resolve();
+      else reject(new Error(`Upload failed (${xhr.status}): ${xhr.responseText || xhr.statusText}`));
+    };
+    xhr.onerror = () => reject(new Error("Network error during upload"));
+    xhr.onabort = () => reject(new Error("Upload aborted"));
+    if (signal) {
+      if (signal.aborted) { xhr.abort(); return; }
+      signal.addEventListener("abort", () => xhr.abort());
+    }
+    xhr.send(file);
   });
-  if (error) throw error;
-  // Long-lived signed URL (100 years) — bucket is private but URL is shareable
-  const { data, error: signErr } = await supabase.storage
-    .from("media")
-    .createSignedUrl(path, 60 * 60 * 24 * 365 * 50);
-  if (signErr) throw signErr;
-  return data.signedUrl;
+}
+
+export async function uploadMedia(file: File, opts: UploadOptions = {}): Promise<string> {
+  // Validation
+  if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+    throw new Error(`Unsupported file type "${file.type || "unknown"}". Use JPG, PNG, WEBP, GIF, AVIF, or SVG.`);
+  }
+  if (file.size > MAX_IMAGE_BYTES) {
+    const mb = (file.size / (1024 * 1024)).toFixed(1);
+    throw new Error(`File is ${mb}MB — max is 10MB.`);
+  }
+  if (file.size === 0) throw new Error("File is empty.");
+
+  const { data: sess } = await supabase.auth.getSession();
+  const token = sess.session?.access_token;
+  if (!token) throw new Error("You need to be signed in to upload.");
+
+  const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+  const path = `${crypto.randomUUID()}.${ext}`;
+  const maxRetries = opts.maxRetries ?? 3;
+
+  let lastErr: unknown;
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      opts.onProgress?.(0);
+      await uploadOnce(path, file, token, opts.onProgress, opts.signal);
+      opts.onProgress?.(100);
+      lastErr = undefined;
+      break;
+    } catch (err) {
+      lastErr = err;
+      if (opts.signal?.aborted) throw err;
+      if (attempt < maxRetries) await sleep(500 * attempt);
+    }
+  }
+  if (lastErr) throw lastErr;
+
+  // Signed URL with retries
+  let signed: string | undefined;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const { data, error } = await supabase.storage
+      .from("media")
+      .createSignedUrl(path, 60 * 60 * 24 * 365 * 50);
+    if (!error && data?.signedUrl) { signed = data.signedUrl; break; }
+    if (attempt < 3) await sleep(400 * attempt);
+  }
+  if (!signed) throw new Error("Uploaded, but failed to generate a URL. Try again.");
+
+  // Preload to warm CDN cache so it appears instantly
+  try {
+    await new Promise<void>((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve();
+      img.onerror = () => resolve();
+      img.src = signed as string;
+      setTimeout(() => resolve(), 4000);
+    });
+  } catch { /* ignore */ }
+
+  return signed;
 }

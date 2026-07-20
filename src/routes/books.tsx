@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useSection, useCollection } from "@/lib/cms";
+import { SmartImage } from "@/components/site/SmartImage";
+
 
 export const Route = createFileRoute("/books")({
   head: () => ({ meta: [{ title: "Books — Melchizedeck Kakese" }, { name: "description", content: "Books by Melchizedeck Kakese." }] }),
@@ -21,12 +23,15 @@ function Books() {
         <div className="mt-14 grid gap-10 md:grid-cols-2 lg:grid-cols-3">
           {items?.map((b) => (
             <article key={b.id} className="group rounded-xl border border-border/60 bg-card/60 p-5 backdrop-blur">
-              <div className="aspect-[3/4] w-full overflow-hidden rounded-md border border-border/60 bg-background">
-                {b.image_url ? (
-                  <img src={b.image_url} alt={b.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                ) : (
-                  <div className="flex h-full items-center justify-center p-4 text-center font-serif text-xl text-gold/60">{b.title}</div>
-                )}
+              <div className="flex min-h-[16rem] w-full items-center justify-center overflow-hidden rounded-md border border-border/60 bg-background p-2">
+                <SmartImage
+                  src={b.image_url}
+                  alt={b.title}
+                  loading="lazy"
+                  fallbackLabel={b.title}
+                  className="max-h-[28rem] w-auto max-w-full object-contain transition-transform duration-500 group-hover:scale-[1.03]"
+                  wrapperClassName="flex items-center justify-center"
+                />
               </div>
               <h2 className="mt-5 font-serif text-2xl text-cream">{b.title}</h2>
               {b.subtitle && <p className="mt-1 text-sm text-gold/80">{b.subtitle}</p>}
