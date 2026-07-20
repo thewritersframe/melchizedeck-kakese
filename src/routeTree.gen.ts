@@ -19,6 +19,7 @@ import { Route as AdvocacyRouteImport } from './routes/advocacy'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicSelcomWebhookRouteImport } from './routes/api/public/selcom/webhook'
 
 const ScriptsRoute = ScriptsRouteImport.update({
   id: '/scripts',
@@ -70,6 +71,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicSelcomWebhookRoute = ApiPublicSelcomWebhookRouteImport.update({
+  id: '/api/public/selcom/webhook',
+  path: '/api/public/selcom/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/events': typeof EventsRoute
   '/scripts': typeof ScriptsRoute
+  '/api/public/selcom/webhook': typeof ApiPublicSelcomWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/events': typeof EventsRoute
   '/scripts': typeof ScriptsRoute
+  '/api/public/selcom/webhook': typeof ApiPublicSelcomWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/events': typeof EventsRoute
   '/scripts': typeof ScriptsRoute
+  '/api/public/selcom/webhook': typeof ApiPublicSelcomWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -121,6 +130,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/events'
     | '/scripts'
+    | '/api/public/selcom/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -133,6 +143,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/events'
     | '/scripts'
+    | '/api/public/selcom/webhook'
   id:
     | '__root__'
     | '/'
@@ -145,6 +156,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/events'
     | '/scripts'
+    | '/api/public/selcom/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -158,6 +170,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   EventsRoute: typeof EventsRoute
   ScriptsRoute: typeof ScriptsRoute
+  ApiPublicSelcomWebhookRoute: typeof ApiPublicSelcomWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -232,6 +245,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/selcom/webhook': {
+      id: '/api/public/selcom/webhook'
+      path: '/api/public/selcom/webhook'
+      fullPath: '/api/public/selcom/webhook'
+      preLoaderRoute: typeof ApiPublicSelcomWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -246,17 +266,8 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   EventsRoute: EventsRoute,
   ScriptsRoute: ScriptsRoute,
+  ApiPublicSelcomWebhookRoute: ApiPublicSelcomWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
