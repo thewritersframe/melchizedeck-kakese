@@ -68,11 +68,11 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
 ];
 
 const COLLECTIONS = [
-  { key: "book", label: "Books", extraMeta: [{ name: "buy_url", label: "Buy link" }] },
-  { key: "blog", label: "Blog posts", extraMeta: [] },
-  { key: "script", label: "Scripts", extraMeta: [] },
-  { key: "event", label: "Events", extraMeta: [{ name: "date", label: "Date" }, { name: "location", label: "Location" }, { name: "url", label: "Details link" }] },
-  { key: "advocacy", label: "Advocacy & adventures", extraMeta: [] },
+  { key: "book", label: "Books", extraMeta: [{ name: "buy_url", label: "Buy link" }], lockable: true },
+  { key: "blog", label: "Blog posts", extraMeta: [], lockable: false },
+  { key: "script", label: "Scripts", extraMeta: [], lockable: true },
+  { key: "event", label: "Events", extraMeta: [{ name: "date", label: "Date" }, { name: "location", label: "Location" }, { name: "url", label: "Details link" }], lockable: false },
+  { key: "advocacy", label: "Advocacy & adventures", extraMeta: [], lockable: false },
 ];
 
 type FieldSpec = { name: string; label: string; type?: "text" | "textarea" | "image" | "json" };
@@ -125,6 +125,7 @@ function Admin() {
           <TabsList className="flex-wrap">
             <TabsTrigger value="pages">Pages</TabsTrigger>
             <TabsTrigger value="collections">Collections</TabsTrigger>
+            <TabsTrigger value="payments">Payments</TabsTrigger>
             <TabsTrigger value="inbox">Inbox</TabsTrigger>
           </TabsList>
 
@@ -150,12 +151,13 @@ function Admin() {
               </TabsList>
               {COLLECTIONS.map((c) => (
                 <TabsContent key={c.key} value={c.key} className="mt-6">
-                  <CollectionEditor collection={c.key} label={c.label} extraMeta={c.extraMeta} />
+                  <CollectionEditor collection={c.key} label={c.label} extraMeta={c.extraMeta} lockable={c.lockable} />
                 </TabsContent>
               ))}
             </Tabs>
           </TabsContent>
 
+          <TabsContent value="payments" className="mt-6"><PaymentsSettings /></TabsContent>
           <TabsContent value="inbox" className="mt-6"><Inbox /></TabsContent>
         </Tabs>
       </section>
@@ -279,7 +281,7 @@ function FieldInput({ field, value, onChange }: { field: FieldSpec; value: unkno
   );
 }
 
-function CollectionEditor({ collection, label, extraMeta }: { collection: string; label: string; extraMeta: { name: string; label: string }[] }) {
+function CollectionEditor({ collection, label, extraMeta, lockable }: { collection: string; label: string; extraMeta: { name: string; label: string }[]; lockable?: boolean }) {
   const qc = useQueryClient();
   const { data: items, isLoading } = useQuery({
     queryKey: ["admin-collection", collection],
@@ -316,7 +318,7 @@ function CollectionEditor({ collection, label, extraMeta }: { collection: string
         <div className="space-y-4">
           {items?.length === 0 && <p className="text-sm text-muted-foreground">No items yet.</p>}
           {items?.map((item) => (
-            <ItemEditor key={item.id} item={item as unknown as Item} extraMeta={extraMeta} onChange={invalidate} />
+            <ItemEditor key={item.id} item={item as unknown as Item} extraMeta={extraMeta} lockable={lockable} onChange={invalidate} />
           ))}
         </div>
       )}
@@ -329,7 +331,7 @@ type Item = {
   image_url: string | null; meta: Record<string, unknown>; sort_order: number; published: boolean;
 };
 
-function ItemEditor({ item, extraMeta, onChange }: { item: Item; extraMeta: { name: string; label: string }[]; onChange: () => void }) {
+function ItemEditor({ item, extraMeta, lockable, onChange }: { item: Item; extraMeta: { name: string; label: string }[]; lockable?: boolean; onChange: () => void }) {
   const [form, setForm] = useState(item);
   const save = useMutation({
     mutationFn: async () => {
@@ -370,6 +372,13 @@ function ItemEditor({ item, extraMeta, onChange }: { item: Item; extraMeta: { na
               <input type="checkbox" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} />
               Published
             </label>
+            {lockable && (
+              <label className="flex items-center gap-2 text-sm text-gold">
+                <input type="checkbox" checked={!!(form.meta as Record<string, unknown>)?.locked}
+                  onChange={(e) => setForm({ ...form, meta: { ...(form.meta as Record<string, unknown>), locked: e.target.checked } })} />
+                🔒 Locked (paid unlock)
+              </label>
+            )}
             <label className="flex items-center gap-2 text-sm text-muted-foreground">
               Order
               <Input type="number" value={form.sort_order} onChange={(e) => setForm({ ...form, sort_order: Number(e.target.value) })} className="w-24" />
