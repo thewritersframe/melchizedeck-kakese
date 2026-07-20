@@ -113,6 +113,86 @@ export type Database = {
         }
         Relationships: []
       }
+      purchases: {
+        Row: {
+          amount: number
+          bundle_expires_at: string | null
+          created_at: string
+          currency: string
+          email: string
+          id: string
+          item_id: string | null
+          item_title: string | null
+          order_ref: string
+          paid_at: string | null
+          phone: string | null
+          provider: string
+          provider_ref: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          bundle_expires_at?: string | null
+          created_at?: string
+          currency?: string
+          email: string
+          id?: string
+          item_id?: string | null
+          item_title?: string | null
+          order_ref?: string
+          paid_at?: string | null
+          phone?: string | null
+          provider?: string
+          provider_ref?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          bundle_expires_at?: string | null
+          created_at?: string
+          currency?: string
+          email?: string
+          id?: string
+          item_id?: string | null
+          item_title?: string | null
+          order_ref?: string
+          paid_at?: string | null
+          phone?: string | null
+          provider?: string
+          provider_ref?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "purchases_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "content_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
       subscribers: {
         Row: {
           created_at: string
@@ -130,6 +210,41 @@ export type Database = {
           id?: string
         }
         Relationships: []
+      }
+      unlocks: {
+        Row: {
+          created_at: string
+          email: string
+          expires_at: string | null
+          id: string
+          item_id: string
+          source: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          expires_at?: string | null
+          id?: string
+          item_id: string
+          source?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          expires_at?: string | null
+          id?: string
+          item_id?: string
+          source?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "unlocks_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "content_items"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
