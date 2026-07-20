@@ -21,9 +21,32 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const { data: isAdmin } = useIsAdmin();
   const { data: footer } = useSection<{ tagline?: string; copyright?: string }>("site", "footer");
+  const { data: about } = useSection<{ imageUrl?: string }>("about", "main");
+  const bgImage = about?.content?.imageUrl;
 
   return (
-    <div className="bg-hero-pattern flex min-h-screen flex-col">
+    <div className="relative flex min-h-screen flex-col">
+      {/* Global blurred backdrop from About photo */}
+      {bgImage && (
+        <div
+          aria-hidden
+          className="pointer-events-none fixed inset-0 -z-20 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url("${bgImage}")`,
+            filter: "blur(28px) saturate(115%)",
+            transform: "scale(1.15)",
+            opacity: 0.75,
+          }}
+        />
+      )}
+      {/* Decorative overlay — kept lighter so the photo dominates */}
+      <div
+        aria-hidden
+        className="bg-hero-pattern pointer-events-none fixed inset-0 -z-10 opacity-30 mix-blend-multiply"
+      />
+      {/* Subtle darkening for legibility */}
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 bg-background/45" />
+
       <header className="sticky top-0 z-40 border-b border-border/40 bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
           <Link to="/" className="font-serif text-xl tracking-wide text-cream">
