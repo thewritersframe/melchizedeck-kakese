@@ -209,6 +209,7 @@ function SectionEditor({ page, sectionKey, label, fields }: { page: string; sect
 
 function FieldInput({ field, value, onChange }: { field: FieldSpec; value: unknown; onChange: (v: unknown) => void }) {
   const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
   if (field.type === "textarea") {
     return (
       <label className="block">
@@ -230,17 +231,30 @@ function FieldInput({ field, value, onChange }: { field: FieldSpec; value: unkno
           )}
           <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-border px-3 py-2 text-sm hover:bg-accent/10">
             {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
-            {uploading ? "Uploading…" : "Upload image"}
-            <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
+            {uploading ? `Uploading… ${progress}%` : "Upload image"}
+            <input type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif,image/svg+xml" className="hidden" onChange={async (e) => {
               const file = e.target.files?.[0]; if (!file) return;
-              setUploading(true);
-              try { const u = await uploadMedia(file); onChange(u); toast.success("Uploaded"); }
-              catch (err) { toast.error((err as Error).message); }
-              finally { setUploading(false); e.target.value = ""; }
+              setUploading(true); setProgress(0);
+              const t = toast.loading("Uploading image…");
+              try {
+                const u = await uploadMedia(file, { onProgress: (p) => setProgress(p) });
+                onChange(u);
+                toast.success("Uploaded", { id: t });
+              } catch (err) {
+                toast.error((err as Error).message, { id: t });
+              } finally {
+                setUploading(false); setProgress(0); e.target.value = "";
+              }
             }} />
           </label>
           {url && <button type="button" className="text-xs text-muted-foreground hover:text-destructive" onClick={() => onChange("")}>Remove</button>}
         </div>
+        {uploading && (
+          <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-border/60">
+            <div className="h-full bg-gold transition-[width] duration-200" style={{ width: `${progress}%` }} />
+          </div>
+        )}
+        <p className="mt-1 text-[11px] text-muted-foreground">JPG, PNG, WEBP, GIF, AVIF or SVG · max 10MB</p>
         <Input value={url} onChange={(e) => onChange(e.target.value)} placeholder="or paste image URL" className="mt-2" />
       </div>
     );
