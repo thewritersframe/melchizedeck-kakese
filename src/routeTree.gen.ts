@@ -14,6 +14,7 @@ import { Route as EventsRouteImport } from './routes/events'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BooksRouteImport } from './routes/books'
 import { Route as BlogRouteImport } from './routes/blog'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdvocacyRouteImport } from './routes/advocacy'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -43,6 +44,11 @@ const BlogRoute = BlogRouteImport.update({
   path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdvocacyRoute = AdvocacyRouteImport.update({
   id: '/advocacy',
   path: '/advocacy',
@@ -63,6 +69,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/advocacy': typeof AdvocacyRoute
+  '/auth': typeof AuthRoute
   '/blog': typeof BlogRoute
   '/books': typeof BooksRoute
   '/contact': typeof ContactRoute
@@ -73,6 +80,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/advocacy': typeof AdvocacyRoute
+  '/auth': typeof AuthRoute
   '/blog': typeof BlogRoute
   '/books': typeof BooksRoute
   '/contact': typeof ContactRoute
@@ -84,6 +92,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/advocacy': typeof AdvocacyRoute
+  '/auth': typeof AuthRoute
   '/blog': typeof BlogRoute
   '/books': typeof BooksRoute
   '/contact': typeof ContactRoute
@@ -96,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/advocacy'
+    | '/auth'
     | '/blog'
     | '/books'
     | '/contact'
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/advocacy'
+    | '/auth'
     | '/blog'
     | '/books'
     | '/contact'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/advocacy'
+    | '/auth'
     | '/blog'
     | '/books'
     | '/contact'
@@ -127,6 +139,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AdvocacyRoute: typeof AdvocacyRoute
+  AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRoute
   BooksRoute: typeof BooksRoute
   ContactRoute: typeof ContactRoute
@@ -171,6 +184,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/advocacy': {
       id: '/advocacy'
       path: '/advocacy'
@@ -199,6 +219,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AdvocacyRoute: AdvocacyRoute,
+  AuthRoute: AuthRoute,
   BlogRoute: BlogRoute,
   BooksRoute: BooksRoute,
   ContactRoute: ContactRoute,
