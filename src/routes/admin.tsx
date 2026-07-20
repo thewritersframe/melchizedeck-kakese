@@ -445,3 +445,85 @@ function Inbox() {
     </div>
   );
 }
+
+function PaymentsSettings() {
+  const qc = useQueryClient();
+  const { data, isLoading } = useQuery({
+    queryKey: ["admin-settings", "payments"],
+    queryFn: async () => {
+      const { data } = await supabase.from("site_settings").select("value").eq("key", "payments").maybeSingle();
+      return (data?.value ?? {}) as Record<string, unknown>;
+    },
+  });
+  const [form, setForm] = useState<Record<string, unknown>>({});
+  useEffect(() => { if (data) setForm(data); }, [data]);
+  const save = useMutation({
+    mutationFn: async () => {
+      const { error } = await supabase.from("site_settings").upsert({ key: "payments", value: form as never }, { onConflict: "key" });
+      if (error) throw error;
+    },
+    onSuccess: () => { toast.success("Payments settings saved"); qc.invalidateQueries({ queryKey: ["admin-settings", "payments"] }); qc.invalidateQueries({ queryKey: ["site-settings", "payments"] }); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const { data: purchases } = useQuery({
+    queryKey: ["admin-purchases"],
+    queryFn: async () => (await supabase.from("purchases").select("*").order("created_at", { ascending: false }).limit(100)).data ?? [],
+  });
+
+  if (isLoading) return <Loader2 className="h-5 w-5 animate-spin" />;
+  return (
+    <div className="space-y-8">
+      <div className="rounded-xl border border-border/60 bg-card/40 p-6">
+        <h3 className="font-serif text-xl text-cream">Payments</h3>
+        <p className="mt-1 text-xs text-muted-foreground">Standard unlock price applies to every locked book / screenplay. After paying, the buyer gets a <strong>one-hour bundle window</strong> to pick <strong>one</strong> additional book or screenplay for free (so their standard payment gives them <strong>two</strong> works total).</p>
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          <label className="block">
+            <span className="text-xs uppercase tracking-widest text-muted-foreground">Standard price</span>
+            <Input type="number" value={Number(form.standard_price ?? 0)} onChange={(e) => setForm({ ...form, standard_price: Number(e.target.value) })} className="mt-1.5" />
+          </label>
+          <label className="block">
+            <span className="text-xs uppercase tracking-widest text-muted-foreground">Currency</span>
+            <Input value={String(form.currency ?? "TZS")} onChange={(e) => setForm({ ...form, currency: e.target.value })} className="mt-1.5" />
+          </label>
+          <label className="block">
+            <span className="text-xs uppercase tracking-widest text-muted-foreground">Bundle window (minutes)</span>
+            <Input type="number" value={Number(form.bundle_minutes ?? 60)} onChange={(e) => setForm({ ...form, bundle_minutes: Number(e.target.value) })} className="mt-1.5" />
+          </label>
+          <label className="block">
+            <span className="text-xs uppercase tracking-widest text-muted-foreground">Free picks per bundle</span>
+            <Input type="number" value={Number(form.bundle_free_picks ?? 1)} onChange={(e) => setForm({ ...form, bundle_free_picks: Number(e.target.value) })} className="mt-1.5" />
+          </label>
+          <label className="block md:col-span-2">
+            <span className="text-xs uppercase tracking-widest text-muted-foreground">Notification email (payment alerts)</span>
+            <Input value={String(form.notify_email ?? "")} onChange={(e) => setForm({ ...form, notify_email: e.target.value })} className="mt-1.5" />
+          </label>
+        </div>
+        <Button className="mt-6 bg-gold text-primary-foreground hover:opacity-90" disabled={save.isPending} onClick={() => save.mutate()}>
+          {save.isPending ? "Saving…" : "Save settings"}
+        </Button>
+        <div className="mt-6 rounded-md border border-border/60 bg-background/50 p-4 text-xs text-muted-foreground">
+          <p className="font-medium text-cream">Selcom webhook URL</p>
+          <code className="mt-1 block break-all text-gold">{typeof window !== "undefined" ? `${window.location.origin}/api/public/selcom/webhook` : "/api/public/selcom/webhook"}</code>
+          <p className="mt-2">Configure this URL in your Selcom merchant dashboard so payment confirmations reach the site.</p>
+        </div>
+      </div>
+
+      <div className="rounded-xl border border-border/60 bg-card/40 p-6">
+        <h3 className="font-serif text-xl text-cream">Recent purchases</h3>
+        <div className="mt-4 space-y-2">
+          {purchases?.length === 0 && <p className="text-sm text-muted-foreground">No purchases yet.</p>}
+          {purchases?.map((p) => (
+            <div key={p.id} className="flex flex-wrap items-center gap-3 rounded-md border border-border/60 bg-background/40 px-3 py-2 text-sm">
+              <span className={`rounded-full px-2 py-0.5 text-[11px] ${p.status === "paid" ? "bg-emerald-500/15 text-emerald-400" : p.status === "failed" ? "bg-destructive/20 text-destructive" : "bg-amber-500/15 text-amber-400"}`}>{p.status}</span>
+              <span className="font-medium text-cream">{p.item_title ?? "—"}</span>
+              <span className="text-muted-foreground">{p.email}</span>
+              <span className="text-muted-foreground">{p.amount} {p.currency}</span>
+              <span className="ml-auto text-xs text-muted-foreground">{new Date(p.created_at).toLocaleString()}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
