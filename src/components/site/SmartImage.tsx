@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ImageIcon, Loader2 } from "lucide-react";
 
-type Props = React.ImgHTMLAttributes<HTMLImageElement> & {
+type Props = Omit<React.ImgHTMLAttributes<HTMLImageElement>, "src" | "alt"> & {
   src: string | null | undefined;
-  fallbackLabel?: string;
+  alt?: string | null;
+  fallbackLabel?: string | null;
   maxRetries?: number;
   wrapperClassName?: string;
 };
@@ -58,7 +59,7 @@ export function SmartImage({
       <img
         {...rest}
         src={finalSrc}
-        alt={alt}
+        alt={alt ?? ""}
         className={cn(className, status === "loading" && "opacity-0")}
         onLoad={() => setStatus("loaded")}
         onError={() => {
