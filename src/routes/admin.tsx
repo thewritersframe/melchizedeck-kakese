@@ -302,7 +302,7 @@ function CollectionEditor({ collection, label, extraMeta }: { collection: string
         <div className="space-y-4">
           {items?.length === 0 && <p className="text-sm text-muted-foreground">No items yet.</p>}
           {items?.map((item) => (
-            <ItemEditor key={item.id} item={item} extraMeta={extraMeta} onChange={invalidate} />
+            <ItemEditor key={item.id} item={item as unknown as Item} extraMeta={extraMeta} onChange={invalidate} />
           ))}
         </div>
       )}
@@ -321,7 +321,7 @@ function ItemEditor({ item, extraMeta, onChange }: { item: Item; extraMeta: { na
     mutationFn: async () => {
       const { error } = await supabase.from("content_items").update({
         title: form.title, subtitle: form.subtitle, body: form.body,
-        image_url: form.image_url, meta: form.meta, sort_order: form.sort_order, published: form.published,
+        image_url: form.image_url, meta: form.meta as never, sort_order: form.sort_order, published: form.published,
       }).eq("id", item.id);
       if (error) throw error;
     },
