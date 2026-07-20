@@ -103,24 +103,26 @@ Bundle window: until ${bundleExpires}
 Notify: ${notify}`,
         });
 
-        // Best-effort email via Lovable Emails (only sends when a domain is configured & LOVABLE_API_KEY present).
+        // Best-effort email via Lovable Emails (only sends when a sender is configured & LOVABLE_API_KEY present).
         try {
           const key = process.env.LOVABLE_API_KEY;
-          if (key) {
+          const from = process.env.NOTIFY_FROM_EMAIL;
+          if (key && from) {
             const { sendLovableEmail } = await import("@lovable.dev/email-js");
-            await sendLovableEmail({
-              apiKey: key,
-              to: notify,
-              subject: `Payment received: ${purchase.item_title ?? "item"} — ${purchase.amount} ${purchase.currency}`,
-              html: `<p>A new payment was received.</p>
+            const subject = `Payment received: ${purchase.item_title ?? "item"} — ${purchase.amount} ${purchase.currency}`;
+            const html = `<p>A new payment was received.</p>
                      <ul>
                        <li><strong>Item:</strong> ${purchase.item_title ?? "(none)"}</li>
                        <li><strong>Amount:</strong> ${purchase.amount} ${purchase.currency}</li>
                        <li><strong>Buyer:</strong> ${purchase.email}</li>
                        <li><strong>Selcom ref:</strong> ${reference}</li>
                        <li><strong>Order ref:</strong> ${orderRef}</li>
-                     </ul>`,
-            });
+                     </ul>`;
+            const text = `Payment received. Item: ${purchase.item_title ?? "(none)"}. Amount: ${purchase.amount} ${purchase.currency}. Buyer: ${purchase.email}. Ref: ${reference}.`;
+            await sendLovableEmail(
+              { to: notify, from, subject, html, text },
+              { apiKey: key },
+            );
           }
         } catch (err) {
           console.error("[selcom webhook] email send failed:", err);
