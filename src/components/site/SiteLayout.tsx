@@ -51,30 +51,35 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   const { data: isAdmin } = useIsAdmin();
   const { data: footer } = useSection<{ tagline?: string; copyright?: string }>("site", "footer");
   const { data: about } = useSection<{ imageUrl?: string }>("about", "main");
-  const bgImage = about?.content?.imageUrl;
+  const bgImage = bgPhoto.url;
 
   return (
     <div className="relative flex min-h-screen flex-col">
-      {/* Global blurred backdrop from About photo */}
-      {bgImage && (
-        <div
-          aria-hidden
-          className="pointer-events-none fixed inset-0 -z-20 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url("${bgImage}")`,
-            filter: "blur(18px) saturate(120%)",
-            transform: "scale(1.15)",
-            opacity: 1,
-          }}
-        />
-      )}
-      {/* Decorative overlay — kept lighter so the photo dominates */}
+      {/* Global blurred backdrop */}
       <div
         aria-hidden
-        className="bg-hero-pattern pointer-events-none fixed inset-0 -z-10 opacity-15 mix-blend-overlay"
+        className="pointer-events-none fixed inset-0 -z-20 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url("${bgImage}")`,
+          filter: "blur(6px) saturate(115%)",
+          transform: "scale(1.08)",
+        }}
+      />
+      {/* African wild/jungle decorative overlay */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 -z-10"
+        style={{
+          backgroundImage: `url("${JUNGLE_SVG}")`,
+          backgroundRepeat: "repeat",
+          backgroundSize: "420px 420px",
+          opacity: 0.35,
+          mixBlendMode: "overlay",
+        }}
       />
       {/* Subtle darkening for legibility */}
-      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 bg-background/25" />
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 bg-background/55" />
+
 
 
       <header className="sticky top-0 z-40 border-b border-border/40 bg-background/80 backdrop-blur-md">
