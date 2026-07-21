@@ -60,6 +60,8 @@ function Books() {
         <div className="mt-6 grid gap-10 md:grid-cols-2 lg:grid-cols-3">
           {items?.map((b) => {
             const locked = isItemLocked(b.meta) && !unlockedIds.has(b.id);
+            const m = (b.meta ?? {}) as { status?: string; year?: string | number; buy_url?: string; sample_url?: string; review_url?: string; notify_url?: string; coming_soon?: boolean };
+            const statusLine = [m.status, m.year].filter(Boolean).join(" · ");
             return (
               <article key={b.id} className="group relative rounded-xl border border-border/60 bg-card/60 p-5 backdrop-blur">
                 <div className="relative flex min-h-[16rem] w-full items-center justify-center overflow-hidden rounded-md border border-border/60 bg-background p-2">
@@ -68,16 +70,17 @@ function Books() {
                     alt={b.title}
                     loading="lazy"
                     fallbackLabel={b.title}
-                    className={`max-h-[28rem] w-auto max-w-full object-contain transition-transform duration-500 group-hover:scale-[1.03] ${locked ? "blur-md" : ""}`}
+                    className={`max-h-[28rem] w-auto max-w-full object-contain transition-transform duration-500 group-hover:scale-[1.03] ${locked ? "blur-[3px]" : ""}`}
                     wrapperClassName="flex items-center justify-center"
                   />
                   {locked && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-black/40">
-                      <Lock className="h-8 w-8 text-gold" />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-black/25">
+                      <Lock className="h-8 w-8 text-gold drop-shadow-lg" />
                     </div>
                   )}
                 </div>
-                <h2 className="mt-5 font-serif text-2xl text-cream">{b.title}</h2>
+                {statusLine && <p className="mt-4 text-xs uppercase tracking-widest text-gold">{statusLine}</p>}
+                <h2 className="mt-1 font-serif text-2xl text-cream">{b.title}</h2>
                 {b.subtitle && <p className="mt-1 text-sm text-gold/80">{b.subtitle}</p>}
                 {b.body && (
                   <p className={`mt-3 line-clamp-4 text-sm text-muted-foreground ${locked ? "line-clamp-2 italic opacity-70" : ""}`}>
@@ -100,11 +103,17 @@ function Books() {
                     {isItemLocked(b.meta) && (
                       <p className="mt-3 inline-flex items-center gap-1 text-xs text-gold"><Unlock className="h-3.5 w-3.5" /> Unlocked</p>
                     )}
-                    {(b.meta as { buy_url?: string })?.buy_url && (
-                      <a href={(b.meta as { buy_url?: string }).buy_url} target="_blank" rel="noreferrer" className="mt-4 inline-block text-sm text-gold hover:underline">
-                        Get the book →
-                      </a>
-                    )}
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {m.coming_soon ? (
+                        <a href={m.notify_url ?? "/#newsletter"} className="inline-flex items-center rounded-md bg-gold px-3 py-1.5 text-xs font-medium text-primary-foreground hover:opacity-90">Notify Me</a>
+                      ) : (
+                        <>
+                          {m.buy_url && <a href={m.buy_url} target="_blank" rel="noreferrer" className="inline-flex items-center rounded-md bg-gold px-3 py-1.5 text-xs font-medium text-primary-foreground hover:opacity-90">Buy Now</a>}
+                          {m.sample_url && <a href={m.sample_url} target="_blank" rel="noreferrer" className="inline-flex items-center rounded-md border border-border/60 px-3 py-1.5 text-xs font-medium text-cream hover:border-gold/60">Read Sample</a>}
+                          {m.review_url && <a href={m.review_url} target="_blank" rel="noreferrer" className="inline-flex items-center rounded-md border border-border/60 px-3 py-1.5 text-xs font-medium text-cream hover:border-gold/60">Leave a Review</a>}
+                        </>
+                      )}
+                    </div>
                   </>
                 )}
               </article>
