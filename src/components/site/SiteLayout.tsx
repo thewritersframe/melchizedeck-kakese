@@ -50,8 +50,8 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const { data: isAdmin } = useIsAdmin();
   const { data: footer } = useSection<{ tagline?: string; copyright?: string }>("site", "footer");
-  const { data: about } = useSection<{ imageUrl?: string }>("about", "main");
   const bgImage = bgPhoto.url;
+
 
   return (
     <div className="relative flex min-h-screen flex-col">
