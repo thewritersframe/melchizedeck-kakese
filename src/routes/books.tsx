@@ -53,7 +53,8 @@ function Books() {
     <SiteLayout>
       <section className="mx-auto max-w-6xl px-6 py-24">
         <div className="max-w-2xl">
-          <h1 className="font-serif text-5xl text-cream">{h?.title ?? "Books"}</h1>
+          <p className="text-xs uppercase tracking-[0.3em] text-gold">Bibliography</p>
+          <h1 className="mt-3 font-serif text-5xl text-cream">{h?.title ?? "Books"}</h1>
           <p className="mt-4 text-muted-foreground">{h?.body}</p>
         </div>
         <div className="mt-8"><AccessBar bundleExpiresAt={unlocks?.bundleExpiresAt ?? null} /></div>
