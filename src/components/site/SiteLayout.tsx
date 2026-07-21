@@ -4,6 +4,35 @@ import { Menu, X, ShieldCheck } from "lucide-react";
 import { useIsAdmin } from "@/lib/cms";
 import { useSection } from "@/lib/cms";
 import { cn } from "@/lib/utils";
+import bgPhoto from "@/assets/kakese-community.jpg.asset.json";
+
+// Jungle/wild African decorative motif — palm fronds, acacia silhouettes, tribal marks
+const JUNGLE_SVG = `data:image/svg+xml;utf8,${encodeURIComponent(
+  `<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420' viewBox='0 0 420 420'>
+    <g fill='none' stroke='%23e5b567' stroke-width='1.2' stroke-linecap='round' opacity='0.55'>
+      <!-- palm frond -->
+      <path d='M60 380 Q90 250 140 160'/>
+      <path d='M80 340 Q60 320 40 315'/><path d='M90 310 Q70 288 48 282'/>
+      <path d='M100 280 Q82 258 60 250'/><path d='M112 248 Q96 226 74 216'/>
+      <path d='M124 214 Q112 192 92 180'/><path d='M136 180 Q128 160 112 148'/>
+      <!-- acacia tree -->
+      <path d='M330 380 L330 250'/>
+      <path d='M270 240 Q330 200 390 240 Q380 220 330 210 Q280 220 270 240 Z'/>
+      <path d='M290 220 Q330 195 370 220'/>
+      <!-- leaf -->
+      <path d='M210 90 Q240 60 270 90 Q240 120 210 90 Z'/><path d='M240 62 L240 118'/>
+      <!-- tribal dots -->
+      <circle cx='30' cy='40' r='2' fill='%23e5b567' stroke='none'/>
+      <circle cx='50' cy='30' r='1.5' fill='%23e5b567' stroke='none'/>
+      <circle cx='70' cy='45' r='1.8' fill='%23e5b567' stroke='none'/>
+      <circle cx='380' cy='60' r='2' fill='%23e5b567' stroke='none'/>
+      <circle cx='400' cy='80' r='1.5' fill='%23e5b567' stroke='none'/>
+      <!-- zigzag -->
+      <path d='M150 400 L165 388 L180 400 L195 388 L210 400 L225 388 L240 400'/>
+      <path d='M0 200 L12 190 L24 200 L36 190 L48 200'/>
+    </g>
+  </svg>`
+)}`;
 
 const NAV = [
   { to: "/", label: "Home" },
