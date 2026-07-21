@@ -49,13 +49,16 @@ function Scripts() {
     <SiteLayout>
       <section className="mx-auto max-w-6xl px-6 py-24">
         <div className="max-w-2xl">
-          <h1 className="font-serif text-5xl text-cream">{h?.title}</h1>
+          <p className="text-xs uppercase tracking-[0.3em] text-gold">Screenwriting</p>
+          <h1 className="mt-3 font-serif text-5xl text-cream">{h?.title}</h1>
           <p className="mt-4 text-muted-foreground">{h?.body}</p>
         </div>
         <div className="mt-8"><AccessBar bundleExpiresAt={unlocks?.bundleExpiresAt ?? null} /></div>
         <div className="mt-6 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {items?.map((it: ContentItem) => {
             const locked = isItemLocked(it.meta) && !unlockedIds.has(it.id);
+            const m = (it.meta ?? {}) as { genre?: string; status?: string; request_url?: string; request_email?: string };
+            const requestHref = m.request_url ?? (m.request_email ? `mailto:${m.request_email}?subject=${encodeURIComponent(`Screenplay treatment request: ${it.title}`)}` : "/contact");
             return (
               <article key={it.id} className="overflow-hidden rounded-xl border border-border/60 bg-card/60 backdrop-blur">
                 {it.image_url && (
@@ -65,28 +68,36 @@ function Scripts() {
                       alt={it.title}
                       loading="lazy"
                       fallbackLabel={it.title}
-                      className={`max-h-[28rem] w-auto max-w-full object-contain ${locked ? "blur-md" : ""}`}
+                      className={`max-h-[28rem] w-auto max-w-full object-contain ${locked ? "blur-[3px]" : ""}`}
                       wrapperClassName="flex items-center justify-center"
                     />
                     {locked && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-                        <Lock className="h-8 w-8 text-gold" />
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/25">
+                        <Lock className="h-8 w-8 text-gold drop-shadow-lg" />
                       </div>
                     )}
                   </div>
                 )}
                 <div className="p-6">
-                  <h2 className="font-serif text-xl text-cream">{it.title}</h2>
+                  <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-widest">
+                    {m.genre && <span className="text-gold">{m.genre}</span>}
+                    {m.genre && m.status && <span className="text-muted-foreground/60">·</span>}
+                    {m.status && <span className="text-muted-foreground">{m.status}</span>}
+                  </div>
+                  <h2 className="mt-2 font-serif text-xl text-cream">{it.title}</h2>
                   {it.subtitle && <p className="mt-1 text-sm text-gold/80">{it.subtitle}</p>}
                   {it.body && (
-                    <p className={`mt-3 whitespace-pre-wrap text-sm text-muted-foreground ${locked ? "line-clamp-2 italic opacity-70" : "line-clamp-5"}`}>
-                      {locked ? it.body.split("\n")[0].slice(0, 140) + "…" : it.body}
-                    </p>
+                    <>
+                      <p className="mt-3 text-[11px] uppercase tracking-widest text-muted-foreground/70">Logline</p>
+                      <p className={`mt-1 whitespace-pre-wrap text-sm text-muted-foreground ${locked ? "line-clamp-2 italic opacity-70" : "line-clamp-5"}`}>
+                        {locked ? it.body.split("\n")[0].slice(0, 140) + "…" : it.body}
+                      </p>
+                    </>
                   )}
                   {locked ? (
                     <div className="mt-4 flex flex-wrap gap-2">
                       <Button size="sm" className="bg-gold text-primary-foreground hover:opacity-90" onClick={() => setOpenItem(it)}>
-                        <Lock className="mr-1 h-3.5 w-3.5" /> Unlock
+                        <Lock className="mr-1 h-3.5 w-3.5" /> Read Synopsis
                       </Button>
                       {bundleActive && email && (
                         <Button size="sm" variant="outline" disabled={claimMut.isPending} onClick={() => claimMut.mutate(it.id)}>
@@ -95,7 +106,10 @@ function Scripts() {
                       )}
                     </div>
                   ) : (
-                    isItemLocked(it.meta) && <p className="mt-3 inline-flex items-center gap-1 text-xs text-gold"><Unlock className="h-3.5 w-3.5" /> Unlocked</p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {isItemLocked(it.meta) && <span className="inline-flex items-center gap-1 text-xs text-gold"><Unlock className="h-3.5 w-3.5" /> Unlocked</span>}
+                      <a href={requestHref} className="inline-flex items-center rounded-md border border-border/60 px-3 py-1.5 text-xs font-medium text-cream hover:border-gold/60">Request Screenplay Treatment</a>
+                    </div>
                   )}
                 </div>
               </article>
