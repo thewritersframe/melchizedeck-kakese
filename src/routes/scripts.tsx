@@ -5,7 +5,7 @@ import { SmartImage } from "@/components/site/SmartImage";
 import { useUnlockEmail, useUnlocks, isItemLocked } from "@/lib/locks";
 import { UnlockDialog } from "@/components/site/UnlockDialog";
 import { ExpandableText } from "@/components/site/ExpandableText";
-import { Lock, Unlock, Gift, Loader2 } from "lucide-react";
+import { BookOpen, Lock, Unlock, Gift, Loader2, X, FileText } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
@@ -21,6 +21,24 @@ export const Route = createFileRoute("/scripts")({
   component: Scripts,
 });
 
+function SynopsisDialog({ item, onClose }: { item: ContentItem; onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm" onClick={onClose}>
+      <div className="w-full max-w-lg rounded-xl border border-border/60 bg-card p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-2 text-gold"><BookOpen className="h-5 w-5" /><span className="text-xs uppercase tracking-widest">Synopsis</span></div>
+          <button onClick={onClose} className="text-muted-foreground hover:text-foreground"><X className="h-5 w-5" /></button>
+        </div>
+        <h3 className="mt-3 font-serif text-2xl text-cream">{item.title}</h3>
+        {item.subtitle && <p className="mt-1 text-sm text-gold/80">{item.subtitle}</p>}
+        <div className="mt-4 max-h-[60vh] overflow-y-auto whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground">
+          {item.body || "No synopsis available yet."}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Scripts() {
   const { data: header } = useSection<Header>("scripts", "header");
   const { data: items } = useCollection("script");
@@ -33,7 +51,8 @@ function Scripts() {
       return (data?.value ?? {}) as { standard_price?: number; currency?: string };
     },
   });
-  const [openItem, setOpenItem] = useState<ContentItem | null>(null);
+  const [synopsisItem, setSynopsisItem] = useState<ContentItem | null>(null);
+  const [unlockItem, setUnlockItem] = useState<ContentItem | null>(null);
   const qc = useQueryClient();
   const claim = useServerFn(claimBundlePick);
   const claimMut = useMutation({
@@ -55,7 +74,7 @@ function Scripts() {
         </div>
         <div className="mt-6 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {items?.map((it: ContentItem) => {
-            const locked = isItemLocked(it.meta) && !unlockedIds.has(it.id);
+            const treatmentLocked = isItemLocked(it.meta) && !unlockedIds.has(it.id);
             const m = (it.meta ?? {}) as { genre?: string; status?: string; request_url?: string; request_email?: string };
             const requestHref = m.request_url ?? (m.request_email ? `mailto:${m.request_email}?subject=${encodeURIComponent(`Screenplay treatment request: ${it.title}`)}` : "/contact");
             return (
@@ -67,14 +86,9 @@ function Scripts() {
                       alt={it.title}
                       loading="lazy"
                       fallbackLabel={it.title}
-                      className={`max-h-[28rem] w-auto max-w-full object-contain ${locked ? "blur-[3px]" : ""}`}
+                      className="max-h-[28rem] w-auto max-w-full object-contain"
                       wrapperClassName="flex items-center justify-center"
                     />
-                    {locked && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/25">
-                        <Lock className="h-8 w-8 text-gold drop-shadow-lg" />
-                      </div>
-                    )}
                   </div>
                 )}
                 <div className="p-6">
@@ -91,23 +105,30 @@ function Scripts() {
                       <ExpandableText text={it.body} className="mt-1 text-sm text-muted-foreground" />
                     </>
                   )}
-                  {locked ? (
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      <Button size="sm" className="bg-gold text-primary-foreground hover:opacity-90" onClick={() => setOpenItem(it)}>
-                        <Lock className="mr-1 h-3.5 w-3.5" /> Read Synopsis
-                      </Button>
-                      {bundleActive && email && (
-                        <Button size="sm" variant="outline" disabled={claimMut.isPending} onClick={() => claimMut.mutate(it.id)}>
-                          {claimMut.isPending ? <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" /> : <Gift className="mr-1 h-3.5 w-3.5" />} Use free pick
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <Button size="sm" variant="outline" onClick={() => setSynopsisItem(it)}>
+                      <BookOpen className="mr-1 h-3.5 w-3.5" /> Read Synopsis
+                    </Button>
+                    {treatmentLocked ? (
+                      <>
+                        <Button size="sm" className="bg-gold text-primary-foreground hover:opacity-90" onClick={() => setUnlockItem(it)}>
+                          <Lock className="mr-1 h-3.5 w-3.5" /> Request Screenplay Treatment
                         </Button>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {isItemLocked(it.meta) && <span className="inline-flex items-center gap-1 text-xs text-gold"><Unlock className="h-3.5 w-3.5" /> Unlocked</span>}
-                      <a href={requestHref} className="inline-flex items-center rounded-md border border-border/60 px-3 py-1.5 text-xs font-medium text-cream hover:border-gold/60">Request Screenplay Treatment</a>
-                    </div>
-                  )}
+                        {bundleActive && email && (
+                          <Button size="sm" variant="outline" disabled={claimMut.isPending} onClick={() => claimMut.mutate(it.id)}>
+                            {claimMut.isPending ? <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" /> : <Gift className="mr-1 h-3.5 w-3.5" />} Use free pick
+                          </Button>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        {isItemLocked(it.meta) && <span className="inline-flex items-center gap-1 text-xs text-gold"><Unlock className="h-3.5 w-3.5" /> Unlocked</span>}
+                        <a href={requestHref} className="inline-flex items-center rounded-md bg-gold px-3 py-1.5 text-xs font-medium text-primary-foreground hover:opacity-90">
+                          <FileText className="mr-1 h-3.5 w-3.5" /> Request Screenplay Treatment
+                        </a>
+                      </>
+                    )}
+                  </div>
                 </div>
               </article>
             );
@@ -115,7 +136,8 @@ function Scripts() {
           {items?.length === 0 && <p className="text-muted-foreground">Nothing here yet — check back soon.</p>}
         </div>
       </section>
-      {openItem && <UnlockDialog item={openItem} onClose={() => setOpenItem(null)} price={pricing} />}
+      {synopsisItem && <SynopsisDialog item={synopsisItem} onClose={() => setSynopsisItem(null)} />}
+      {unlockItem && <UnlockDialog item={unlockItem} onClose={() => setUnlockItem(null)} price={pricing} />}
     </SiteLayout>
   );
 }
