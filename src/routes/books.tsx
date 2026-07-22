@@ -4,7 +4,7 @@ import { useSection, useCollection, type ContentItem } from "@/lib/cms";
 import { SmartImage } from "@/components/site/SmartImage";
 import { useUnlockEmail, useUnlocks, isItemLocked } from "@/lib/locks";
 import { UnlockDialog } from "@/components/site/UnlockDialog";
-import { AccessBar } from "@/components/site/AccessBar";
+import { ExpandableText } from "@/components/site/ExpandableText";
 import { Lock, Unlock, Gift, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -57,7 +57,6 @@ function Books() {
           <h1 className="mt-3 font-serif text-5xl text-cream">{h?.title ?? "Books"}</h1>
           <p className="mt-4 text-muted-foreground">{h?.body}</p>
         </div>
-        <div className="mt-8"><AccessBar bundleExpiresAt={unlocks?.bundleExpiresAt ?? null} /></div>
         <div className="mt-6 grid gap-10 md:grid-cols-2 lg:grid-cols-3">
           {items?.map((b) => {
             const locked = isItemLocked(b.meta) && !unlockedIds.has(b.id);
@@ -83,11 +82,7 @@ function Books() {
                 {statusLine && <p className="mt-4 text-xs uppercase tracking-widest text-gold">{statusLine}</p>}
                 <h2 className="mt-1 font-serif text-2xl text-cream">{b.title}</h2>
                 {b.subtitle && <p className="mt-1 text-sm text-gold/80">{b.subtitle}</p>}
-                {b.body && (
-                  <p className={`mt-3 line-clamp-4 text-sm text-muted-foreground ${locked ? "line-clamp-2 italic opacity-70" : ""}`}>
-                    {locked ? b.body.split("\n")[0].slice(0, 140) + "…" : b.body}
-                  </p>
-                )}
+                {b.body && <ExpandableText text={b.body} className="mt-3 text-sm text-muted-foreground" />}
                 {locked ? (
                   <div className="mt-4 flex flex-wrap gap-2">
                     <Button size="sm" className="bg-gold text-primary-foreground hover:opacity-90" onClick={() => setOpenItem(b)}>

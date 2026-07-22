@@ -4,7 +4,7 @@ import { useSection, useCollection, type ContentItem } from "@/lib/cms";
 import { SmartImage } from "@/components/site/SmartImage";
 import { useUnlockEmail, useUnlocks, isItemLocked } from "@/lib/locks";
 import { UnlockDialog } from "@/components/site/UnlockDialog";
-import { AccessBar } from "@/components/site/AccessBar";
+import { ExpandableText } from "@/components/site/ExpandableText";
 import { Lock, Unlock, Gift, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -53,7 +53,6 @@ function Scripts() {
           <h1 className="mt-3 font-serif text-5xl text-cream">{h?.title}</h1>
           <p className="mt-4 text-muted-foreground">{h?.body}</p>
         </div>
-        <div className="mt-8"><AccessBar bundleExpiresAt={unlocks?.bundleExpiresAt ?? null} /></div>
         <div className="mt-6 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {items?.map((it: ContentItem) => {
             const locked = isItemLocked(it.meta) && !unlockedIds.has(it.id);
@@ -89,9 +88,7 @@ function Scripts() {
                   {it.body && (
                     <>
                       <p className="mt-3 text-[11px] uppercase tracking-widest text-muted-foreground/70">Logline</p>
-                      <p className={`mt-1 whitespace-pre-wrap text-sm text-muted-foreground ${locked ? "line-clamp-2 italic opacity-70" : "line-clamp-5"}`}>
-                        {locked ? it.body.split("\n")[0].slice(0, 140) + "…" : it.body}
-                      </p>
+                      <ExpandableText text={it.body} className="mt-1 text-sm text-muted-foreground" />
                     </>
                   )}
                   {locked ? (
