@@ -62,9 +62,23 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
     { name: "title", label: "Title" }, { name: "body", label: "Body", type: "textarea" },
     { name: "email", label: "Public email" }, { name: "location", label: "Location" },
   ]}]},
-  { page: "site", sections: [{ key: "footer", label: "Footer", fields: [
-    { name: "tagline", label: "Tagline" }, { name: "copyright", label: "Copyright text" },
-  ]}]},
+  { page: "site", sections: [
+    { key: "background", label: "Site background image", fields: [
+      { name: "imageUrl", label: "Background photo (blurred behind all pages)", type: "image" },
+    ]},
+    { key: "footer", label: "Footer & Social links", fields: [
+      { name: "tagline", label: "Tagline" }, { name: "copyright", label: "Copyright text" },
+      { name: "instagram", label: "Instagram URL" },
+      { name: "threads", label: "Threads URL" },
+      { name: "facebook", label: "Facebook URL" },
+      { name: "linkedin", label: "LinkedIn URL" },
+      { name: "whatsapp", label: "WhatsApp URL" },
+      { name: "amazon", label: "Amazon URL" },
+      { name: "discord", label: "Discord URL" },
+      { name: "email", label: "Email (mailto:…)" },
+      { name: "linktree", label: "Linktree URL" },
+    ]},
+  ]},
 ];
 
 const COLLECTIONS = [
