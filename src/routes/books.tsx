@@ -60,8 +60,8 @@ function Books() {
         <div className="mt-6 grid gap-10 md:grid-cols-2 lg:grid-cols-3">
           {items?.map((b) => {
             const locked = isItemLocked(b.meta) && !unlockedIds.has(b.id);
-            const m = (b.meta ?? {}) as { status?: string; year?: string | number; buy_url?: string; sample_url?: string; review_url?: string; notify_url?: string; coming_soon?: boolean };
-            const statusLine = [m.status, m.year].filter(Boolean).join(" · ");
+            const m = (b.meta ?? {}) as { genre?: string; status?: string; year?: string | number; buy_url?: string; sample_url?: string; review_url?: string; notify_url?: string; coming_soon?: boolean };
+            const statusLine = [m.genre, m.status, m.year].filter(Boolean).join(" · ");
             return (
               <article key={b.id} className="group relative rounded-xl border border-border/60 bg-card/60 p-5 backdrop-blur">
                 <div className="relative flex min-h-[16rem] w-full items-center justify-center overflow-hidden rounded-md border border-border/60 bg-background p-2">
