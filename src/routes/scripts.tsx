@@ -100,7 +100,10 @@ function Scripts() {
                     {m.genre && m.status && <span className="text-muted-foreground/60">·</span>}
                     {m.status && <span className="text-muted-foreground">{m.status}</span>}
                   </div>
-                  <h2 className="mt-2 font-serif text-xl text-cream">{it.title}</h2>
+                  <div className="mt-2 flex items-start justify-between gap-3">
+                    <h2 className="font-serif text-xl text-cream">{it.title}</h2>
+                    {treatmentLocked && itemPrice != null && <PriceTag amount={itemPrice} currency={itemCurrency} className="shrink-0" />}
+                  </div>
                   {it.subtitle && <p className="mt-1 text-sm text-gold/80">{it.subtitle}</p>}
                   {it.body && (
                     <>
