@@ -7,7 +7,7 @@ export const Route = createFileRoute("/about")({
   component: About,
 });
 
-function About(const c = data?.content;) {
+function About() {
   const { data } = useSection<{ title: string; body: string; imageUrl?: string }>("about", "main");
   const c = data?.content;
   return (
