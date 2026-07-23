@@ -87,6 +87,8 @@ const COLLECTIONS: { key: string; label: string; extraMeta: MetaField[]; lockabl
     { name: "genre", label: "Genre" },
     { name: "status", label: "Status (e.g. Published, Coming Soon)" },
     { name: "year", label: "Year" },
+    { name: "price", label: "Price (numeric — overrides standard price)" },
+    { name: "currency", label: "Currency code (e.g. TZS, USD) — defaults to site currency" },
     { name: "buy_url", label: "Buy link (Amazon etc.)" },
     { name: "sample_url", label: "Read Sample link" },
     { name: "review_url", label: "Leave a Review link" },
@@ -100,6 +102,8 @@ const COLLECTIONS: { key: string; label: string; extraMeta: MetaField[]; lockabl
   { key: "script", label: "Scripts", lockable: true, extraMeta: [
     { name: "genre", label: "Genre" },
     { name: "status", label: "Status" },
+    { name: "price", label: "Price (numeric — overrides standard price)" },
+    { name: "currency", label: "Currency code (e.g. TZS, USD)" },
     { name: "request_url", label: "Treatment request URL (optional)" },
     { name: "request_email", label: "Treatment request email (optional)" },
   ]},

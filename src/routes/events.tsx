@@ -18,7 +18,13 @@ function Events() {
         <h1 className="font-serif text-5xl text-cream">{h?.title}</h1>
         <p className="mt-4 text-muted-foreground">{h?.body}</p>
         <div className="mt-14 space-y-6">
-          {items?.map((ev) => {
+          {[...(items ?? [])]
+            .sort((a, b) => {
+              const ad = new Date(((a.meta as { date?: string })?.date ?? a.created_at) || 0).getTime();
+              const bd = new Date(((b.meta as { date?: string })?.date ?? b.created_at) || 0).getTime();
+              return bd - ad;
+            })
+            .map((ev) => {
             const meta = ev.meta as { date?: string; location?: string; url?: string };
             return (
               <article key={ev.id} className="grid gap-6 rounded-xl border border-border/60 bg-card/60 p-6 backdrop-blur md:grid-cols-[1fr_2fr]">

@@ -5,6 +5,7 @@ import { SmartImage } from "@/components/site/SmartImage";
 import { useUnlockEmail, useUnlocks, isItemLocked } from "@/lib/locks";
 import { UnlockDialog } from "@/components/site/UnlockDialog";
 import { ExpandableText } from "@/components/site/ExpandableText";
+import { PriceTag } from "@/components/site/PriceTag";
 import { BookOpen, Lock, Unlock, Gift, Loader2, X, FileText } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -75,7 +76,9 @@ function Scripts() {
         <div className="mt-6 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {items?.map((it: ContentItem) => {
             const treatmentLocked = isItemLocked(it.meta) && !unlockedIds.has(it.id);
-            const m = (it.meta ?? {}) as { genre?: string; status?: string; request_url?: string; request_email?: string };
+            const m = (it.meta ?? {}) as { genre?: string; status?: string; price?: number; currency?: string; request_url?: string; request_email?: string };
+            const itemPrice = m.price != null ? Number(m.price) : (pricing?.standard_price ?? null);
+            const itemCurrency = m.currency ?? pricing?.currency ?? "TZS";
             const requestHref = m.request_url ?? (m.request_email ? `mailto:${m.request_email}?subject=${encodeURIComponent(`Screenplay treatment request: ${it.title}`)}` : "/contact");
             return (
               <article key={it.id} className="overflow-hidden rounded-xl border border-border/60 bg-card/60 backdrop-blur">
@@ -97,7 +100,10 @@ function Scripts() {
                     {m.genre && m.status && <span className="text-muted-foreground/60">·</span>}
                     {m.status && <span className="text-muted-foreground">{m.status}</span>}
                   </div>
-                  <h2 className="mt-2 font-serif text-xl text-cream">{it.title}</h2>
+                  <div className="mt-2 flex items-start justify-between gap-3">
+                    <h2 className="font-serif text-xl text-cream">{it.title}</h2>
+                    {treatmentLocked && itemPrice != null && <PriceTag amount={itemPrice} currency={itemCurrency} className="shrink-0" />}
+                  </div>
                   {it.subtitle && <p className="mt-1 text-sm text-gold/80">{it.subtitle}</p>}
                   {it.body && (
                     <>
@@ -137,7 +143,7 @@ function Scripts() {
         </div>
       </section>
       {synopsisItem && <SynopsisDialog item={synopsisItem} onClose={() => setSynopsisItem(null)} />}
-      {unlockItem && <UnlockDialog item={unlockItem} onClose={() => setUnlockItem(null)} price={pricing} />}
+      {unlockItem && (() => { const om = (unlockItem.meta ?? {}) as { price?: number | string; currency?: string }; const ip = om.price != null && om.price !== "" ? Number(om.price) : null; return <UnlockDialog item={unlockItem} onClose={() => setUnlockItem(null)} price={pricing} itemPrice={ip} itemCurrency={om.currency ?? pricing?.currency} />; })()}
     </SiteLayout>
   );
 }

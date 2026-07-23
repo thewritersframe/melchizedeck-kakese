@@ -7,14 +7,17 @@ import { Loader2, Lock, X, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { startCheckout } from "@/lib/payments.functions";
 import { setStoredEmail } from "@/lib/locks";
+import { useLocalPrice } from "@/lib/currency";
 
 type Props = {
   item: { id: string; title: string };
   onClose: () => void;
   price?: { standard_price?: number; currency?: string };
+  itemPrice?: number | null;
+  itemCurrency?: string;
 };
 
-export function UnlockDialog({ item, onClose, price }: Props) {
+export function UnlockDialog({ item, onClose, price, itemPrice, itemCurrency }: Props) {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const start = useServerFn(startCheckout);
@@ -35,8 +38,13 @@ export function UnlockDialog({ item, onClose, price }: Props) {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const priceLabel = price?.standard_price != null
-    ? `${price.standard_price.toLocaleString()} ${price.currency ?? "TZS"}`
+  const effectivePrice = itemPrice ?? price?.standard_price ?? null;
+  const effectiveCurrency = itemCurrency ?? price?.currency ?? "TZS";
+  const standard = price?.standard_price ?? null;
+  const qualifiesForBundle = effectivePrice != null && standard != null && effectivePrice >= standard;
+  const { data: localized } = useLocalPrice(effectivePrice, effectiveCurrency);
+  const priceLabel = effectivePrice != null
+    ? (localized?.formatted ?? `${effectivePrice.toLocaleString()} ${effectiveCurrency}`)
     : "the standard price";
 
   return (
@@ -48,8 +56,11 @@ export function UnlockDialog({ item, onClose, price }: Props) {
         </div>
         <h3 className="mt-3 font-serif text-2xl text-cream">{item.title}</h3>
         <p className="mt-2 text-sm text-muted-foreground">
-          Pay {priceLabel} to unlock this work. For one hour after payment you can pick a second book or screenplay for free.
+          Pay {priceLabel} to unlock this work.{qualifiesForBundle ? " Because this meets the standard price, you'll get a 1-hour window to pick one additional book or screenplay for free." : ""}
         </p>
+        {localized?.isConverted && (
+          <p className="mt-1 text-[11px] text-muted-foreground/80">Charged as {localized.original} — your card may show a small conversion difference.</p>
+        )}
         <div className="mt-5 space-y-3">
           <label className="block">
             <span className="text-xs uppercase tracking-widest text-muted-foreground">Email</span>

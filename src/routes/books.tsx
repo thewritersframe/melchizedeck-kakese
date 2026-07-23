@@ -5,6 +5,7 @@ import { SmartImage } from "@/components/site/SmartImage";
 import { useUnlockEmail, useUnlocks, isItemLocked } from "@/lib/locks";
 import { UnlockDialog } from "@/components/site/UnlockDialog";
 import { ExpandableText } from "@/components/site/ExpandableText";
+import { PriceTag } from "@/components/site/PriceTag";
 import { Lock, Unlock, Gift, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -60,7 +61,9 @@ function Books() {
         <div className="mt-6 grid gap-10 md:grid-cols-2 lg:grid-cols-3">
           {items?.map((b) => {
             const locked = isItemLocked(b.meta) && !unlockedIds.has(b.id);
-            const m = (b.meta ?? {}) as { genre?: string; status?: string; year?: string | number; buy_url?: string; sample_url?: string; review_url?: string; notify_url?: string; coming_soon?: boolean };
+            const m = (b.meta ?? {}) as { genre?: string; status?: string; year?: string | number; price?: number; currency?: string; buy_url?: string; sample_url?: string; review_url?: string; notify_url?: string; coming_soon?: boolean };
+            const itemPrice = m.price != null ? Number(m.price) : (pricing?.standard_price ?? null);
+            const itemCurrency = m.currency ?? pricing?.currency ?? "TZS";
             const statusLine = [m.genre, m.status, m.year].filter(Boolean).join(" · ");
             return (
               <article key={b.id} className="group relative rounded-xl border border-border/60 bg-card/60 p-5 backdrop-blur">
@@ -80,7 +83,10 @@ function Books() {
                   )}
                 </div>
                 {statusLine && <p className="mt-4 text-xs uppercase tracking-widest text-gold">{statusLine}</p>}
-                <h2 className="mt-1 font-serif text-2xl text-cream">{b.title}</h2>
+                <div className="mt-1 flex items-start justify-between gap-3">
+                  <h2 className="font-serif text-2xl text-cream">{b.title}</h2>
+                  {itemPrice != null && !m.coming_soon && <PriceTag amount={itemPrice} currency={itemCurrency} className="shrink-0" />}
+                </div>
                 {b.subtitle && <p className="mt-1 text-sm text-gold/80">{b.subtitle}</p>}
                 {b.body && <ExpandableText text={b.body} className="mt-3 text-sm text-muted-foreground" />}
                 {locked ? (
@@ -118,7 +124,7 @@ function Books() {
           {items?.length === 0 && <p className="text-muted-foreground">No books yet.</p>}
         </div>
       </section>
-      {openItem && <UnlockDialog item={openItem} onClose={() => setOpenItem(null)} price={pricing} />}
+      {openItem && (() => { const om = (openItem.meta ?? {}) as { price?: number | string; currency?: string }; const ip = om.price != null && om.price !== "" ? Number(om.price) : null; return <UnlockDialog item={openItem} onClose={() => setOpenItem(null)} price={pricing} itemPrice={ip} itemCurrency={om.currency ?? pricing?.currency} />; })()}
     </SiteLayout>
   );
 }

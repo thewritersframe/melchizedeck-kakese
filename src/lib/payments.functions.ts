@@ -51,8 +51,9 @@ export const startCheckout = createServerFn({ method: "POST" })
       standard_price?: number;
       currency?: string;
     };
-    const amount = Number(pay.standard_price ?? 10000);
-    const currency = pay.currency ?? "TZS";
+    const itemMeta = (item.meta ?? {}) as { price?: number; currency?: string };
+    const amount = Number(itemMeta.price ?? pay.standard_price ?? 10000);
+    const currency = (itemMeta.currency ?? pay.currency ?? "TZS");
 
     // Load admin client only after basic validation
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
