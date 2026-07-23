@@ -397,10 +397,22 @@ function ItemEditor({ item, extraMeta, lockable, onChange }: { item: Item; extra
           <Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Title" />
           <Input value={form.subtitle ?? ""} onChange={(e) => setForm({ ...form, subtitle: e.target.value })} placeholder="Subtitle" />
           <Textarea rows={4} value={form.body ?? ""} onChange={(e) => setForm({ ...form, body: e.target.value })} placeholder="Body" />
-          {extraMeta.map((m) => (
-            <Input key={m.name} placeholder={m.label} value={String((form.meta as Record<string, unknown>)?.[m.name] ?? "")}
-              onChange={(e) => setForm({ ...form, meta: { ...(form.meta as Record<string, unknown>), [m.name]: e.target.value } })} />
-          ))}
+          {extraMeta.map((m) => {
+            const cur = (form.meta as Record<string, unknown>)?.[m.name];
+            if (m.type === "bool") {
+              return (
+                <label key={m.name} className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <input type="checkbox" checked={!!cur}
+                    onChange={(e) => setForm({ ...form, meta: { ...(form.meta as Record<string, unknown>), [m.name]: e.target.checked } })} />
+                  {m.label}
+                </label>
+              );
+            }
+            return (
+              <Input key={m.name} placeholder={m.label} value={String(cur ?? "")}
+                onChange={(e) => setForm({ ...form, meta: { ...(form.meta as Record<string, unknown>), [m.name]: e.target.value } })} />
+            );
+          })}
           <div className="flex flex-wrap items-center gap-3">
             <label className="flex items-center gap-2 text-sm text-muted-foreground">
               <input type="checkbox" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} />
