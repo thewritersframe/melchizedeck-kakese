@@ -315,7 +315,7 @@ function FieldInput({ field, value, onChange }: { field: FieldSpec; value: unkno
   );
 }
 
-function CollectionEditor({ collection, label, extraMeta, lockable }: { collection: string; label: string; extraMeta: { name: string; label: string }[]; lockable?: boolean }) {
+function CollectionEditor({ collection, label, extraMeta, lockable }: { collection: string; label: string; extraMeta: MetaField[]; lockable?: boolean }) {
   const qc = useQueryClient();
   const { data: items, isLoading } = useQuery({
     queryKey: ["admin-collection", collection],
