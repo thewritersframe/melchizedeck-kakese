@@ -65,9 +65,12 @@ export const Route = createFileRoute("/api/public/selcom/webhook")({
         const pay = (settings?.value ?? {}) as {
           bundle_minutes?: number;
           notify_email?: string;
+          standard_price?: number;
         };
+        const standard = Number(pay.standard_price ?? 0);
+        const qualifies = standard > 0 && Number(purchase.amount) >= standard;
         const bundleMs = Math.max(1, Number(pay.bundle_minutes ?? 60)) * 60 * 1000;
-        const bundleExpires = new Date(Date.now() + bundleMs).toISOString();
+        const bundleExpires = qualifies ? new Date(Date.now() + bundleMs).toISOString() : null;
 
         await supabaseAdmin.from("purchases").update({
           status: "paid",
