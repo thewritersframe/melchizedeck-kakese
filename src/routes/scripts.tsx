@@ -76,7 +76,9 @@ function Scripts() {
         <div className="mt-6 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {items?.map((it: ContentItem) => {
             const treatmentLocked = isItemLocked(it.meta) && !unlockedIds.has(it.id);
-            const m = (it.meta ?? {}) as { genre?: string; status?: string; request_url?: string; request_email?: string };
+            const m = (it.meta ?? {}) as { genre?: string; status?: string; price?: number; currency?: string; request_url?: string; request_email?: string };
+            const itemPrice = m.price != null ? Number(m.price) : (pricing?.standard_price ?? null);
+            const itemCurrency = m.currency ?? pricing?.currency ?? "TZS";
             const requestHref = m.request_url ?? (m.request_email ? `mailto:${m.request_email}?subject=${encodeURIComponent(`Screenplay treatment request: ${it.title}`)}` : "/contact");
             return (
               <article key={it.id} className="overflow-hidden rounded-xl border border-border/60 bg-card/60 backdrop-blur">
