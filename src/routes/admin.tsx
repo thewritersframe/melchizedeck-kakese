@@ -365,7 +365,7 @@ type Item = {
   image_url: string | null; meta: Record<string, unknown>; sort_order: number; published: boolean;
 };
 
-function ItemEditor({ item, extraMeta, lockable, onChange }: { item: Item; extraMeta: { name: string; label: string }[]; lockable?: boolean; onChange: () => void }) {
+function ItemEditor({ item, extraMeta, lockable, onChange }: { item: Item; extraMeta: MetaField[]; lockable?: boolean; onChange: () => void }) {
   const [form, setForm] = useState(item);
   const save = useMutation({
     mutationFn: async () => {
