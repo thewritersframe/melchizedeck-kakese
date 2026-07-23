@@ -24,3 +24,38 @@ function About() {
     </SiteLayout>
   );
 }
+type Achievements = {
+  title: string;
+  items: {
+    title: string;
+    body: string;
+  }[];
+};
+
+const { data: achievements } = useSection<Achievements>("about", "achievements");
+const a = achievements?.content;
+{a && (
+  <section className="py-24">
+    <div className="mx-auto max-w-6xl px-6">
+      <h2 className="text-center font-serif text-4xl text-cream">
+        {a.title}
+      </h2>
+
+      <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {a.items?.map((item, i) => (
+          <div
+            key={i}
+            className="rounded-xl border border-gold/20 bg-card/60 p-6"
+          >
+            <h3 className="font-serif text-2xl text-gold">
+              {item.title}
+            </h3>
+            <p className="mt-3 text-muted-foreground">
+              {item.body}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
