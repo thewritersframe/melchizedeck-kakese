@@ -143,7 +143,7 @@ function Scripts() {
         </div>
       </section>
       {synopsisItem && <SynopsisDialog item={synopsisItem} onClose={() => setSynopsisItem(null)} />}
-      {unlockItem && <UnlockDialog item={unlockItem} onClose={() => setUnlockItem(null)} price={pricing} itemPrice={(unlockItem.meta as { price?: number })?.price ?? null} itemCurrency={(unlockItem.meta as { currency?: string })?.currency ?? pricing?.currency} />}
+      {unlockItem && (() => { const om = (unlockItem.meta ?? {}) as { price?: number | string; currency?: string }; const ip = om.price != null && om.price !== "" ? Number(om.price) : null; return <UnlockDialog item={unlockItem} onClose={() => setUnlockItem(null)} price={pricing} itemPrice={ip} itemCurrency={om.currency ?? pricing?.currency} />; })()}
     </SiteLayout>
   );
 }
