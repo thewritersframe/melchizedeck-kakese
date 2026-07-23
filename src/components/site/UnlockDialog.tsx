@@ -7,6 +7,7 @@ import { Loader2, Lock, X, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { startCheckout } from "@/lib/payments.functions";
 import { setStoredEmail } from "@/lib/locks";
+import { useLocalPrice } from "@/lib/currency";
 
 type Props = {
   item: { id: string; title: string };
