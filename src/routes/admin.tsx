@@ -81,12 +81,32 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
   ]},
 ];
 
-const COLLECTIONS = [
-  { key: "book", label: "Books", extraMeta: [{ name: "buy_url", label: "Buy link" }], lockable: true },
-  { key: "blog", label: "Blog posts", extraMeta: [], lockable: false },
-  { key: "script", label: "Scripts", extraMeta: [], lockable: true },
-  { key: "event", label: "Events", extraMeta: [{ name: "date", label: "Date" }, { name: "location", label: "Location" }, { name: "url", label: "Details link" }], lockable: false },
-  { key: "advocacy", label: "Advocacy & adventures", extraMeta: [], lockable: false },
+type MetaField = { name: string; label: string; type?: "text" | "bool" };
+const COLLECTIONS: { key: string; label: string; extraMeta: MetaField[]; lockable?: boolean }[] = [
+  { key: "book", label: "Books", lockable: true, extraMeta: [
+    { name: "genre", label: "Genre" },
+    { name: "status", label: "Status (e.g. Published, Coming Soon)" },
+    { name: "year", label: "Year" },
+    { name: "buy_url", label: "Buy link (Amazon etc.)" },
+    { name: "sample_url", label: "Read Sample link" },
+    { name: "review_url", label: "Leave a Review link" },
+    { name: "notify_url", label: "Notify Me link" },
+    { name: "coming_soon", label: "Coming soon (show Notify Me)", type: "bool" },
+  ]},
+  { key: "blog", label: "Blog posts", extraMeta: [
+    { name: "category", label: "Category" },
+    { name: "read_time", label: "Read time (e.g. 5 min)" },
+  ]},
+  { key: "script", label: "Scripts", lockable: true, extraMeta: [
+    { name: "genre", label: "Genre" },
+    { name: "status", label: "Status" },
+    { name: "request_url", label: "Treatment request URL (optional)" },
+    { name: "request_email", label: "Treatment request email (optional)" },
+  ]},
+  { key: "event", label: "Events", extraMeta: [
+    { name: "date", label: "Date" }, { name: "location", label: "Location" }, { name: "url", label: "Details link" },
+  ]},
+  { key: "advocacy", label: "Advocacy & adventures", extraMeta: [] },
 ];
 
 type FieldSpec = { name: string; label: string; type?: "text" | "textarea" | "image" | "json" };
@@ -295,7 +315,7 @@ function FieldInput({ field, value, onChange }: { field: FieldSpec; value: unkno
   );
 }
 
-function CollectionEditor({ collection, label, extraMeta, lockable }: { collection: string; label: string; extraMeta: { name: string; label: string }[]; lockable?: boolean }) {
+function CollectionEditor({ collection, label, extraMeta, lockable }: { collection: string; label: string; extraMeta: MetaField[]; lockable?: boolean }) {
   const qc = useQueryClient();
   const { data: items, isLoading } = useQuery({
     queryKey: ["admin-collection", collection],
@@ -345,7 +365,7 @@ type Item = {
   image_url: string | null; meta: Record<string, unknown>; sort_order: number; published: boolean;
 };
 
-function ItemEditor({ item, extraMeta, lockable, onChange }: { item: Item; extraMeta: { name: string; label: string }[]; lockable?: boolean; onChange: () => void }) {
+function ItemEditor({ item, extraMeta, lockable, onChange }: { item: Item; extraMeta: MetaField[]; lockable?: boolean; onChange: () => void }) {
   const [form, setForm] = useState(item);
   const save = useMutation({
     mutationFn: async () => {
@@ -377,10 +397,22 @@ function ItemEditor({ item, extraMeta, lockable, onChange }: { item: Item; extra
           <Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Title" />
           <Input value={form.subtitle ?? ""} onChange={(e) => setForm({ ...form, subtitle: e.target.value })} placeholder="Subtitle" />
           <Textarea rows={4} value={form.body ?? ""} onChange={(e) => setForm({ ...form, body: e.target.value })} placeholder="Body" />
-          {extraMeta.map((m) => (
-            <Input key={m.name} placeholder={m.label} value={String((form.meta as Record<string, unknown>)?.[m.name] ?? "")}
-              onChange={(e) => setForm({ ...form, meta: { ...(form.meta as Record<string, unknown>), [m.name]: e.target.value } })} />
-          ))}
+          {extraMeta.map((m) => {
+            const cur = (form.meta as Record<string, unknown>)?.[m.name];
+            if (m.type === "bool") {
+              return (
+                <label key={m.name} className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <input type="checkbox" checked={!!cur}
+                    onChange={(e) => setForm({ ...form, meta: { ...(form.meta as Record<string, unknown>), [m.name]: e.target.checked } })} />
+                  {m.label}
+                </label>
+              );
+            }
+            return (
+              <Input key={m.name} placeholder={m.label} value={String(cur ?? "")}
+                onChange={(e) => setForm({ ...form, meta: { ...(form.meta as Record<string, unknown>), [m.name]: e.target.value } })} />
+            );
+          })}
           <div className="flex flex-wrap items-center gap-3">
             <label className="flex items-center gap-2 text-sm text-muted-foreground">
               <input type="checkbox" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} />
