@@ -32,7 +32,8 @@ function Index() {
   className="relative overflow-hidden bg-cover bg-center"
   style={{ backgroundImage: "url('/20260705_145620.jpg')" }}
 >
-        <div className="mx-auto flex min-h-[80vh] max-w-4xl flex-col items-center justify-center px-6 py-24 text-center">
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="relative mx-auto flex min-h-[80vh] max-w-4xl flex-col items-center justify-center px-6 py-24 text-center">
           <p className="text-xs font-medium uppercase tracking-[0.3em] text-gold">
             {h?.eyebrow}
           </p>
