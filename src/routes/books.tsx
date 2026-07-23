@@ -5,6 +5,7 @@ import { SmartImage } from "@/components/site/SmartImage";
 import { useUnlockEmail, useUnlocks, isItemLocked } from "@/lib/locks";
 import { UnlockDialog } from "@/components/site/UnlockDialog";
 import { ExpandableText } from "@/components/site/ExpandableText";
+import { PriceTag } from "@/components/site/PriceTag";
 import { Lock, Unlock, Gift, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
