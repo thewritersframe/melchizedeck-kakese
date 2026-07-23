@@ -56,8 +56,11 @@ export function UnlockDialog({ item, onClose, price, itemPrice, itemCurrency }: 
         </div>
         <h3 className="mt-3 font-serif text-2xl text-cream">{item.title}</h3>
         <p className="mt-2 text-sm text-muted-foreground">
-          Pay {priceLabel} to unlock this work. For one hour after payment you can pick a second book or screenplay for free.
+          Pay {priceLabel} to unlock this work.{qualifiesForBundle ? " Because this meets the standard price, you'll get a 1-hour window to pick one additional book or screenplay for free." : ""}
         </p>
+        {localized?.isConverted && (
+          <p className="mt-1 text-[11px] text-muted-foreground/80">Charged as {localized.original} — your card may show a small conversion difference.</p>
+        )}
         <div className="mt-5 space-y-3">
           <label className="block">
             <span className="text-xs uppercase tracking-widest text-muted-foreground">Email</span>
