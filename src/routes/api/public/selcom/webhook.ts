@@ -101,7 +101,7 @@ Amount: ${purchase.amount} ${purchase.currency}
 Buyer email: ${purchase.email}
 Selcom reference: ${reference}
 Order ref: ${orderRef}
-Bundle window: until ${bundleExpires}
+Bundle window: ${bundleExpires ? `until ${bundleExpires}` : "not eligible (below standard price)"}
 
 Notify: ${notify}`,
         });
