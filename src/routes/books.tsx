@@ -124,7 +124,7 @@ function Books() {
           {items?.length === 0 && <p className="text-muted-foreground">No books yet.</p>}
         </div>
       </section>
-      {openItem && <UnlockDialog item={openItem} onClose={() => setOpenItem(null)} price={pricing} />}
+      {openItem && <UnlockDialog item={openItem} onClose={() => setOpenItem(null)} price={pricing} itemPrice={(openItem.meta as { price?: number })?.price ?? null} itemCurrency={(openItem.meta as { currency?: string })?.currency ?? pricing?.currency} />}
     </SiteLayout>
   );
 }
