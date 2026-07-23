@@ -12,9 +12,11 @@ type Props = {
   item: { id: string; title: string };
   onClose: () => void;
   price?: { standard_price?: number; currency?: string };
+  itemPrice?: number | null;
+  itemCurrency?: string;
 };
 
-export function UnlockDialog({ item, onClose, price }: Props) {
+export function UnlockDialog({ item, onClose, price, itemPrice, itemCurrency }: Props) {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const start = useServerFn(startCheckout);
@@ -35,8 +37,13 @@ export function UnlockDialog({ item, onClose, price }: Props) {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const priceLabel = price?.standard_price != null
-    ? `${price.standard_price.toLocaleString()} ${price.currency ?? "TZS"}`
+  const effectivePrice = itemPrice ?? price?.standard_price ?? null;
+  const effectiveCurrency = itemCurrency ?? price?.currency ?? "TZS";
+  const standard = price?.standard_price ?? null;
+  const qualifiesForBundle = effectivePrice != null && standard != null && effectivePrice >= standard;
+  const { data: localized } = useLocalPrice(effectivePrice, effectiveCurrency);
+  const priceLabel = effectivePrice != null
+    ? (localized?.formatted ?? `${effectivePrice.toLocaleString()} ${effectiveCurrency}`)
     : "the standard price";
 
   return (
