@@ -111,6 +111,11 @@ const COLLECTIONS: { key: string; label: string; extraMeta: MetaField[]; lockabl
     { name: "date", label: "Date" }, { name: "location", label: "Location" }, { name: "url", label: "Details link" },
   ]},
   { key: "advocacy", label: "Advocacy & adventures", extraMeta: [] },
+  { key: "achievement", label: "Achievements", extraMeta: [
+    { name: "year", label: "Year" },
+    { name: "location", label: "Location" },
+    { name: "url", label: "Related link (optional)" },
+  ]},
 ];
 
 type FieldSpec = { name: string; label: string; type?: "text" | "textarea" | "image" | "json" };
