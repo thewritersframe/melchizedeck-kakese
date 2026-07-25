@@ -73,10 +73,32 @@ export const startCheckout = createServerFn({ method: "POST" })
       .single();
     if (error) throw new Error(error.message);
 
-    // TODO: Once SELCOM_VENDOR_ID / SELCOM_API_KEY / SELCOM_API_SECRET are set,
-    // call Selcom Checkout API here to create a session and return its payment URL.
-    // For now we return a placeholder so the UI can show a "Complete payment" state.
-    const checkoutUrl: string | null = null;
+    // Create a hosted Selcom checkout session and return the gateway URL the
+    // buyer is redirected to. All Selcom logic lives in selcom.server.ts (server-only).
+    const { readSelcomCreds, createSelcomCheckoutOrder, buildReturnUrls } = await import("@/lib/selcom.server");
+    const creds = readSelcomCreds();
+    if (!creds) {
+      throw new Error(
+        "Selcom is not configured yet. Add SELCOM_VENDOR_ID, SELCOM_API_KEY and SELCOM_API_SECRET to enable payments.",
+      );
+    }
+
+    const { webhook, redirect_url, cancel_url } = buildReturnUrls(purchase.order_ref);
+    const { checkoutUrl } = await createSelcomCheckoutOrder(
+      {
+        order_id: purchase.order_ref,
+        buyer_email: email,
+        buyer_name: email.split("@")[0] || "Buyer",
+        buyer_phone: data.phone ?? "",
+        amount,
+        currency,
+        webhook,
+        redirect_url,
+        cancel_url,
+        merchant_remarks: `Unlock: ${item.title}`,
+      },
+      creds,
+    );
 
     return {
       orderRef: purchase.order_ref,
