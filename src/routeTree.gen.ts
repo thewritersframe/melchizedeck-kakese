@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UnlockRouteImport } from './routes/unlock'
 import { Route as ScriptsRouteImport } from './routes/scripts'
 import { Route as EventsRouteImport } from './routes/events'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -21,6 +22,11 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiPublicSelcomWebhookRouteImport } from './routes/api/public/selcom/webhook'
 
+const UnlockRoute = UnlockRouteImport.update({
+  id: '/unlock',
+  path: '/unlock',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ScriptsRoute = ScriptsRouteImport.update({
   id: '/scripts',
   path: '/scripts',
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/events': typeof EventsRoute
   '/scripts': typeof ScriptsRoute
+  '/unlock': typeof UnlockRoute
   '/api/public/selcom/webhook': typeof ApiPublicSelcomWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/events': typeof EventsRoute
   '/scripts': typeof ScriptsRoute
+  '/unlock': typeof UnlockRoute
   '/api/public/selcom/webhook': typeof ApiPublicSelcomWebhookRoute
 }
 export interface FileRoutesById {
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/events': typeof EventsRoute
   '/scripts': typeof ScriptsRoute
+  '/unlock': typeof UnlockRoute
   '/api/public/selcom/webhook': typeof ApiPublicSelcomWebhookRoute
 }
 export interface FileRouteTypes {
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/events'
     | '/scripts'
+    | '/unlock'
     | '/api/public/selcom/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/events'
     | '/scripts'
+    | '/unlock'
     | '/api/public/selcom/webhook'
   id:
     | '__root__'
@@ -156,6 +167,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/events'
     | '/scripts'
+    | '/unlock'
     | '/api/public/selcom/webhook'
   fileRoutesById: FileRoutesById
 }
@@ -170,11 +182,19 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   EventsRoute: typeof EventsRoute
   ScriptsRoute: typeof ScriptsRoute
+  UnlockRoute: typeof UnlockRoute
   ApiPublicSelcomWebhookRoute: typeof ApiPublicSelcomWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/unlock': {
+      id: '/unlock'
+      path: '/unlock'
+      fullPath: '/unlock'
+      preLoaderRoute: typeof UnlockRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/scripts': {
       id: '/scripts'
       path: '/scripts'
@@ -266,18 +286,9 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   EventsRoute: EventsRoute,
   ScriptsRoute: ScriptsRoute,
+  UnlockRoute: UnlockRoute,
   ApiPublicSelcomWebhookRoute: ApiPublicSelcomWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
