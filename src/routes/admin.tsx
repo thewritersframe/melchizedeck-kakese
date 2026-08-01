@@ -564,10 +564,15 @@ function PaymentsSettings() {
             <span className="text-xs uppercase tracking-widest text-muted-foreground">Free picks per bundle</span>
             <Input type="number" value={Number(form.bundle_free_picks ?? 1)} onChange={(e) => setForm({ ...form, bundle_free_picks: Number(e.target.value) })} className="mt-1.5" />
           </label>
+          <label className="block">
+            <span className="text-xs uppercase tracking-widest text-muted-foreground">Minimum contribution (Support My Vision)</span>
+            <Input type="number" value={Number(form.min_donation ?? 500)} onChange={(e) => setForm({ ...form, min_donation: Number(e.target.value) })} className="mt-1.5" />
+          </label>
           <label className="block md:col-span-2">
             <span className="text-xs uppercase tracking-widest text-muted-foreground">Notification email (payment alerts)</span>
             <Input value={String(form.notify_email ?? "")} onChange={(e) => setForm({ ...form, notify_email: e.target.value })} className="mt-1.5" />
           </label>
+
         </div>
         <Button className="mt-6 bg-gold text-primary-foreground hover:opacity-90" disabled={save.isPending} onClick={() => save.mutate()}>
           {save.isPending ? "Saving…" : "Save settings"}
