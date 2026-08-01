@@ -66,7 +66,16 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
     { key: "background", label: "Site background image", fields: [
       { name: "imageUrl", label: "Background photo (blurred behind all pages)", type: "image" },
     ]},
+    { key: "support", label: "Support My Vision (contributions)", fields: [
+      { name: "eyebrow", label: "Eyebrow" },
+      { name: "title", label: "Title" },
+      { name: "body", label: "Body", type: "textarea" },
+      { name: "amounts", label: "Suggested amounts (comma separated, e.g. 5000, 10000, 25000)" },
+      { name: "buttonLabel", label: "Button label" },
+      { name: "note", label: "Small note under the text", type: "textarea" },
+    ]},
     { key: "footer", label: "Footer & Social links", fields: [
+
       { name: "tagline", label: "Tagline" }, { name: "copyright", label: "Copyright text" },
       { name: "instagram", label: "Instagram URL" },
       { name: "threads", label: "Threads URL" },
