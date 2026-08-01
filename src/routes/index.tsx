@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useSection, useCollection } from "@/lib/cms";
+import { SupportVision } from "@/components/site/SupportVision";
 import { ArrowRight, BookOpen, PenLine, Sparkles } from "lucide-react";
 import { NewsletterForm } from "@/components/site/NewsletterForm";
 
@@ -117,6 +118,7 @@ function Index() {
           </div>
         </section>
       )}
+      <SupportVision />
     </SiteLayout>
   );
 }
