@@ -619,6 +619,5 @@ function PaymentsSettings() {
       </div>
     </div>
 
-    </div>
   );
 }
