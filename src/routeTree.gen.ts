@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UnlockRouteImport } from './routes/unlock'
+import { Route as SupportThanksRouteImport } from './routes/support-thanks'
 import { Route as ScriptsRouteImport } from './routes/scripts'
 import { Route as EventsRouteImport } from './routes/events'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -25,6 +26,11 @@ import { Route as ApiPublicSelcomWebhookRouteImport } from './routes/api/public/
 const UnlockRoute = UnlockRouteImport.update({
   id: '/unlock',
   path: '/unlock',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupportThanksRoute = SupportThanksRouteImport.update({
+  id: '/support-thanks',
+  path: '/support-thanks',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ScriptsRoute = ScriptsRouteImport.update({
@@ -94,6 +100,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/events': typeof EventsRoute
   '/scripts': typeof ScriptsRoute
+  '/support-thanks': typeof SupportThanksRoute
   '/unlock': typeof UnlockRoute
   '/api/public/selcom/webhook': typeof ApiPublicSelcomWebhookRoute
 }
@@ -108,6 +115,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/events': typeof EventsRoute
   '/scripts': typeof ScriptsRoute
+  '/support-thanks': typeof SupportThanksRoute
   '/unlock': typeof UnlockRoute
   '/api/public/selcom/webhook': typeof ApiPublicSelcomWebhookRoute
 }
@@ -123,6 +131,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/events': typeof EventsRoute
   '/scripts': typeof ScriptsRoute
+  '/support-thanks': typeof SupportThanksRoute
   '/unlock': typeof UnlockRoute
   '/api/public/selcom/webhook': typeof ApiPublicSelcomWebhookRoute
 }
@@ -139,6 +148,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/events'
     | '/scripts'
+    | '/support-thanks'
     | '/unlock'
     | '/api/public/selcom/webhook'
   fileRoutesByTo: FileRoutesByTo
@@ -153,6 +163,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/events'
     | '/scripts'
+    | '/support-thanks'
     | '/unlock'
     | '/api/public/selcom/webhook'
   id:
@@ -167,6 +178,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/events'
     | '/scripts'
+    | '/support-thanks'
     | '/unlock'
     | '/api/public/selcom/webhook'
   fileRoutesById: FileRoutesById
@@ -182,6 +194,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   EventsRoute: typeof EventsRoute
   ScriptsRoute: typeof ScriptsRoute
+  SupportThanksRoute: typeof SupportThanksRoute
   UnlockRoute: typeof UnlockRoute
   ApiPublicSelcomWebhookRoute: typeof ApiPublicSelcomWebhookRoute
 }
@@ -193,6 +206,13 @@ declare module '@tanstack/react-router' {
       path: '/unlock'
       fullPath: '/unlock'
       preLoaderRoute: typeof UnlockRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/support-thanks': {
+      id: '/support-thanks'
+      path: '/support-thanks'
+      fullPath: '/support-thanks'
+      preLoaderRoute: typeof SupportThanksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/scripts': {
@@ -286,6 +306,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   EventsRoute: EventsRoute,
   ScriptsRoute: ScriptsRoute,
+  SupportThanksRoute: SupportThanksRoute,
   UnlockRoute: UnlockRoute,
   ApiPublicSelcomWebhookRoute: ApiPublicSelcomWebhookRoute,
 }

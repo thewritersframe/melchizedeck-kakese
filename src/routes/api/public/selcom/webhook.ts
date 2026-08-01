@@ -43,13 +43,94 @@ export const Route = createFileRoute("/api/public/selcom/webhook")({
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
+        const succeeded = result === "SUCCESS" || result === "PAID" || result === "COMPLETED";
+
         const { data: purchase } = await supabaseAdmin
           .from("purchases")
           .select("id, email, item_id, item_title, amount, currency, status, bundle_expires_at")
           .eq("order_ref", orderRef)
           .maybeSingle();
-        if (!purchase) return new Response("Unknown order", { status: 404 });
+
+        if (!purchase) {
+          // Not a product purchase — it may be a "Support My Vision" contribution.
+          const { data: donation } = await supabaseAdmin
+            .from("donations")
+            .select("id, name, email, amount, currency, message, status")
+            .eq("order_ref", orderRef)
+            .maybeSingle();
+          if (!donation) return new Response("Unknown order", { status: 404 });
+          if (donation.status === "paid") return new Response("ok");
+
+          if (!succeeded) {
+            await supabaseAdmin.from("donations").update({ status: "failed", provider_ref: reference }).eq("id", donation.id);
+            return new Response("ok");
+          }
+
+          await supabaseAdmin.from("donations").update({
+            status: "paid",
+            provider_ref: reference,
+            paid_at: new Date().toISOString(),
+          }).eq("id", donation.id);
+
+          const { data: dSettings } = await supabaseAdmin
+            .from("site_settings")
+            .select("value")
+            .eq("key", "payments")
+            .maybeSingle();
+          const dPay = (dSettings?.value ?? {}) as { notify_email?: string };
+          const dNotify = dPay.notify_email ?? "melchizedeckkakese@gmail.com";
+          const dSubject = `Contribution received: ${donation.amount} ${donation.currency} — Support My Vision`;
+          const dText = `A new contribution was received.
+
+Supporter: ${donation.name ?? "(anonymous)"}
+Email: ${donation.email}
+Amount: ${donation.amount} ${donation.currency}
+Message: ${donation.message ?? "(none)"}
+Selcom reference: ${reference}
+Order ref: ${orderRef}`;
+
+          await supabaseAdmin.from("messages").insert({
+            name: donation.name ?? donation.email,
+            email: donation.email,
+            kind: "donation",
+            subject: dSubject,
+            body: `${dText}
+
+Notify: ${dNotify}`,
+          });
+
+          try {
+            const key = process.env.LOVABLE_API_KEY;
+            const from = process.env.NOTIFY_FROM_EMAIL;
+            if (key && from) {
+              const { sendLovableEmail } = await import("@lovable.dev/email-js");
+              await sendLovableEmail(
+                {
+                  to: dNotify,
+                  from,
+                  subject: dSubject,
+                  html: `<p>A new contribution was received.</p><ul>
+                    <li><strong>Supporter:</strong> ${donation.name ?? "(anonymous)"}</li>
+                    <li><strong>Email:</strong> ${donation.email}</li>
+                    <li><strong>Amount:</strong> ${donation.amount} ${donation.currency}</li>
+                    <li><strong>Message:</strong> ${donation.message ?? "(none)"}</li>
+                    <li><strong>Selcom ref:</strong> ${reference}</li>
+                    <li><strong>Order ref:</strong> ${orderRef}</li>
+                  </ul>`,
+                  text: dText,
+                },
+                { apiKey: key },
+              );
+            }
+          } catch (err) {
+            console.error("[selcom webhook] donation email send failed:", err);
+          }
+
+          return new Response("ok");
+        }
+
         if (purchase.status === "paid") return new Response("ok");
+
 
         if (result !== "SUCCESS" && result !== "PAID" && result !== "COMPLETED") {
           await supabaseAdmin.from("purchases").update({ status: "failed", provider_ref: reference }).eq("id", purchase.id);

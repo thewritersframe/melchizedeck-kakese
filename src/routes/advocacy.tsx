@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useSection, useCollection } from "@/lib/cms";
+import { SupportVision } from "@/components/site/SupportVision";
+
 
 export const Route = createFileRoute("/advocacy")({
   head: () => ({ meta: [{ title: "Advocacy & Adventures — Melchizedeck Kakese" }, { name: "description", content: "Youth advocacy work and stories from the road." }] }),
@@ -32,6 +34,8 @@ function Advocacy() {
           {items?.length === 0 && <p className="text-muted-foreground">Stories coming soon.</p>}
         </div>
       </section>
+      <SupportVision />
     </SiteLayout>
   );
 }
+

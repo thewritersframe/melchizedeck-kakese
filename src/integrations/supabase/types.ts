@@ -59,6 +59,57 @@ export type Database = {
         }
         Relationships: []
       }
+      donations: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          email: string
+          id: string
+          message: string | null
+          name: string | null
+          order_ref: string
+          paid_at: string | null
+          phone: string | null
+          provider: string
+          provider_ref: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          email: string
+          id?: string
+          message?: string | null
+          name?: string | null
+          order_ref?: string
+          paid_at?: string | null
+          phone?: string | null
+          provider?: string
+          provider_ref?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          email?: string
+          id?: string
+          message?: string | null
+          name?: string | null
+          order_ref?: string
+          paid_at?: string | null
+          phone?: string | null
+          provider?: string
+          provider_ref?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           body: string

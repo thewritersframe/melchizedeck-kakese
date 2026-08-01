@@ -1,0 +1,111 @@
+import { createServerFn } from "@tanstack/react-start";
+import { createClient } from "@supabase/supabase-js";
+import type { Database } from "@/integrations/supabase/types";
+
+function makeFetch(key: string): typeof fetch {
+  return (input, init) => {
+    const headers = new Headers(init?.headers);
+    if (key.startsWith("sb_") && headers.get("Authorization") === `Bearer ${key}`) {
+      headers.delete("Authorization");
+    }
+    headers.set("apikey", key);
+    return fetch(input, { ...init, headers });
+  };
+}
+
+function serverClient() {
+  const url = process.env.SUPABASE_URL!;
+  const key = process.env.SUPABASE_PUBLISHABLE_KEY!;
+  return createClient<Database>(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false, storage: undefined },
+    global: { fetch: makeFetch(key) },
+  });
+}
+
+/**
+ * Public: start a "Support My Vision" donation.
+ * Creates a pending donation row and opens a hosted Selcom checkout session.
+ */
+export const startDonation = createServerFn({ method: "POST" })
+  .inputValidator((d: {
+    name?: string;
+    email: string;
+    phone?: string;
+    amount: number;
+    message?: string;
+  }) => d)
+  .handler(async ({ data }) => {
+    const email = (data.email ?? "").trim().toLowerCase();
+    if (!email.includes("@") || email.length > 200) throw new Error("Enter a valid email");
+    const amount = Number(data.amount);
+    if (!Number.isFinite(amount) || amount <= 0) throw new Error("Enter a valid amount");
+
+    const supabase = serverClient();
+    const { data: settings } = await supabase
+      .from("site_settings")
+      .select("value")
+      .eq("key", "payments")
+      .maybeSingle();
+    const pay = (settings?.value ?? {}) as { currency?: string; min_donation?: number };
+    const currency = pay.currency ?? "TZS";
+    const min = Number(pay.min_donation ?? 500);
+    if (amount < min) throw new Error(`Minimum contribution is ${min} ${currency}`);
+
+    const name = (data.name ?? "").trim().slice(0, 120) || null;
+    const message = (data.message ?? "").trim().slice(0, 1000) || null;
+    const phone = (data.phone ?? "").trim().slice(0, 30) || null;
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: donation, error } = await supabaseAdmin
+      .from("donations")
+      .insert({
+        name,
+        email,
+        phone,
+        amount,
+        currency,
+        message,
+        provider: "selcom",
+        status: "pending",
+      })
+      .select("id, order_ref, amount, currency")
+      .single();
+    if (error) throw new Error(error.message);
+
+    const { readSelcomCreds, createSelcomCheckoutOrder, buildReturnUrls } = await import(
+      "@/lib/selcom.server"
+    );
+    const creds = readSelcomCreds();
+    if (!creds) {
+      throw new Error(
+        "Payments are not configured yet. Add SELCOM_VENDOR_ID, SELCOM_API_KEY and SELCOM_API_SECRET to enable contributions.",
+      );
+    }
+
+    const { webhook, redirect_url, cancel_url } = buildReturnUrls(
+      donation.order_ref,
+      "/support-thanks",
+    );
+    const { checkoutUrl } = await createSelcomCheckoutOrder(
+      {
+        order_id: donation.order_ref,
+        buyer_email: email,
+        buyer_name: name ?? email.split("@")[0] ?? "Supporter",
+        buyer_phone: phone ?? "",
+        amount,
+        currency,
+        webhook,
+        redirect_url,
+        cancel_url,
+        merchant_remarks: "Support My Vision contribution",
+      },
+      creds,
+    );
+
+    return {
+      orderRef: donation.order_ref,
+      amount: donation.amount,
+      currency: donation.currency,
+      checkoutUrl,
+    };
+  });

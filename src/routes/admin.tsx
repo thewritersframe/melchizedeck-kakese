@@ -66,7 +66,16 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
     { key: "background", label: "Site background image", fields: [
       { name: "imageUrl", label: "Background photo (blurred behind all pages)", type: "image" },
     ]},
+    { key: "support", label: "Support My Vision (contributions)", fields: [
+      { name: "eyebrow", label: "Eyebrow" },
+      { name: "title", label: "Title" },
+      { name: "body", label: "Body", type: "textarea" },
+      { name: "amounts", label: "Suggested amounts (comma separated, e.g. 5000, 10000, 25000)" },
+      { name: "buttonLabel", label: "Button label" },
+      { name: "note", label: "Small note under the text", type: "textarea" },
+    ]},
     { key: "footer", label: "Footer & Social links", fields: [
+
       { name: "tagline", label: "Tagline" }, { name: "copyright", label: "Copyright text" },
       { name: "instagram", label: "Instagram URL" },
       { name: "threads", label: "Threads URL" },
@@ -526,6 +535,12 @@ function PaymentsSettings() {
     queryFn: async () => (await supabase.from("purchases").select("*").order("created_at", { ascending: false }).limit(100)).data ?? [],
   });
 
+  const { data: donations } = useQuery({
+    queryKey: ["admin-donations"],
+    queryFn: async () => (await supabase.from("donations").select("*").order("created_at", { ascending: false }).limit(100)).data ?? [],
+  });
+
+
   if (isLoading) return <Loader2 className="h-5 w-5 animate-spin" />;
   return (
     <div className="space-y-8">
@@ -549,10 +564,15 @@ function PaymentsSettings() {
             <span className="text-xs uppercase tracking-widest text-muted-foreground">Free picks per bundle</span>
             <Input type="number" value={Number(form.bundle_free_picks ?? 1)} onChange={(e) => setForm({ ...form, bundle_free_picks: Number(e.target.value) })} className="mt-1.5" />
           </label>
+          <label className="block">
+            <span className="text-xs uppercase tracking-widest text-muted-foreground">Minimum contribution (Support My Vision)</span>
+            <Input type="number" value={Number(form.min_donation ?? 500)} onChange={(e) => setForm({ ...form, min_donation: Number(e.target.value) })} className="mt-1.5" />
+          </label>
           <label className="block md:col-span-2">
             <span className="text-xs uppercase tracking-widest text-muted-foreground">Notification email (payment alerts)</span>
             <Input value={String(form.notify_email ?? "")} onChange={(e) => setForm({ ...form, notify_email: e.target.value })} className="mt-1.5" />
           </label>
+
         </div>
         <Button className="mt-6 bg-gold text-primary-foreground hover:opacity-90" disabled={save.isPending} onClick={() => save.mutate()}>
           {save.isPending ? "Saving…" : "Save settings"}
@@ -579,6 +599,25 @@ function PaymentsSettings() {
           ))}
         </div>
       </div>
+
+      <div className="rounded-xl border border-border/60 bg-card/40 p-6">
+        <h3 className="font-serif text-xl text-cream">Contributions (Support My Vision)</h3>
+        <p className="mt-1 text-xs text-muted-foreground">Text and suggested amounts are editable under Pages → Site → Support My Vision.</p>
+        <div className="mt-4 space-y-2">
+          {donations?.length === 0 && <p className="text-sm text-muted-foreground">No contributions yet.</p>}
+          {donations?.map((d) => (
+            <div key={d.id} className="flex flex-wrap items-center gap-3 rounded-md border border-border/60 bg-background/40 px-3 py-2 text-sm">
+              <span className={`rounded-full px-2 py-0.5 text-[11px] ${d.status === "paid" ? "bg-emerald-500/15 text-emerald-400" : d.status === "failed" ? "bg-destructive/20 text-destructive" : "bg-amber-500/15 text-amber-400"}`}>{d.status}</span>
+              <span className="font-medium text-cream">{d.name ?? "Anonymous"}</span>
+              <span className="text-muted-foreground">{d.email}</span>
+              <span className="text-gold">{d.amount} {d.currency}</span>
+              {d.message && <span className="text-muted-foreground italic">“{d.message}”</span>}
+              <span className="ml-auto text-xs text-muted-foreground">{new Date(d.created_at).toLocaleString()}</span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
+
   );
 }
