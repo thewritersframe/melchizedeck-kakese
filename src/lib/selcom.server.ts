@@ -76,28 +76,23 @@ function getOrigin(): string {
   return "";
 }
 
-export function buildReturnUrls(orderRef: string): {
+export function buildReturnUrls(
+  orderRef: string,
+  returnPath = "/unlock",
+): {
   webhook: string;
   redirect_url: string;
   cancel_url: string;
 } {
   const origin = getOrigin();
-  if (!origin) {
-    // Last-resort fallback to the published domain. The buyer is only redirected
-    // here if request headers don't reveal the origin (very rare on the live site).
-    const base = "https://melchizedeck-kakese.lovable.app";
-    return {
-      webhook: `${base}/api/public/selcom/webhook`,
-      redirect_url: `${base}/unlock?ref=${orderRef}`,
-      cancel_url: `${base}/`,
-    };
-  }
+  const base = origin || "https://melchizedeck-kakese.lovable.app";
   return {
-    webhook: `${origin}/api/public/selcom/webhook`,
-    redirect_url: `${origin}/unlock?ref=${orderRef}`,
-    cancel_url: `${origin}/`,
+    webhook: `${base}/api/public/selcom/webhook`,
+    redirect_url: `${base}${returnPath}?ref=${orderRef}`,
+    cancel_url: `${base}/`,
   };
 }
+
 
 /**
  * Creates a hosted Selcom checkout order and returns the gateway URL the buyer
