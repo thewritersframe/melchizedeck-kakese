@@ -535,6 +535,12 @@ function PaymentsSettings() {
     queryFn: async () => (await supabase.from("purchases").select("*").order("created_at", { ascending: false }).limit(100)).data ?? [],
   });
 
+  const { data: donations } = useQuery({
+    queryKey: ["admin-donations"],
+    queryFn: async () => (await supabase.from("donations").select("*").order("created_at", { ascending: false }).limit(100)).data ?? [],
+  });
+
+
   if (isLoading) return <Loader2 className="h-5 w-5 animate-spin" />;
   return (
     <div className="space-y-8">
