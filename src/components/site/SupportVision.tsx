@@ -10,6 +10,7 @@ import { useSection } from "@/lib/cms";
 import { useSiteSettings } from "@/lib/settings";
 import { startDonation } from "@/lib/donations.functions";
 import { PriceTag } from "@/components/site/PriceTag";
+import { SelcomPayPanel, type PayInstructions } from "@/components/site/SelcomPayPanel";
 
 type SupportContent = {
   eyebrow?: string;
@@ -47,6 +48,7 @@ export function SupportVision() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
+  const [manual, setManual] = useState<PayInstructions | null>(null);
 
   const donate = useServerFn(startDonation);
   const start = useMutation({
@@ -62,6 +64,13 @@ export function SupportVision() {
       if (res?.checkoutUrl) {
         toast.success("Redirecting to secure checkout…");
         window.location.href = res.checkoutUrl;
+      } else if (res?.manual && (res.manual.payLink || res.manual.qrPayload)) {
+        setManual({
+          orderRef: res.orderRef,
+          amount: Number(res.amount),
+          currency: res.currency,
+          ...res.manual,
+        });
       } else {
         toast.error("Could not open checkout. Please try again.");
       }
@@ -85,6 +94,15 @@ export function SupportVision() {
           </div>
 
           <div>
+            {manual ? (
+              <div className="rounded-lg border border-gold/25 bg-card/60 p-4">
+                <SelcomPayPanel info={manual} />
+                <Button variant="outline" className="mt-4 w-full" onClick={() => setManual(null)}>
+                  Make another contribution
+                </Button>
+              </div>
+            ) : (
+            <>
             {presets.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {presets.map((p) => (
@@ -135,6 +153,8 @@ export function SupportVision() {
             >
               {start.isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Opening checkout…</> : c.buttonLabel}
             </Button>
+            </>
+            )}
           </div>
         </div>
       </div>
