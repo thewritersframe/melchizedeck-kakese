@@ -77,10 +77,26 @@ export const startCheckout = createServerFn({ method: "POST" })
     // buyer is redirected to. All Selcom logic lives in selcom.server.ts (server-only).
     const { readSelcomCreds, createSelcomCheckoutOrder, buildReturnUrls } = await import("@/lib/selcom.server");
     const creds = readSelcomCreds();
+    const manual = {
+      payLink: (pay as { pay_link?: string }).pay_link ?? null,
+      tillNumber: (pay as { till_number?: string }).till_number ?? null,
+      merchantName: (pay as { merchant_name?: string }).merchant_name ?? null,
+      qrPayload: (pay as { tips_qr?: string }).tips_qr ?? null,
+    };
     if (!creds) {
-      throw new Error(
-        "Selcom is not configured yet. Add SELCOM_VENDOR_ID, SELCOM_API_KEY and SELCOM_API_SECRET to enable payments.",
-      );
+      // No hosted-checkout credentials: hand the buyer the merchant's Selcom
+      // payment link / TIPS QR so the money still reaches the merchant.
+      if (!manual.payLink && !manual.qrPayload) {
+        throw new Error("Payments are not configured yet. Please try again later.");
+      }
+      return {
+        orderRef: purchase.order_ref,
+        amount: purchase.amount,
+        currency: purchase.currency,
+        checkoutUrl: null as string | null,
+        manual,
+        pending: true,
+      };
     }
 
     const { webhook, redirect_url, cancel_url } = buildReturnUrls(purchase.order_ref);
@@ -104,7 +120,8 @@ export const startCheckout = createServerFn({ method: "POST" })
       orderRef: purchase.order_ref,
       amount: purchase.amount,
       currency: purchase.currency,
-      checkoutUrl,
+      checkoutUrl: checkoutUrl as string | null,
+      manual,
       pending: true,
     };
   });
