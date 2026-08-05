@@ -20,6 +20,7 @@ type Props = {
 export function UnlockDialog({ item, onClose, price, itemPrice, itemCurrency }: Props) {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [manual, setManual] = useState<PayInstructions | null>(null);
   const start = useServerFn(startCheckout);
   const qc = useQueryClient();
 
@@ -30,6 +31,13 @@ export function UnlockDialog({ item, onClose, price, itemPrice, itemCurrency }: 
       qc.invalidateQueries({ queryKey: ["unlocks", email.trim().toLowerCase()] });
       if (r.checkoutUrl) {
         window.location.href = r.checkoutUrl;
+      } else if (r.manual && (r.manual.payLink || r.manual.qrPayload)) {
+        setManual({
+          orderRef: r.orderRef,
+          amount: Number(r.amount),
+          currency: r.currency,
+          ...r.manual,
+        });
       } else {
         toast.success(`Order ${r.orderRef.slice(0, 8)} created. Once payment is completed you'll get access — refresh this page after paying.`);
         onClose();
@@ -37,6 +45,7 @@ export function UnlockDialog({ item, onClose, price, itemPrice, itemCurrency }: 
     },
     onError: (e: Error) => toast.error(e.message),
   });
+
 
   const effectivePrice = itemPrice ?? price?.standard_price ?? null;
   const effectiveCurrency = itemCurrency ?? price?.currency ?? "TZS";
