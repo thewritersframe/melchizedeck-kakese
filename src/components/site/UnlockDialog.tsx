@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { startCheckout } from "@/lib/payments.functions";
 import { setStoredEmail } from "@/lib/locks";
 import { useLocalPrice } from "@/lib/currency";
+import { SelcomPayPanel, type PayInstructions } from "@/components/site/SelcomPayPanel";
 
 type Props = {
   item: { id: string; title: string };
@@ -70,6 +71,13 @@ export function UnlockDialog({ item, onClose, price, itemPrice, itemCurrency }: 
         {localized?.isConverted && (
           <p className="mt-1 text-[11px] text-muted-foreground/80">Charged as {localized.original} — your card may show a small conversion difference.</p>
         )}
+        {manual ? (
+          <div className="mt-5">
+            <SelcomPayPanel info={manual} />
+            <Button variant="outline" className="mt-4 w-full" onClick={onClose}>Done</Button>
+          </div>
+        ) : (
+        <>
         <div className="mt-5 space-y-3">
           <label className="block">
             <span className="text-xs uppercase tracking-widest text-muted-foreground">Email</span>
@@ -91,6 +99,8 @@ export function UnlockDialog({ item, onClose, price, itemPrice, itemCurrency }: 
         <p className="mt-3 text-[11px] text-muted-foreground">
           Payments are processed by Selcom. Access is tied to your email — enter the same email later to restore access.
         </p>
+        </>
+        )}
       </div>
     </div>
   );
