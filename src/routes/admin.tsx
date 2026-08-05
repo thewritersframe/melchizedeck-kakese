@@ -572,6 +572,24 @@ function PaymentsSettings() {
             <span className="text-xs uppercase tracking-widest text-muted-foreground">Notification email (payment alerts)</span>
             <Input value={String(form.notify_email ?? "")} onChange={(e) => setForm({ ...form, notify_email: e.target.value })} className="mt-1.5" />
           </label>
+          <label className="block">
+            <span className="text-xs uppercase tracking-widest text-muted-foreground">Selcom payment link</span>
+            <Input value={String(form.pay_link ?? "")} onChange={(e) => setForm({ ...form, pay_link: e.target.value })} placeholder="https://selcompay.me/70048280" className="mt-1.5" />
+          </label>
+          <label className="block">
+            <span className="text-xs uppercase tracking-widest text-muted-foreground">Till / Lipa number</span>
+            <Input value={String(form.till_number ?? "")} onChange={(e) => setForm({ ...form, till_number: e.target.value })} className="mt-1.5" />
+          </label>
+          <label className="block">
+            <span className="text-xs uppercase tracking-widest text-muted-foreground">Merchant name (shown to payers)</span>
+            <Input value={String(form.merchant_name ?? "")} onChange={(e) => setForm({ ...form, merchant_name: e.target.value })} className="mt-1.5" />
+          </label>
+          <label className="block md:col-span-2">
+            <span className="text-xs uppercase tracking-widest text-muted-foreground">TIPS QR payload (scannable code)</span>
+            <Input value={String(form.tips_qr ?? "")} onChange={(e) => setForm({ ...form, tips_qr: e.target.value })} className="mt-1.5" />
+          </label>
+
+
 
         </div>
         <Button className="mt-6 bg-gold text-primary-foreground hover:opacity-90" disabled={save.isPending} onClick={() => save.mutate()}>
