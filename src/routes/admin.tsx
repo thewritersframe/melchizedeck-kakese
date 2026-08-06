@@ -3,7 +3,8 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useIsAdmin, uploadMedia } from "@/lib/cms";
+import { useIsAdmin, uploadMedia, ALLOWED_VIDEO_TYPES, MAX_VIDEO_BYTES } from "@/lib/cms";
+import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -57,6 +58,7 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
   { page: "scripts", sections: [{ key: "header", label: "Header", fields: [{ name: "title", label: "Title" }, { name: "body", label: "Intro", type: "textarea" }] }] },
   { page: "blog", sections: [{ key: "header", label: "Header", fields: [{ name: "title", label: "Title" }, { name: "body", label: "Intro", type: "textarea" }] }] },
   { page: "events", sections: [{ key: "header", label: "Header", fields: [{ name: "title", label: "Title" }, { name: "body", label: "Intro", type: "textarea" }] }] },
+  { page: "speeches", sections: [{ key: "header", label: "Header", fields: [{ name: "title", label: "Title" }, { name: "body", label: "Intro", type: "textarea" }] }] },
   { page: "advocacy", sections: [{ key: "header", label: "Header", fields: [{ name: "title", label: "Title" }, { name: "body", label: "Intro", type: "textarea" }] }] },
   { page: "contact", sections: [{ key: "main", label: "Contact", fields: [
     { name: "title", label: "Title" }, { name: "body", label: "Body", type: "textarea" },
@@ -90,7 +92,7 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
   ]},
 ];
 
-type MetaField = { name: string; label: string; type?: "text" | "bool" };
+type MetaField = { name: string; label: string; type?: "text" | "bool" | "video" };
 const COLLECTIONS: { key: string; label: string; extraMeta: MetaField[]; lockable?: boolean }[] = [
   { key: "book", label: "Books", lockable: true, extraMeta: [
     { name: "genre", label: "Genre" },
@@ -125,9 +127,17 @@ const COLLECTIONS: { key: string; label: string; extraMeta: MetaField[]; lockabl
     { name: "location", label: "Location" },
     { name: "url", label: "Related link (optional)" },
   ]},
+  { key: "speech", label: "Speeches (videos)", extraMeta: [
+    { name: "video_url", label: "Video file", type: "video" },
+    { name: "external_url", label: "Or paste a YouTube / Vimeo / Facebook video link" },
+    { name: "date", label: "Date (e.g. 2026-05-12)" },
+    { name: "location", label: "Location / event" },
+    { name: "duration", label: "Duration (e.g. 12:40)" },
+  ]},
+
 ];
 
-type FieldSpec = { name: string; label: string; type?: "text" | "textarea" | "image" | "json" };
+type FieldSpec = { name: string; label: string; type?: "text" | "textarea" | "image" | "json" | "video" };
 
 function Admin() {
   const nav = useNavigate();
@@ -272,7 +282,50 @@ function FieldInput({ field, value, onChange }: { field: FieldSpec; value: unkno
       </label>
     );
   }
+  if (field.type === "video") {
+    const url = String(value ?? "");
+    return (
+      <div className="rounded-lg border border-border/60 p-3">
+        <span className="text-xs uppercase tracking-widest text-muted-foreground">{field.label}</span>
+        <div className="mt-2 flex flex-wrap items-center gap-3">
+          {url ? (
+            <video src={url} controls preload="metadata" className="h-28 w-48 rounded-md border border-border/60 bg-black object-cover" />
+          ) : (
+            <div className="flex h-28 w-48 items-center justify-center rounded-md border border-dashed border-border text-xs text-muted-foreground">No video</div>
+          )}
+          <div className="flex flex-col gap-2">
+            <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-border px-3 py-2 text-sm hover:bg-accent/10">
+              {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+              {uploading ? `Uploading… ${progress}%` : "Upload video"}
+              <input type="file" accept="video/mp4,video/webm,video/quicktime,video/x-m4v,video/ogg" className="hidden" onChange={async (e) => {
+                const file = e.target.files?.[0]; if (!file) return;
+                setUploading(true); setProgress(0);
+                const t = toast.loading("Uploading video…");
+                try {
+                  const u = await uploadMedia(file, {
+                    onProgress: (p) => setProgress(p),
+                    allowedTypes: ALLOWED_VIDEO_TYPES,
+                    maxBytes: MAX_VIDEO_BYTES,
+                  });
+                  onChange(u);
+                  toast.success("Video uploaded", { id: t });
+                } catch (err) {
+                  toast.error((err as Error).message, { id: t });
+                } finally {
+                  setUploading(false); setProgress(0); e.target.value = "";
+                }
+              }} />
+            </label>
+            {uploading && <Progress value={progress} className="w-48" />}
+            {url && <Button size="sm" variant="ghost" onClick={() => onChange("")}>Remove video</Button>}
+            <p className="max-w-xs text-xs text-muted-foreground">MP4, WEBM, MOV, M4V or OGG — up to 50MB. For longer speeches, upload to YouTube and paste the link instead. Or leave empty and paste a YouTube/Vimeo link below.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
   if (field.type === "image") {
+
     const url = String(value ?? "");
     return (
       <div>
@@ -424,6 +477,12 @@ function ItemEditor({ item, extraMeta, lockable, onChange }: { item: Item; extra
                     onChange={(e) => setForm({ ...form, meta: { ...(form.meta as Record<string, unknown>), [m.name]: e.target.checked } })} />
                   {m.label}
                 </label>
+              );
+            }
+            if (m.type === "video") {
+              return (
+                <FieldInput key={m.name} field={{ name: m.name, label: m.label, type: "video" }} value={cur}
+                  onChange={(v) => setForm({ ...form, meta: { ...(form.meta as Record<string, unknown>), [m.name]: v } })} />
               );
             }
             return (

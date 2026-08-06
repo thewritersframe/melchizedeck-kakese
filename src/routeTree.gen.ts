@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UnlockRouteImport } from './routes/unlock'
 import { Route as SupportThanksRouteImport } from './routes/support-thanks'
+import { Route as SpeechesRouteImport } from './routes/speeches'
 import { Route as ScriptsRouteImport } from './routes/scripts'
 import { Route as EventsRouteImport } from './routes/events'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -31,6 +32,11 @@ const UnlockRoute = UnlockRouteImport.update({
 const SupportThanksRoute = SupportThanksRouteImport.update({
   id: '/support-thanks',
   path: '/support-thanks',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SpeechesRoute = SpeechesRouteImport.update({
+  id: '/speeches',
+  path: '/speeches',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ScriptsRoute = ScriptsRouteImport.update({
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/events': typeof EventsRoute
   '/scripts': typeof ScriptsRoute
+  '/speeches': typeof SpeechesRoute
   '/support-thanks': typeof SupportThanksRoute
   '/unlock': typeof UnlockRoute
   '/api/public/selcom/webhook': typeof ApiPublicSelcomWebhookRoute
@@ -115,6 +122,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/events': typeof EventsRoute
   '/scripts': typeof ScriptsRoute
+  '/speeches': typeof SpeechesRoute
   '/support-thanks': typeof SupportThanksRoute
   '/unlock': typeof UnlockRoute
   '/api/public/selcom/webhook': typeof ApiPublicSelcomWebhookRoute
@@ -131,6 +139,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/events': typeof EventsRoute
   '/scripts': typeof ScriptsRoute
+  '/speeches': typeof SpeechesRoute
   '/support-thanks': typeof SupportThanksRoute
   '/unlock': typeof UnlockRoute
   '/api/public/selcom/webhook': typeof ApiPublicSelcomWebhookRoute
@@ -148,6 +157,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/events'
     | '/scripts'
+    | '/speeches'
     | '/support-thanks'
     | '/unlock'
     | '/api/public/selcom/webhook'
@@ -163,6 +173,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/events'
     | '/scripts'
+    | '/speeches'
     | '/support-thanks'
     | '/unlock'
     | '/api/public/selcom/webhook'
@@ -178,6 +189,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/events'
     | '/scripts'
+    | '/speeches'
     | '/support-thanks'
     | '/unlock'
     | '/api/public/selcom/webhook'
@@ -194,6 +206,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   EventsRoute: typeof EventsRoute
   ScriptsRoute: typeof ScriptsRoute
+  SpeechesRoute: typeof SpeechesRoute
   SupportThanksRoute: typeof SupportThanksRoute
   UnlockRoute: typeof UnlockRoute
   ApiPublicSelcomWebhookRoute: typeof ApiPublicSelcomWebhookRoute
@@ -213,6 +226,13 @@ declare module '@tanstack/react-router' {
       path: '/support-thanks'
       fullPath: '/support-thanks'
       preLoaderRoute: typeof SupportThanksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/speeches': {
+      id: '/speeches'
+      path: '/speeches'
+      fullPath: '/speeches'
+      preLoaderRoute: typeof SpeechesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/scripts': {
@@ -306,6 +326,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   EventsRoute: EventsRoute,
   ScriptsRoute: ScriptsRoute,
+  SpeechesRoute: SpeechesRoute,
   SupportThanksRoute: SupportThanksRoute,
   UnlockRoute: UnlockRoute,
   ApiPublicSelcomWebhookRoute: ApiPublicSelcomWebhookRoute,
@@ -313,13 +334,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

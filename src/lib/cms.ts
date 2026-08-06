@@ -75,10 +75,22 @@ export const ALLOWED_IMAGE_TYPES = [
 ];
 export const MAX_IMAGE_BYTES = 10 * 1024 * 1024; // 10MB
 
+export const ALLOWED_VIDEO_TYPES = [
+  "video/mp4",
+  "video/webm",
+  "video/quicktime",
+  "video/x-m4v",
+  "video/ogg",
+];
+export const MAX_VIDEO_BYTES = 50 * 1024 * 1024; // 50MB (storage per-file limit)
+
 export type UploadOptions = {
   onProgress?: (percent: number) => void;
   signal?: AbortSignal;
   maxRetries?: number;
+  allowedTypes?: string[];
+  maxBytes?: number;
+  kindLabel?: string;
 };
 
 function sleep(ms: number) {
@@ -120,15 +132,23 @@ async function uploadOnce(
 }
 
 export async function uploadMedia(file: File, opts: UploadOptions = {}): Promise<string> {
+  const allowed = opts.allowedTypes ?? ALLOWED_IMAGE_TYPES;
+  const maxBytes = opts.maxBytes ?? MAX_IMAGE_BYTES;
+  const isVideo = allowed === ALLOWED_VIDEO_TYPES;
   // Validation
-  if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-    throw new Error(`Unsupported file type "${file.type || "unknown"}". Use JPG, PNG, WEBP, GIF, AVIF, or SVG.`);
+  if (!allowed.includes(file.type)) {
+    throw new Error(
+      isVideo
+        ? `Unsupported file type "${file.type || "unknown"}". Use MP4, WEBM, MOV, M4V, or OGG.`
+        : `Unsupported file type "${file.type || "unknown"}". Use JPG, PNG, WEBP, GIF, AVIF, or SVG.`,
+    );
   }
-  if (file.size > MAX_IMAGE_BYTES) {
+  if (file.size > maxBytes) {
     const mb = (file.size / (1024 * 1024)).toFixed(1);
-    throw new Error(`File is ${mb}MB — max is 10MB.`);
+    throw new Error(`File is ${mb}MB — max is ${Math.round(maxBytes / (1024 * 1024))}MB.`);
   }
   if (file.size === 0) throw new Error("File is empty.");
+
 
   const { data: sess } = await supabase.auth.getSession();
   const token = sess.session?.access_token;
@@ -165,16 +185,19 @@ export async function uploadMedia(file: File, opts: UploadOptions = {}): Promise
   }
   if (!signed) throw new Error("Uploaded, but failed to generate a URL. Try again.");
 
-  // Preload to warm CDN cache so it appears instantly
-  try {
-    await new Promise<void>((resolve) => {
-      const img = new Image();
-      img.onload = () => resolve();
-      img.onerror = () => resolve();
-      img.src = signed as string;
-      setTimeout(() => resolve(), 4000);
-    });
-  } catch { /* ignore */ }
+  // Preload to warm CDN cache so it appears instantly (images only)
+  if (!isVideo) {
+    try {
+      await new Promise<void>((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+        img.src = signed as string;
+        setTimeout(() => resolve(), 4000);
+      });
+    } catch { /* ignore */ }
+  }
+
 
   return signed;
 }
