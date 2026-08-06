@@ -479,6 +479,12 @@ function ItemEditor({ item, extraMeta, lockable, onChange }: { item: Item; extra
                 </label>
               );
             }
+            if (m.type === "video") {
+              return (
+                <FieldInput key={m.name} field={{ name: m.name, label: m.label, type: "video" }} value={cur}
+                  onChange={(v) => setForm({ ...form, meta: { ...(form.meta as Record<string, unknown>), [m.name]: v } })} />
+              );
+            }
             return (
               <Input key={m.name} placeholder={m.label} value={String(cur ?? "")}
                 onChange={(e) => setForm({ ...form, meta: { ...(form.meta as Record<string, unknown>), [m.name]: e.target.value } })} />
