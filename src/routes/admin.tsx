@@ -136,7 +136,7 @@ const COLLECTIONS: { key: string; label: string; extraMeta: MetaField[]; lockabl
 
 ];
 
-type FieldSpec = { name: string; label: string; type?: "text" | "textarea" | "image" | "json" };
+type FieldSpec = { name: string; label: string; type?: "text" | "textarea" | "image" | "json" | "video" };
 
 function Admin() {
   const nav = useNavigate();
