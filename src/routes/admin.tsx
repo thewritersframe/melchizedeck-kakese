@@ -318,7 +318,7 @@ function FieldInput({ field, value, onChange }: { field: FieldSpec; value: unkno
             </label>
             {uploading && <Progress value={progress} className="w-48" />}
             {url && <Button size="sm" variant="ghost" onClick={() => onChange("")}>Remove video</Button>}
-            <p className="max-w-xs text-xs text-muted-foreground">MP4, WEBM, MOV, M4V or OGG — up to 500MB. Or leave empty and paste a YouTube/Vimeo link below.</p>
+            <p className="max-w-xs text-xs text-muted-foreground">MP4, WEBM, MOV, M4V or OGG — up to 50MB. For longer speeches, upload to YouTube and paste the link instead. Or leave empty and paste a YouTube/Vimeo link below.</p>
           </div>
         </div>
       </div>

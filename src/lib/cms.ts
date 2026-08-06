@@ -82,7 +82,7 @@ export const ALLOWED_VIDEO_TYPES = [
   "video/x-m4v",
   "video/ogg",
 ];
-export const MAX_VIDEO_BYTES = 500 * 1024 * 1024; // 500MB
+export const MAX_VIDEO_BYTES = 50 * 1024 * 1024; // 50MB (storage per-file limit)
 
 export type UploadOptions = {
   onProgress?: (percent: number) => void;
