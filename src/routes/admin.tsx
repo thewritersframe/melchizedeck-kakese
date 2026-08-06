@@ -281,7 +281,50 @@ function FieldInput({ field, value, onChange }: { field: FieldSpec; value: unkno
       </label>
     );
   }
+  if (field.type === "video") {
+    const url = String(value ?? "");
+    return (
+      <div className="rounded-lg border border-border/60 p-3">
+        <span className="text-xs uppercase tracking-widest text-muted-foreground">{field.label}</span>
+        <div className="mt-2 flex flex-wrap items-center gap-3">
+          {url ? (
+            <video src={url} controls preload="metadata" className="h-28 w-48 rounded-md border border-border/60 bg-black object-cover" />
+          ) : (
+            <div className="flex h-28 w-48 items-center justify-center rounded-md border border-dashed border-border text-xs text-muted-foreground">No video</div>
+          )}
+          <div className="flex flex-col gap-2">
+            <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-border px-3 py-2 text-sm hover:bg-accent/10">
+              {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+              {uploading ? `Uploading… ${progress}%` : "Upload video"}
+              <input type="file" accept="video/mp4,video/webm,video/quicktime,video/x-m4v,video/ogg" className="hidden" onChange={async (e) => {
+                const file = e.target.files?.[0]; if (!file) return;
+                setUploading(true); setProgress(0);
+                const t = toast.loading("Uploading video…");
+                try {
+                  const u = await uploadMedia(file, {
+                    onProgress: (p) => setProgress(p),
+                    allowedTypes: ALLOWED_VIDEO_TYPES,
+                    maxBytes: MAX_VIDEO_BYTES,
+                  });
+                  onChange(u);
+                  toast.success("Video uploaded", { id: t });
+                } catch (err) {
+                  toast.error((err as Error).message, { id: t });
+                } finally {
+                  setUploading(false); setProgress(0); e.target.value = "";
+                }
+              }} />
+            </label>
+            {uploading && <Progress value={progress} className="w-48" />}
+            {url && <Button size="sm" variant="ghost" onClick={() => onChange("")}>Remove video</Button>}
+            <p className="max-w-xs text-xs text-muted-foreground">MP4, WEBM, MOV, M4V or OGG — up to 500MB. Or leave empty and paste a YouTube/Vimeo link below.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
   if (field.type === "image") {
+
     const url = String(value ?? "");
     return (
       <div>
