@@ -125,6 +125,14 @@ const COLLECTIONS: { key: string; label: string; extraMeta: MetaField[]; lockabl
     { name: "location", label: "Location" },
     { name: "url", label: "Related link (optional)" },
   ]},
+  { key: "speech", label: "Speeches (videos)", extraMeta: [
+    { name: "video_url", label: "Video file", type: "video" },
+    { name: "external_url", label: "Or paste a YouTube / Vimeo / Facebook video link" },
+    { name: "date", label: "Date (e.g. 2026-05-12)" },
+    { name: "location", label: "Location / event" },
+    { name: "duration", label: "Duration (e.g. 12:40)" },
+  ]},
+
 ];
 
 type FieldSpec = { name: string; label: string; type?: "text" | "textarea" | "image" | "json" };
