@@ -185,16 +185,19 @@ export async function uploadMedia(file: File, opts: UploadOptions = {}): Promise
   }
   if (!signed) throw new Error("Uploaded, but failed to generate a URL. Try again.");
 
-  // Preload to warm CDN cache so it appears instantly
-  try {
-    await new Promise<void>((resolve) => {
-      const img = new Image();
-      img.onload = () => resolve();
-      img.onerror = () => resolve();
-      img.src = signed as string;
-      setTimeout(() => resolve(), 4000);
-    });
-  } catch { /* ignore */ }
+  // Preload to warm CDN cache so it appears instantly (images only)
+  if (!isVideo) {
+    try {
+      await new Promise<void>((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+        img.src = signed as string;
+        setTimeout(() => resolve(), 4000);
+      });
+    } catch { /* ignore */ }
+  }
+
 
   return signed;
 }
