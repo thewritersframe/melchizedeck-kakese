@@ -132,15 +132,23 @@ async function uploadOnce(
 }
 
 export async function uploadMedia(file: File, opts: UploadOptions = {}): Promise<string> {
+  const allowed = opts.allowedTypes ?? ALLOWED_IMAGE_TYPES;
+  const maxBytes = opts.maxBytes ?? MAX_IMAGE_BYTES;
+  const isVideo = allowed === ALLOWED_VIDEO_TYPES;
   // Validation
-  if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-    throw new Error(`Unsupported file type "${file.type || "unknown"}". Use JPG, PNG, WEBP, GIF, AVIF, or SVG.`);
+  if (!allowed.includes(file.type)) {
+    throw new Error(
+      isVideo
+        ? `Unsupported file type "${file.type || "unknown"}". Use MP4, WEBM, MOV, M4V, or OGG.`
+        : `Unsupported file type "${file.type || "unknown"}". Use JPG, PNG, WEBP, GIF, AVIF, or SVG.`,
+    );
   }
-  if (file.size > MAX_IMAGE_BYTES) {
+  if (file.size > maxBytes) {
     const mb = (file.size / (1024 * 1024)).toFixed(1);
-    throw new Error(`File is ${mb}MB — max is 10MB.`);
+    throw new Error(`File is ${mb}MB — max is ${Math.round(maxBytes / (1024 * 1024))}MB.`);
   }
   if (file.size === 0) throw new Error("File is empty.");
+
 
   const { data: sess } = await supabase.auth.getSession();
   const token = sess.session?.access_token;
