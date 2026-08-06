@@ -75,10 +75,22 @@ export const ALLOWED_IMAGE_TYPES = [
 ];
 export const MAX_IMAGE_BYTES = 10 * 1024 * 1024; // 10MB
 
+export const ALLOWED_VIDEO_TYPES = [
+  "video/mp4",
+  "video/webm",
+  "video/quicktime",
+  "video/x-m4v",
+  "video/ogg",
+];
+export const MAX_VIDEO_BYTES = 500 * 1024 * 1024; // 500MB
+
 export type UploadOptions = {
   onProgress?: (percent: number) => void;
   signal?: AbortSignal;
   maxRetries?: number;
+  allowedTypes?: string[];
+  maxBytes?: number;
+  kindLabel?: string;
 };
 
 function sleep(ms: number) {
