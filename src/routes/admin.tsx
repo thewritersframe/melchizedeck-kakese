@@ -57,6 +57,7 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
   { page: "scripts", sections: [{ key: "header", label: "Header", fields: [{ name: "title", label: "Title" }, { name: "body", label: "Intro", type: "textarea" }] }] },
   { page: "blog", sections: [{ key: "header", label: "Header", fields: [{ name: "title", label: "Title" }, { name: "body", label: "Intro", type: "textarea" }] }] },
   { page: "events", sections: [{ key: "header", label: "Header", fields: [{ name: "title", label: "Title" }, { name: "body", label: "Intro", type: "textarea" }] }] },
+  { page: "speeches", sections: [{ key: "header", label: "Header", fields: [{ name: "title", label: "Title" }, { name: "body", label: "Intro", type: "textarea" }] }] },
   { page: "advocacy", sections: [{ key: "header", label: "Header", fields: [{ name: "title", label: "Title" }, { name: "body", label: "Intro", type: "textarea" }] }] },
   { page: "contact", sections: [{ key: "main", label: "Contact", fields: [
     { name: "title", label: "Title" }, { name: "body", label: "Body", type: "textarea" },
