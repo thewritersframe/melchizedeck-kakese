@@ -90,7 +90,7 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
   ]},
 ];
 
-type MetaField = { name: string; label: string; type?: "text" | "bool" };
+type MetaField = { name: string; label: string; type?: "text" | "bool" | "video" };
 const COLLECTIONS: { key: string; label: string; extraMeta: MetaField[]; lockable?: boolean }[] = [
   { key: "book", label: "Books", lockable: true, extraMeta: [
     { name: "genre", label: "Genre" },
