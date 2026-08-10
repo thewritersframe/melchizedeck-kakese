@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useSection, useCollection } from "@/lib/cms";
+import { ShareButtons } from "@/components/site/ShareButtons";
 
 export const Route = createFileRoute("/blog")({
   head: () => ({ meta: [{ title: "Blog — Melchizedeck Kakese" }, { name: "description", content: "Essays and reflections." }] }),
