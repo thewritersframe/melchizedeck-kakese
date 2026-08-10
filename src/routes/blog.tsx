@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useSection, useCollection } from "@/lib/cms";
+import { ShareButtons } from "@/components/site/ShareButtons";
 
 export const Route = createFileRoute("/blog")({
   head: () => ({ meta: [{ title: "Blog — Melchizedeck Kakese" }, { name: "description", content: "Essays and reflections." }] }),
@@ -54,7 +55,7 @@ function Blog() {
             const dateStr = new Date(post.created_at).toLocaleDateString(undefined, { year: "numeric", month: "long" });
             const meta = [m.category, dateStr, m.read_time].filter(Boolean).join(" · ");
             return (
-              <article key={post.id} className="border-b border-border/40 pb-10">
+              <article key={post.id} id={post.slug ?? post.id} className="scroll-mt-24 border-b border-border/40 pb-10">
                 <p className="text-xs uppercase tracking-widest text-gold">{meta}</p>
                 <h2 className="mt-2 font-serif text-3xl text-cream">{post.title}</h2>
                 {post.subtitle && <p className="mt-1 text-gold/80">{post.subtitle}</p>}
@@ -62,6 +63,11 @@ function Blog() {
                   <img src={post.image_url} alt={post.title} loading="lazy" className="mt-6 aspect-[16/9] w-full rounded-lg border border-border/60 object-cover" />
                 )}
                 {post.body && <p className="mt-6 whitespace-pre-wrap leading-relaxed text-muted-foreground">{post.body}</p>}
+                <ShareButtons
+                  title={post.title}
+                  path={`/blog#${post.slug ?? post.id}`}
+                  text={post.subtitle ?? undefined}
+                />
               </article>
             );
           })}
