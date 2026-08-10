@@ -555,7 +555,8 @@ function Inbox() {
       </div>
       <div>
         <h3 className="font-serif text-xl text-cream">Subscribers ({subs?.length ?? 0})</h3>
-        <div className="mt-4 space-y-2">
+        <Broadcast emails={(subs ?? []).map((s) => s.email)} />
+        <div className="mt-6 space-y-2">
           {subs?.map((s) => (
             <div key={s.id} className="flex items-center justify-between rounded-md border border-border/60 bg-card/40 px-3 py-2 text-sm">
               <span>{s.email}</span>
@@ -568,6 +569,108 @@ function Inbox() {
     </div>
   );
 }
+
+const SITE_URL = "https://melchizedeck-kakese.lovable.app";
+
+function Broadcast({ emails }: { emails: string[] }) {
+  const [postId, setPostId] = useState("");
+  const [subject, setSubject] = useState("");
+  const [body, setBody] = useState("");
+
+  const { data: posts } = useQuery({
+    queryKey: ["admin-broadcast-posts"],
+    queryFn: async () =>
+      (await supabase
+        .from("content_items")
+        .select("id, title, subtitle, slug, body, collection, created_at")
+        .in("collection", ["blog", "book", "script", "event", "speech"])
+        .eq("published", true)
+        .order("created_at", { ascending: false })
+        .limit(30)).data ?? [],
+  });
+
+  const PATHS: Record<string, string> = { blog: "/blog", book: "/books", script: "/scripts", event: "/events", speech: "/speeches" };
+
+  function compose(id: string) {
+    setPostId(id);
+    const p = posts?.find((x) => x.id === id);
+    if (!p) { setSubject(""); setBody(""); return; }
+    const url = `${SITE_URL}${PATHS[p.collection] ?? "/"}#${p.slug ?? p.id}`;
+    setSubject(`New from Melchizedeck Kakese: ${p.title}`);
+    setBody(
+      `Hello,\n\nI've just published something new — "${p.title}"${p.subtitle ? ` (${p.subtitle})` : ""}.\n\n` +
+        (p.body ? `${p.body.slice(0, 400)}${p.body.length > 400 ? "…" : ""}\n\n` : "") +
+        `Read it here: ${url}\n\nWarm regards,\nMelchizedeck Kakese\n${SITE_URL}`,
+    );
+  }
+
+  async function copy(text: string, what: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success(`${what} copied`);
+    } catch {
+      toast.error(`Couldn't copy ${what.toLowerCase()}`);
+    }
+  }
+
+  function downloadCsv() {
+    const csv = ["email", ...emails].join("\n");
+    const url = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "subscribers.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  const gmail = `https://mail.google.com/mail/?view=cm&fs=1&bcc=${encodeURIComponent(emails.join(","))}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+  return (
+    <div className="mt-4 rounded-lg border border-border/60 bg-card/40 p-4">
+      <p className="text-xs uppercase tracking-widest text-gold">Announce a new post</p>
+      <p className="mt-1 text-xs text-muted-foreground">
+        Pick what you published, then send it from your own inbox. Subscribers go in BCC so nobody sees each other's address.
+      </p>
+
+      <select
+        value={postId}
+        onChange={(e) => compose(e.target.value)}
+        className="mt-3 w-full rounded-md border border-border/60 bg-background px-3 py-2 text-sm"
+      >
+        <option value="">Select content…</option>
+        {posts?.map((p) => (
+          <option key={p.id} value={p.id}>{p.collection}: {p.title}</option>
+        ))}
+      </select>
+
+      {postId && (
+        <div className="mt-3 space-y-2">
+          <Input value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="Subject" />
+          <Textarea value={body} onChange={(e) => setBody(e.target.value)} rows={10} placeholder="Message" />
+        </div>
+      )}
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        <Button size="sm" variant="outline" onClick={() => copy(emails.join(", "), "BCC list")} disabled={!emails.length}>
+          Copy BCC list ({emails.length})
+        </Button>
+        <Button size="sm" variant="outline" onClick={downloadCsv} disabled={!emails.length}>Download CSV</Button>
+        <Button size="sm" variant="outline" onClick={() => copy(`${subject}\n\n${body}`, "Announcement")} disabled={!subject && !body}>
+          Copy message
+        </Button>
+        <Button
+          size="sm"
+          className="bg-gold text-primary-foreground hover:opacity-90"
+          disabled={!emails.length || !subject}
+          onClick={() => window.open(gmail, "_blank", "noopener")}
+        >
+          Open in Gmail
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 
 function PaymentsSettings() {
   const qc = useQueryClient();
