@@ -50,10 +50,12 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
   { page: "about", sections: [
     { key: "main", label: "About", fields: [
       { name: "title", label: "Title" },
-      { name: "body", label: "Body", type: "textarea" },
+      { name: "body", label: "Body (used only if no story blocks below)", type: "textarea" },
       { name: "imageUrl", label: "Portrait image", type: "image" },
+      { name: "blocks", label: "Story blocks", type: "blocks" },
     ]},
   ]},
+
   { page: "books", sections: [{ key: "header", label: "Header", fields: [{ name: "title", label: "Title" }, { name: "body", label: "Intro", type: "textarea" }] }] },
   { page: "scripts", sections: [{ key: "header", label: "Header", fields: [{ name: "title", label: "Title" }, { name: "body", label: "Intro", type: "textarea" }] }] },
   { page: "blog", sections: [{ key: "header", label: "Header", fields: [{ name: "title", label: "Title" }, { name: "body", label: "Intro", type: "textarea" }] }] },
