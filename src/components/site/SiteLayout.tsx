@@ -2,6 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import { Menu, X, ShieldCheck, Instagram, Facebook, Linkedin, Mail, MessageCircle, ShoppingBag, AtSign, Link2 } from "lucide-react";
 import { useIsAdmin, useSection } from "@/lib/cms";
+import { useTypography } from "@/lib/fonts";
 import { CookieConsent } from "@/components/site/CookieConsent";
 import { cn } from "@/lib/utils";
 import bgPhoto from "@/assets/kakese-community.jpg.asset.json";
@@ -72,6 +73,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
   const { data: isAdmin } = useIsAdmin();
+  useTypography();
   const { data: footer } = useSection<{ tagline?: string; copyright?: string } & Socials>("site", "footer");
   const { data: bgSection } = useSection<{ imageUrl?: string }>("site", "background");
   const bgImage = useVerifiedBackground(bgSection?.content?.imageUrl ?? "", bgPhoto.url);
