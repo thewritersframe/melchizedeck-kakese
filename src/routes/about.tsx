@@ -2,27 +2,45 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useCollection, useSection } from "@/lib/cms";
 import { SmartImage } from "@/components/site/SmartImage";
+import { AboutBlocks, parseBlocks } from "@/components/site/AboutBlocks";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({ meta: [{ title: "About — Melchizedeck Kakese" }, { name: "description", content: "About Melchizedeck Kakese." }] }),
+  head: () => ({
+    meta: [
+      { title: "About — Melchizedeck Kakese" },
+      { name: "description", content: "The story, the work and the achievements of Melchizedeck Kakese — author, screenwriter and youth advocate." },
+      { property: "og:title", content: "About Melchizedeck Kakese" },
+      { property: "og:description", content: "The story, the work and the achievements of Melchizedeck Kakese." },
+      { property: "og:type", content: "profile" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: About,
 });
 
 function About() {
-  const { data } = useSection<{ title: string; body: string; imageUrl?: string }>("about", "main");
+  const { data } = useSection<{ title: string; body: string; imageUrl?: string; blocks?: unknown }>("about", "main");
   const { data: achievements } = useCollection("achievement");
   const c = data?.content;
+  const blocks = parseBlocks(c?.blocks);
   return (
     <SiteLayout>
       <section className="mx-auto max-w-4xl px-6 py-24">
         <h1 className="font-serif text-5xl text-cream">{c?.title ?? "About"}</h1>
         {c?.imageUrl && (
-          <img src={c.imageUrl} alt="" loading="eager" className="mt-10 aspect-[16/9] w-full rounded-lg border border-border/60 object-cover" />
+          <div className="mt-10 overflow-hidden rounded-lg border border-border/60 bg-background/40">
+            <img src={c.imageUrl} alt="Melchizedeck Kakese" loading="eager" className="h-auto w-full object-contain" />
+          </div>
         )}
-        <div className="prose prose-invert mt-10 max-w-none whitespace-pre-wrap text-lg leading-relaxed text-muted-foreground">
-          {c?.body}
-        </div>
+        {blocks.length > 0 ? (
+          <AboutBlocks blocks={blocks} />
+        ) : (
+          <div className="prose prose-invert mt-10 max-w-none whitespace-pre-wrap text-lg leading-relaxed text-muted-foreground">
+            {c?.body}
+          </div>
+        )}
       </section>
+
 
       {achievements && achievements.length > 0 && (
         <section className="mx-auto max-w-6xl px-6 pb-24">
