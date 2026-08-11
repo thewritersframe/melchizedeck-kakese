@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Loader2, Trash2, Plus, Upload, LogOut, ImageIcon } from "lucide-react";
+import { BlocksEditor } from "@/components/admin/BlocksEditor";
+import { FONT_OPTIONS } from "@/lib/fonts";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin Dashboard" }, { name: "robots", content: "noindex" }] }),
@@ -78,6 +80,11 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
       { name: "buttonLabel", label: "Button label" },
       { name: "note", label: "Small note under the text", type: "textarea" },
     ]},
+    { key: "typography", label: "Typography (fonts)", fields: [
+      { name: "headingFont", label: "Heading font", type: "font" },
+      { name: "bodyFont", label: "Body font", type: "font" },
+      { name: "baseSize", label: "Base text size in px (12–24, default 16)" },
+    ]},
     { key: "footer", label: "Footer & Social links", fields: [
 
       { name: "tagline", label: "Tagline" }, { name: "copyright", label: "Copyright text" },
@@ -139,7 +146,7 @@ const COLLECTIONS: { key: string; label: string; extraMeta: MetaField[]; lockabl
 
 ];
 
-type FieldSpec = { name: string; label: string; type?: "text" | "textarea" | "image" | "json" | "video" };
+type FieldSpec = { name: string; label: string; type?: "text" | "textarea" | "image" | "json" | "video" | "blocks" | "font" };
 
 function Admin() {
   const nav = useNavigate();
@@ -276,6 +283,30 @@ function SectionEditor({ page, sectionKey, label, fields }: { page: string; sect
 function FieldInput({ field, value, onChange }: { field: FieldSpec; value: unknown; onChange: (v: unknown) => void }) {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
+  if (field.type === "blocks") {
+    return (
+      <div>
+        <BlocksEditor value={value} onChange={(v) => onChange(v)} />
+      </div>
+    );
+  }
+  if (field.type === "font") {
+    return (
+      <label className="block">
+        <span className="text-xs uppercase tracking-widest text-muted-foreground">{field.label}</span>
+        <select
+          value={String(value ?? "")}
+          onChange={(e) => onChange(e.target.value)}
+          className="mt-1.5 w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground"
+        >
+          <option value="">Site default</option>
+          {FONT_OPTIONS.map((f) => (
+            <option key={f.family} value={f.family}>{f.label}</option>
+          ))}
+        </select>
+      </label>
+    );
+  }
   if (field.type === "textarea") {
     return (
       <label className="block">
