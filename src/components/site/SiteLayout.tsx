@@ -147,6 +147,9 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           <p className="text-xs text-muted-foreground">{footer?.content?.copyright ?? "© Melchizedeck Kakese."}</p>
         </div>
       </footer>
+
+      <CookieConsent />
+
     </div>
   );
 }
