@@ -2,6 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import { Menu, X, ShieldCheck, Instagram, Facebook, Linkedin, Mail, MessageCircle, ShoppingBag, AtSign, Link2 } from "lucide-react";
 import { useIsAdmin, useSection } from "@/lib/cms";
+import { CookieConsent } from "@/components/site/CookieConsent";
 import { cn } from "@/lib/utils";
 import bgPhoto from "@/assets/kakese-community.jpg.asset.json";
 
@@ -146,6 +147,9 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           <p className="text-xs text-muted-foreground">{footer?.content?.copyright ?? "© Melchizedeck Kakese."}</p>
         </div>
       </footer>
+
+      <CookieConsent />
+
     </div>
   );
 }
