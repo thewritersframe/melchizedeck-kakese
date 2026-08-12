@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Loader2, Trash2, Plus, Upload, LogOut, ImageIcon } from "lucide-react";
 import { BlocksEditor } from "@/components/admin/BlocksEditor";
-import { FONT_OPTIONS } from "@/lib/fonts";
+import { FONT_OPTIONS, FONT_GROUPS, findFont } from "@/lib/fonts";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin Dashboard" }, { name: "robots", content: "noindex" }] }),
