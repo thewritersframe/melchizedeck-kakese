@@ -295,22 +295,9 @@ function FieldInput({ field, value, onChange }: { field: FieldSpec; value: unkno
     );
   }
   if (field.type === "font") {
-    return (
-      <label className="block">
-        <span className="text-xs uppercase tracking-widest text-muted-foreground">{field.label}</span>
-        <select
-          value={String(value ?? "")}
-          onChange={(e) => onChange(e.target.value)}
-          className="mt-1.5 w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground"
-        >
-          <option value="">Site default</option>
-          {FONT_OPTIONS.map((f) => (
-            <option key={f.family} value={f.family}>{f.label}</option>
-          ))}
-        </select>
-      </label>
-    );
+    return <FontField label={field.label} value={String(value ?? "")} onChange={onChange} />;
   }
+
   if (field.type === "textarea") {
     return (
       <label className="block">
