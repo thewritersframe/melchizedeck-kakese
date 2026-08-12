@@ -81,10 +81,14 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
       { name: "note", label: "Small note under the text", type: "textarea" },
     ]},
     { key: "typography", label: "Typography (fonts)", fields: [
-      { name: "headingFont", label: "Heading font", type: "font" },
-      { name: "bodyFont", label: "Body font", type: "font" },
+      { name: "displayFont", label: "Display font — big page/hero titles", type: "font" },
+      { name: "headingFont", label: "Heading font — section headings", type: "font" },
+      { name: "bodyFont", label: "Body font — paragraphs & buttons", type: "font" },
+      { name: "accentFont", label: "Accent font — eyebrows, quotes, signatures (handwritten works well)", type: "font" },
       { name: "baseSize", label: "Base text size in px (12–24, default 16)" },
+      { name: "headingScale", label: "Heading size multiplier (0.8–1.5, default 1)" },
     ]},
+
     { key: "footer", label: "Footer & Social links", fields: [
 
       { name: "tagline", label: "Tagline" }, { name: "copyright", label: "Copyright text" },
