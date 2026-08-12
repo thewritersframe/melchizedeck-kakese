@@ -172,7 +172,7 @@ function SocialsBar({ socials }: { socials: Socials }) {
   if (visible.length === 0) return null;
   return (
     <div className="flex flex-wrap items-center gap-2 border-t border-border/40 pt-6">
-      <span className="mr-2 text-xs uppercase tracking-[0.3em] text-gold">Follow</span>
+      <span className="mr-2 text-xs font-accent uppercase tracking-[0.3em] text-gold">Follow</span>
       {visible.map((i) => (
         <a
           key={i.key}

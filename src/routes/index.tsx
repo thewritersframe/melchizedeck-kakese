@@ -35,7 +35,7 @@ function Index() {
 >
         <div className="absolute inset-0 bg-black/60" />
         <div className="relative mx-auto flex min-h-[80vh] max-w-4xl flex-col items-center justify-center px-6 py-24 text-center">
-          <p className="text-xs font-medium uppercase tracking-[0.3em] text-gold">
+          <p className="text-xs font-medium font-accent uppercase tracking-[0.3em] text-gold">
             {h?.eyebrow}
           </p>
           <h1 className="mt-6 font-serif text-5xl leading-tight text-cream md:text-7xl">
@@ -64,7 +64,7 @@ function Index() {
         <section className="border-t border-border/40 bg-background/40 py-24">
           <div className="mx-auto grid max-w-6xl gap-12 px-6 md:grid-cols-2 md:items-center">
             <div className="order-2 md:order-1">
-              <p className="text-xs font-medium uppercase tracking-[0.3em] text-gold">{f.label}</p>
+              <p className="text-xs font-medium font-accent uppercase tracking-[0.3em] text-gold">{f.label}</p>
               <h2 className="mt-4 font-serif text-4xl text-cream">{f.title}</h2>
               <p className="mt-4 text-muted-foreground">{f.body}</p>
               <div className="mt-8 flex flex-wrap gap-3">
