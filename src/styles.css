@@ -82,7 +82,10 @@
   html, body { background-color: var(--color-background); color: var(--color-foreground); }
   body { font-family: var(--font-sans); }
   h1, h2, h3, h4, .font-serif { font-family: var(--font-serif); }
+  h1, .font-display { font-family: var(--font-display); }
+  .font-accent { font-family: var(--font-accent); }
 }
+
 
 @utility bg-hero-pattern {
   background-color: var(--color-background);
