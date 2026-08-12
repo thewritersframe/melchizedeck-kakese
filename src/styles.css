@@ -7,6 +7,9 @@
 @theme inline {
   --font-serif: "Playfair Display", ui-serif, Georgia, serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-serif);
+  --font-accent: var(--font-serif);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -79,7 +82,10 @@
   html, body { background-color: var(--color-background); color: var(--color-foreground); }
   body { font-family: var(--font-sans); }
   h1, h2, h3, h4, .font-serif { font-family: var(--font-serif); }
+  h1, .font-display { font-family: var(--font-display); }
+  .font-accent { font-family: var(--font-accent); }
 }
+
 
 @utility bg-hero-pattern {
   background-color: var(--color-background);

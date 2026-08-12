@@ -29,7 +29,7 @@ function Blog() {
   return (
     <SiteLayout>
       <section className="mx-auto max-w-3xl px-6 py-24">
-        <p className="text-xs uppercase tracking-[0.3em] text-gold">Blog &amp; Essays</p>
+        <p className="text-xs font-accent uppercase tracking-[0.3em] text-gold">Blog &amp; Essays</p>
         <h1 className="mt-3 font-serif text-5xl text-cream">{h?.title}</h1>
         <p className="mt-4 text-muted-foreground">{h?.body}</p>
 

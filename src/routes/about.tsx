@@ -46,7 +46,7 @@ function About() {
         <section className="mx-auto max-w-6xl px-6 pb-24">
           <div className="mb-8 flex items-end justify-between border-b border-border/40 pb-4">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-gold">Gallery</p>
+              <p className="text-xs font-accent uppercase tracking-[0.3em] text-gold">Gallery</p>
               <h2 className="mt-2 font-serif text-3xl text-cream md:text-4xl">Achievements</h2>
             </div>
           </div>

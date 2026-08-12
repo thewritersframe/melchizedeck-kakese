@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Loader2, Trash2, Plus, Upload, LogOut, ImageIcon } from "lucide-react";
 import { BlocksEditor } from "@/components/admin/BlocksEditor";
-import { FONT_OPTIONS } from "@/lib/fonts";
+import { FONT_OPTIONS, FONT_GROUPS, findFont } from "@/lib/fonts";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin Dashboard" }, { name: "robots", content: "noindex" }] }),
@@ -81,10 +81,14 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
       { name: "note", label: "Small note under the text", type: "textarea" },
     ]},
     { key: "typography", label: "Typography (fonts)", fields: [
-      { name: "headingFont", label: "Heading font", type: "font" },
-      { name: "bodyFont", label: "Body font", type: "font" },
+      { name: "displayFont", label: "Display font — big page/hero titles", type: "font" },
+      { name: "headingFont", label: "Heading font — section headings", type: "font" },
+      { name: "bodyFont", label: "Body font — paragraphs & buttons", type: "font" },
+      { name: "accentFont", label: "Accent font — eyebrows, quotes, signatures (handwritten works well)", type: "font" },
       { name: "baseSize", label: "Base text size in px (12–24, default 16)" },
+      { name: "headingScale", label: "Heading size multiplier (0.8–1.5, default 1)" },
     ]},
+
     { key: "footer", label: "Footer & Social links", fields: [
 
       { name: "tagline", label: "Tagline" }, { name: "copyright", label: "Copyright text" },
@@ -291,22 +295,9 @@ function FieldInput({ field, value, onChange }: { field: FieldSpec; value: unkno
     );
   }
   if (field.type === "font") {
-    return (
-      <label className="block">
-        <span className="text-xs uppercase tracking-widest text-muted-foreground">{field.label}</span>
-        <select
-          value={String(value ?? "")}
-          onChange={(e) => onChange(e.target.value)}
-          className="mt-1.5 w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground"
-        >
-          <option value="">Site default</option>
-          {FONT_OPTIONS.map((f) => (
-            <option key={f.family} value={f.family}>{f.label}</option>
-          ))}
-        </select>
-      </label>
-    );
+    return <FontField label={field.label} value={String(value ?? "")} onChange={onChange} />;
   }
+
   if (field.type === "textarea") {
     return (
       <label className="block">
@@ -832,5 +823,52 @@ function PaymentsSettings() {
       </div>
     </div>
 
+  );
+}
+
+function FontField({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
+  const selected = findFont(value);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const id = "admin-font-previews";
+    if (document.getElementById(id)) return;
+    const link = document.createElement("link");
+    link.id = id;
+    link.rel = "stylesheet";
+    link.href = `https://fonts.googleapis.com/css2?${FONT_OPTIONS.filter((f) => f.google)
+      .map((f) => `family=${f.google}`)
+      .join("&")}&display=swap`;
+    document.head.appendChild(link);
+  }, []);
+
+  return (
+    <div className="block">
+      <span className="text-xs uppercase tracking-widest text-muted-foreground">{label}</span>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="mt-1.5 w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground"
+      >
+        <option value="">Site default</option>
+        {FONT_GROUPS.map((g) => (
+          <optgroup key={g} label={g}>
+            {FONT_OPTIONS.filter((f) => f.group === g).map((f) => (
+              <option key={f.family} value={f.family} style={{ fontFamily: f.stack }}>
+                {f.label}
+              </option>
+            ))}
+          </optgroup>
+        ))}
+      </select>
+      <div className="mt-2 rounded-md border border-border/60 bg-card/60 px-3 py-3">
+        <p className="text-lg leading-snug text-cream" style={{ fontFamily: selected?.stack }}>
+          Words that move continents
+        </p>
+        <p className="mt-1 text-xs text-muted-foreground">
+          {selected ? `${selected.label} · ${selected.group}` : "Using the site default font"}
+        </p>
+      </div>
+    </div>
   );
 }
