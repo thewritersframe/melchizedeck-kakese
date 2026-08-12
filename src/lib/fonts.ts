@@ -79,7 +79,11 @@ export function useTypography() {
     if (typeof document === "undefined") return;
     const heading = findFont(c?.headingFont);
     const body = findFont(c?.bodyFont);
-    const families = [heading, body].filter(Boolean).map((f) => `family=${f!.google}`);
+    const display = findFont(c?.displayFont);
+    const accent = findFont(c?.accentFont);
+    const families = Array.from(
+      new Set([heading, body, display, accent].filter(Boolean).map((f) => `family=${f!.google}`)),
+    );
 
     const id = "cms-typography-fonts";
     document.getElementById(id)?.remove();
@@ -92,10 +96,14 @@ export function useTypography() {
     }
 
     const root = document.documentElement;
-    if (heading) root.style.setProperty("--font-serif", heading.stack);
-    else root.style.removeProperty("--font-serif");
-    if (body) root.style.setProperty("--font-sans", body.stack);
-    else root.style.removeProperty("--font-sans");
+    const setVar = (name: string, font?: FontOption) => {
+      if (font) root.style.setProperty(name, font.stack);
+      else root.style.removeProperty(name);
+    };
+    setVar("--font-serif", heading);
+    setVar("--font-sans", body);
+    setVar("--font-display", display ?? heading);
+    setVar("--font-accent", accent);
 
     const size = Number(c?.baseSize);
     if (size >= 12 && size <= 24) root.style.fontSize = `${size}px`;
@@ -103,5 +111,6 @@ export function useTypography() {
 
     const scale = Number(c?.headingScale);
     root.style.setProperty("--heading-scale", scale > 0.5 && scale < 2 ? String(scale) : "1");
-  }, [c?.headingFont, c?.bodyFont, c?.baseSize, c?.headingScale]);
+  }, [c?.headingFont, c?.bodyFont, c?.displayFont, c?.accentFont, c?.baseSize, c?.headingScale]);
+
 }
