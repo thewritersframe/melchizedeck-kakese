@@ -127,9 +127,17 @@ export function SiteLayout({ children }: { children: ReactNode }) {
 </nav>
             )}
           </nav>
-          <button className="lg:hidden text-cream" onClick={() => setOpen((o) => !o)} aria-label="Menu">
-            {open ? <X /> : <Menu />}
-          </button>
+  <div className="flex items-center gap-3 lg:hidden">
+  <ThemeSwitcher />
+
+  <button
+    className="text-cream"
+    onClick={() => setOpen((o) => !o)}
+    aria-label="Menu"
+  >
+    {open ? <X /> : <Menu />}
+  </button>
+</div>
         </div>
         {open && (
           <div className="border-t border-border/40 bg-background/95 lg:hidden">
