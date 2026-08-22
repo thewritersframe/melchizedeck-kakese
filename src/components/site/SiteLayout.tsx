@@ -93,65 +93,85 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       />
       <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 bg-background/55" />
 
-      <header className="sticky top-0 z-40 border-b border-border/40 bg-background/80 backdrop-blur-md">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-          <Link to="/" className="font-serif text-xl tracking-wide text-cream">
-            M.<span className="text-gold">Kakese</span>
-          </Link>
-          <nav className="hidden items-center gap-7 lg:flex">
-  {NAV.map((item) => (
-    <Link
-      key={item.to}
-      to={item.to}
-      className={cn(
-        "text-sm transition-colors hover:text-gold",
-        pathname === item.to
-          ? "text-gold"
-          : "text-muted-foreground"
+<header className="sticky top-0 z-40 border-b border-border/40 bg-background/80 backdrop-blur-md">
+  <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+    <Link to="/" className="font-serif text-xl tracking-wide text-cream">
+      M.<span className="text-gold">Kakese</span>
+    </Link>
+    <nav className="hidden items-center gap-7 lg:flex">
+      {NAV.map((item) => (
+        <Link
+          key={item.to}
+          to={item.to}
+          className={cn(
+            "text-sm transition-colors hover:text-gold",
+            pathname === item.to
+              ? "text-gold"
+              : "text-muted-foreground"
+          )}
+        >
+          {item.label}
+        </Link>
+      ))}
+
+      {isAdmin && (
+        <Link
+          to="/admin"
+          className="inline-flex items-center gap-1.5 rounded-md border border-gold/40 px-3 py-1.5 text-xs text-gold hover:bg-gold/10"
+        >
+          <ShieldCheck className="h-3.5 w-3.5" />
+          Admin
+        </Link>
       )}
-    >
-      {item.label}
-    </Link>
-  ))}
 
-  {isAdmin && (
-    <Link
-      to="/admin"
-      className="inline-flex items-center gap-1.5 rounded-md border border-gold/40 px-3 py-1.5 text-xs text-gold hover:bg-gold/10"
-    >
-      <ShieldCheck className="h-3.5 w-3.5" /> Admin
-    </Link>
-  )}
+      <ThemeSwitcher />
+    </nav>
 
-  <ThemeSwitcher />
-</nav>
-  <div className="flex items-center gap-3 lg:hidden">
-  <ThemeSwitcher />
+    <div className="flex items-center gap-3 lg:hidden">
+      <ThemeSwitcher />
 
-  <button
-    className="text-cream"
-    onClick={() => setOpen((o) => !o)}
-    aria-label="Menu"
-  >
-    {open ? <X /> : <Menu />}
-  </button>
-</div>
-        </div>
-        {open && (
-          <div className="border-t border-border/40 bg-background/95 lg:hidden">
-            <nav className="mx-auto flex max-w-7xl flex-col px-6 py-4">
-              {NAV.map((item) => (
-                <Link key={item.to} to={item.to} onClick={() => setOpen(false)} className={cn("py-2 text-sm", pathname === item.to ? "text-gold" : "text-muted-foreground")}>
-                  {item.label}
-                </Link>
-              ))}
-              {isAdmin && (
-                <Link to="/admin" onClick={() => setOpen(false)} className="mt-2 py-2 text-sm text-gold">Admin dashboard</Link>
-              )}
-            </nav>
-          </div>
+      <button
+        className="text-cream"
+        onClick={() => setOpen((o) => !o)}
+        aria-label="Menu"
+      >
+        {open ? <X /> : <Menu />}
+      </button>
+    </div>
+  </div>
+
+  {open && (
+    <div className="border-t border-border/40 bg-background/95 lg:hidden">
+      <nav className="mx-auto flex max-w-7xl flex-col px-6 py-4">
+        {NAV.map((item) => (
+          <Link
+            key={item.to}
+            to={item.to}
+            onClick={() => setOpen(false)}
+            className={cn(
+              "py-2 text-sm",
+              pathname === item.to
+                ? "text-gold"
+                : "text-muted-foreground"
+            )}
+          >
+            {item.label}
+          </Link>
+        ))}
+
+        {isAdmin && (
+          <Link
+            to="/admin"
+            onClick={() => setOpen(false)}
+            className="mt-2 py-2 text-sm text-gold"
+          >
+            Admin dashboard
+          </Link>
         )}
-      </header>
+      </nav>
+    </div>
+  )}
+</header>
 
       <main className="flex-1">{children}</main>
 
