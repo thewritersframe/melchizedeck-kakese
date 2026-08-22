@@ -125,8 +125,6 @@ export function SiteLayout({ children }: { children: ReactNode }) {
 
   <ThemeSwitcher />
 </nav>
-            )}
-          </nav>
   <div className="flex items-center gap-3 lg:hidden">
   <ThemeSwitcher />
 
