@@ -6,7 +6,7 @@ import { useTypography } from "@/lib/fonts";
 import { CookieConsent } from "@/components/site/CookieConsent";
 import { cn } from "@/lib/utils";
 import bgPhoto from "@/assets/kakese-community.jpg.asset.json";
-
+import ThemeSwitcher from "@/components/ThemeSwitcher";
 const JUNGLE_SVG = `data:image/svg+xml;utf8,${encodeURIComponent(
   `<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420' viewBox='0 0 420 420'>
     <g fill='none' stroke='%23e5b567' stroke-width='1.2' stroke-linecap='round' opacity='0.55'>
@@ -99,15 +99,32 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             M.<span className="text-gold">Kakese</span>
           </Link>
           <nav className="hidden items-center gap-7 lg:flex">
-            {NAV.map((item) => (
-              <Link key={item.to} to={item.to} className={cn("text-sm transition-colors hover:text-gold", pathname === item.to ? "text-gold" : "text-muted-foreground")}>
-                {item.label}
-              </Link>
-            ))}
-            {isAdmin && (
-              <Link to="/admin" className="inline-flex items-center gap-1.5 rounded-md border border-gold/40 px-3 py-1.5 text-xs text-gold hover:bg-gold/10">
-                <ShieldCheck className="h-3.5 w-3.5" /> Admin
-              </Link>
+  {NAV.map((item) => (
+    <Link
+      key={item.to}
+      to={item.to}
+      className={cn(
+        "text-sm transition-colors hover:text-gold",
+        pathname === item.to
+          ? "text-gold"
+          : "text-muted-foreground"
+      )}
+    >
+      {item.label}
+    </Link>
+  ))}
+
+  {isAdmin && (
+    <Link
+      to="/admin"
+      className="inline-flex items-center gap-1.5 rounded-md border border-gold/40 px-3 py-1.5 text-xs text-gold hover:bg-gold/10"
+    >
+      <ShieldCheck className="h-3.5 w-3.5" /> Admin
+    </Link>
+  )}
+
+  <ThemeSwitcher />
+</nav>
             )}
           </nav>
           <button className="lg:hidden text-cream" onClick={() => setOpen((o) => !o)} aria-label="Menu">
