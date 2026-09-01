@@ -4,8 +4,22 @@ import { useSection, useCollection } from "@/lib/cms";
 import { SupportVision } from "@/components/site/SupportVision";
 import { ArrowRight, BookOpen, PenLine, Sparkles } from "lucide-react";
 import { NewsletterForm } from "@/components/site/NewsletterForm";
+import { EventsSlideshow } from "@/components/site/EventsSlideshow";
 
-export const Route = createFileRoute("/")({ component: Index });
+export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Melchizedeck Kakese — Author, Screenwriter & Advocate" },
+      { name: "description", content: "Books, screenplays, essays and events from Tanzanian author and screenwriter Melchizedeck Kakese." },
+      { property: "og:title", content: "Melchizedeck Kakese — Author, Screenwriter & Advocate" },
+      { property: "og:description", content: "Books, screenplays, essays and events from Tanzanian author and screenwriter Melchizedeck Kakese." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: Index,
+});
+
 
 type Hero = { eyebrow: string; title: string; subtitle: string; ctaPrimaryLabel: string; ctaPrimaryTo: string; ctaSecondaryLabel: string; ctaSecondaryTo: string };
 type Featured = { label: string; title: string; body: string; imageUrl: string; primaryLabel: string; primaryTo: string; secondaryLabel: string; secondaryTo: string };
@@ -84,6 +98,11 @@ function Index() {
           </div>
         </section>
       )}
+
+      {/* Events slideshow */}
+      <EventsSlideshow />
+
+
 
       {/* Pillars */}
       {p && (
