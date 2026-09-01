@@ -1,3 +1,6 @@
+import { useReviewSummaries } from "@/lib/engagement";
+import { ReviewsSection } from "@/components/site/ReviewsSection";
+import { Stars } from "@/components/site/Stars";
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useSection, useCollection, type ContentItem } from "@/lib/cms";
@@ -64,7 +67,8 @@ function Scripts() {
   const unlockedIds = new Set(unlocks?.itemIds ?? []);
   const bundleActive = !!unlocks?.bundleExpiresAt;
   const h = header?.content;
-
+const itemIds = items?.map((item) => item.id) ?? [];
+const { data: reviewSummaries } = useReviewSummaries(itemIds);
   return (
     <SiteLayout>
       <section className="mx-auto max-w-6xl px-6 py-24">
@@ -105,6 +109,30 @@ function Scripts() {
                     {treatmentLocked && itemPrice != null && <PriceTag amount={itemPrice} currency={itemCurrency} className="shrink-0" />}
                   </div>
                   {it.subtitle && <p className="mt-1 text-sm text-gold/80">{it.subtitle}</p>}
+                  {(() => {
+  const summary = reviewSummaries?.[it.id];
+
+  if (!summary) {
+    return (
+      <div className="mt-3 flex items-center gap-2">
+        <Stars value={0} size={16} />
+        <span className="text-xs text-muted-foreground">
+          No reviews yet
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-3 flex items-center gap-2">
+      <Stars value={summary.average} size={16} />
+      <span className="text-xs text-muted-foreground">
+        {summary.average.toFixed(1)} · {summary.count}{" "}
+        {summary.count === 1 ? "review" : "reviews"}
+      </span>
+    </div>
+  );
+})()}
                   {it.body && (
                     <>
                       <p className="mt-3 text-[11px] uppercase tracking-widest text-muted-foreground/70">Logline</p>
@@ -135,6 +163,7 @@ function Scripts() {
                       </>
                     )}
                   </div>
+                  <ReviewsSection itemId={it.id} />
                 </div>
               </article>
             );
