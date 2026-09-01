@@ -92,6 +92,30 @@ const { data: reviewSummaries } = useReviewSummaries(itemIds);
                   {itemPrice != null && !m.coming_soon && <PriceTag amount={itemPrice} currency={itemCurrency} className="shrink-0" />}
                 </div>
                 {b.subtitle && <p className="mt-1 text-sm text-gold/80">{b.subtitle}</p>}
+                {(() => {
+  const summary = reviewSummaries?.[b.id];
+
+  if (!summary) {
+    return (
+      <div className="mt-3 flex items-center gap-2">
+        <Stars value={0} size={16} />
+        <span className="text-xs text-muted-foreground">
+          No reviews yet
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-3 flex items-center gap-2">
+      <Stars value={summary.average} size={16} />
+      <span className="text-xs text-muted-foreground">
+        {summary.average.toFixed(1)} · {summary.count}{" "}
+        {summary.count === 1 ? "review" : "reviews"}
+      </span>
+    </div>
+  );
+})()}
                 {b.body && <ExpandableText text={b.body} className="mt-3 text-sm text-muted-foreground" />}
                 {locked ? (
                   <div className="mt-4 flex flex-wrap gap-2">
@@ -122,6 +146,7 @@ const { data: reviewSummaries } = useReviewSummaries(itemIds);
                     </div>
                   </>
                 )}
+             <ReviewsSection itemId={b.id} />
               </article>
             );
           })}
