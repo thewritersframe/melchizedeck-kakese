@@ -3,7 +3,6 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { useSection, useCollection } from "@/lib/cms";
 import { SupportVision } from "@/components/site/SupportVision";
 import { ArrowRight, BookOpen, PenLine, Sparkles } from "lucide-react";
-import { NewsletterForm } from "@/components/site/NewsletterForm";
 import { EventsSlideshow } from "@/components/site/EventsSlideshow";
 
 export const Route = createFileRoute("/")({
@@ -24,7 +23,6 @@ export const Route = createFileRoute("/")({
 type Hero = { eyebrow: string; title: string; subtitle: string; ctaPrimaryLabel: string; ctaPrimaryTo: string; ctaSecondaryLabel: string; ctaSecondaryTo: string };
 type Featured = { label: string; title: string; body: string; imageUrl: string; primaryLabel: string; primaryTo: string; secondaryLabel: string; secondaryTo: string };
 type Pillars = { title: string; items: { title: string; body: string }[] };
-type Newsletter = { title: string; body: string };
 
 const ICONS = [PenLine, BookOpen, Sparkles];
 
@@ -32,12 +30,10 @@ function Index() {
   const { data: hero } = useSection<Hero>("home", "hero");
   const { data: featured } = useSection<Featured>("home", "featured");
   const { data: pillars } = useSection<Pillars>("home", "pillars");
-  const { data: newsletter } = useSection<Newsletter>("home", "newsletter");
   const { data: books } = useCollection("book");
   const h = hero?.content;
   const f = featured?.content;
   const p = pillars?.content;
-  const n = newsletter?.content;
   const featuredImage = f?.imageUrl || books?.[0]?.image_url || "";
 
   return (
@@ -123,17 +119,6 @@ function Index() {
                 );
               })}
             </div>
-          </div>
-        </section>
-      )}
-
-      {/* Newsletter */}
-      {n && (
-        <section className="border-t border-border/40 bg-background/40 py-20">
-          <div className="mx-auto max-w-2xl px-6 text-center">
-            <h2 className="font-serif text-4xl text-cream">{n.title}</h2>
-            <p className="mt-4 text-muted-foreground">{n.body}</p>
-            <div className="mt-8"><NewsletterForm /></div>
           </div>
         </section>
       )}
