@@ -14,6 +14,41 @@ export type Database = {
   }
   public: {
     Tables: {
+      content_comments: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          item_id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          item_id: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          item_id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_comments_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "content_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       content_items: {
         Row: {
           body: string | null
@@ -58,6 +93,73 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      content_likes: {
+        Row: {
+          created_at: string
+          id: string
+          item_id: string
+          visitor_key: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          item_id: string
+          visitor_key: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          item_id?: string
+          visitor_key?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_likes_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "content_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      content_reviews: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          item_id: string
+          name: string
+          rating: number
+          updated_at: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          item_id: string
+          name: string
+          rating: number
+          updated_at?: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          item_id?: string
+          name?: string
+          rating?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_reviews_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "content_items"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       donations: {
         Row: {
