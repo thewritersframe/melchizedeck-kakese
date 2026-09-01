@@ -3,7 +3,6 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { useSection, useCollection } from "@/lib/cms";
 import { SupportVision } from "@/components/site/SupportVision";
 import { ArrowRight, BookOpen, PenLine, Sparkles } from "lucide-react";
-import { NewsletterForm } from "@/components/site/NewsletterForm";
 import { EventsSlideshow } from "@/components/site/EventsSlideshow";
 
 export const Route = createFileRoute("/")({
