@@ -1,3 +1,6 @@
+import { useReviewSummaries } from "@/lib/engagement";
+import { ReviewsSection } from "@/components/site/ReviewsSection";
+import { Stars } from "@/components/site/Stars";
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useSection, useCollection, type ContentItem } from "@/lib/cms";
@@ -49,7 +52,8 @@ function Books() {
   const unlockedIds = new Set(unlocks?.itemIds ?? []);
   const bundleActive = !!unlocks?.bundleExpiresAt;
   const h = header?.content;
-
+const itemIds = items?.map((item) => item.id) ?? [];
+const { data: reviewSummaries } = useReviewSummaries(itemIds);
   return (
     <SiteLayout>
       <section className="mx-auto max-w-6xl px-6 py-24">
