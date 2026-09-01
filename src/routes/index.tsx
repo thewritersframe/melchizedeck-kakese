@@ -99,6 +99,11 @@ function Index() {
         </section>
       )}
 
+      {/* Events slideshow */}
+      <EventsSlideshow />
+
+
+
       {/* Pillars */}
       {p && (
         <section className="py-24">
