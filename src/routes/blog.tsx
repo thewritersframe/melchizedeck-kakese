@@ -5,6 +5,7 @@ import { useSection, useCollection } from "@/lib/cms";
 import { ShareButtons } from "@/components/site/ShareButtons";
 import { LikeButton } from "@/components/site/LikeButton";
 import { CommentsSection } from "@/components/site/CommentsSection";
+import { ExpandableText } from "@/components/site/ExpandableText";
 
 export const Route = createFileRoute("/blog")({
   head: () => ({
@@ -124,9 +125,11 @@ function Blog() {
                 )}
 
                 {post.body && (
-                  <p className="mt-6 whitespace-pre-wrap leading-relaxed text-muted-foreground">
-                    {post.body}
-                  </p>
+                  <ExpandableText
+                    text={post.body}
+                    threshold={600}
+                    className="mt-6 text-muted-foreground"
+                  />
                 )}
 
                 {/* Engagement */}

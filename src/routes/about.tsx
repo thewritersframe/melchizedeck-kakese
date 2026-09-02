@@ -3,6 +3,7 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { useCollection, useSection } from "@/lib/cms";
 import { SmartImage } from "@/components/site/SmartImage";
 import { AboutBlocks, parseBlocks } from "@/components/site/AboutBlocks";
+import { ExpandableText } from "@/components/site/ExpandableText";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -35,9 +36,13 @@ function About() {
         {blocks.length > 0 ? (
           <AboutBlocks blocks={blocks} />
         ) : (
-          <div className="prose prose-invert mt-10 max-w-none whitespace-pre-wrap text-lg leading-relaxed text-muted-foreground">
-            {c?.body}
-          </div>
+          c?.body && (
+            <ExpandableText
+              text={c.body}
+              threshold={900}
+              className="mt-10 max-w-none text-lg text-muted-foreground"
+            />
+          )
         )}
       </section>
 
@@ -68,7 +73,7 @@ function About() {
                       </p>
                     )}
                     {a.subtitle && <p className="mt-2 text-sm text-muted-foreground">{a.subtitle}</p>}
-                    {a.body && <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground">{a.body}</p>}
+                    {a.body && <ExpandableText text={a.body} threshold={180} className="mt-3 text-sm text-muted-foreground" />}
                   </div>
                 </article>
               );

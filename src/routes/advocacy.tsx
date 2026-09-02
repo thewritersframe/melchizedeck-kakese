@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useSection, useCollection } from "@/lib/cms";
 import { SupportVision } from "@/components/site/SupportVision";
+import { ExpandableText } from "@/components/site/ExpandableText";
 
 
 export const Route = createFileRoute("/advocacy")({
@@ -27,7 +28,7 @@ function Advocacy() {
               <div className="p-6">
                 <h2 className="font-serif text-2xl text-cream">{it.title}</h2>
                 {it.subtitle && <p className="mt-1 text-sm text-gold/80">{it.subtitle}</p>}
-                {it.body && <p className="mt-4 whitespace-pre-wrap text-sm text-muted-foreground">{it.body}</p>}
+                {it.body && <ExpandableText text={it.body} className="mt-4 text-sm text-muted-foreground" />}
               </div>
             </article>
           ))}
