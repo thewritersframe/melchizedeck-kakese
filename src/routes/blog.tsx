@@ -5,6 +5,7 @@ import { useSection, useCollection } from "@/lib/cms";
 import { ShareButtons } from "@/components/site/ShareButtons";
 import { LikeButton } from "@/components/site/LikeButton";
 import { CommentsSection } from "@/components/site/CommentsSection";
+import { ExpandableText } from "@/components/site/ExpandableText";
 
 export const Route = createFileRoute("/blog")({
   head: () => ({
