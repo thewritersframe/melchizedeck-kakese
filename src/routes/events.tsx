@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useSection, useCollection } from "@/lib/cms";
 import { CalendarDays, MapPin } from "lucide-react";
+import { ExpandableText } from "@/components/site/ExpandableText";
 
 export const Route = createFileRoute("/events")({
   head: () => ({ meta: [{ title: "Events — Melchizedeck Kakese" }, { name: "description", content: "Speaking engagements, readings, and workshops." }] }),
