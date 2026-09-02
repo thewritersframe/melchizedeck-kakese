@@ -11,9 +11,14 @@ const getStoredTheme = (): Theme => {
 
 const applyTheme = (theme: Theme) => {
   const root = document.documentElement;
+  const resolved =
+    theme === "system"
+      ? window.matchMedia("(prefers-color-scheme: light)").matches
+        ? "light"
+        : "dark"
+      : theme;
   root.classList.remove("light", "dark");
-  if (theme === "light") root.classList.add("light");
-  if (theme === "dark") root.classList.add("dark");
+  root.classList.add(resolved);
 };
 
 export default function ThemeSwitcher() {
