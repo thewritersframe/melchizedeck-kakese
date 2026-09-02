@@ -68,7 +68,7 @@ function About() {
                       </p>
                     )}
                     {a.subtitle && <p className="mt-2 text-sm text-muted-foreground">{a.subtitle}</p>}
-                    {a.body && <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground">{a.body}</p>}
+                    {a.body && <ExpandableText text={a.body} threshold={180} className="mt-3 text-sm text-muted-foreground" />}
                   </div>
                 </article>
               );
