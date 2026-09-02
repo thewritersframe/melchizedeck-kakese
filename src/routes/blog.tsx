@@ -124,9 +124,11 @@ function Blog() {
                 )}
 
                 {post.body && (
-                  <p className="mt-6 whitespace-pre-wrap leading-relaxed text-muted-foreground">
-                    {post.body}
-                  </p>
+                  <ExpandableText
+                    text={post.body}
+                    threshold={600}
+                    className="mt-6 text-muted-foreground"
+                  />
                 )}
 
                 {/* Engagement */}
