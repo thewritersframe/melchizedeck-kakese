@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useSection, useCollection } from "@/lib/cms";
 import { SupportVision } from "@/components/site/SupportVision";
+import { ExpandableText } from "@/components/site/ExpandableText";
 
 
 export const Route = createFileRoute("/advocacy")({
