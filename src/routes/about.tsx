@@ -36,9 +36,13 @@ function About() {
         {blocks.length > 0 ? (
           <AboutBlocks blocks={blocks} />
         ) : (
-          <div className="prose prose-invert mt-10 max-w-none whitespace-pre-wrap text-lg leading-relaxed text-muted-foreground">
-            {c?.body}
-          </div>
+          c?.body && (
+            <ExpandableText
+              text={c.body}
+              threshold={900}
+              className="mt-10 max-w-none text-lg text-muted-foreground"
+            />
+          )
         )}
       </section>
 
