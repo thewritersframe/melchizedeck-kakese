@@ -4,6 +4,7 @@ import { useSection, useCollection } from "@/lib/cms";
 import { SupportVision } from "@/components/site/SupportVision";
 import { ArrowRight, BookOpen, PenLine, Sparkles } from "lucide-react";
 import { EventsSlideshow } from "@/components/site/EventsSlideshow";
+import { RotatingHeadline } from "@/components/site/RotatingHeadline";
 
 export const Route = createFileRoute("/")({
   head: () => ({
