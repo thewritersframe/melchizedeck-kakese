@@ -4,6 +4,7 @@ import { useSection, useCollection } from "@/lib/cms";
 import { SupportVision } from "@/components/site/SupportVision";
 import { ArrowRight, BookOpen, PenLine, Sparkles } from "lucide-react";
 import { EventsSlideshow } from "@/components/site/EventsSlideshow";
+import { RotatingHeadline } from "@/components/site/RotatingHeadline";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -48,9 +49,8 @@ function Index() {
           <p className="text-xs font-medium font-accent uppercase tracking-[0.3em] text-gold">
             {h?.eyebrow}
           </p>
-          <h1 className="mt-6 font-serif text-5xl leading-tight text-cream md:text-7xl">
-            {h?.title}
-          </h1>
+          <RotatingHeadline />
+
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
             {h?.subtitle}
           </p>
