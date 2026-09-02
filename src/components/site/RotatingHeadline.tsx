@@ -9,13 +9,13 @@ const PHRASES = [
 
 export function RotatingHeadline() {
   const [index, setIndex] = useState(0);
-  const [phase, setPhase] = useState<"in" | "out">("in");
+  const [leaving, setLeaving] = useState(false);
 
   useEffect(() => {
-    const outTimer = setTimeout(() => setPhase("out"), 2400);
+    const outTimer = setTimeout(() => setLeaving(true), 2400);
     const swapTimer = setTimeout(() => {
       setIndex((i) => (i + 1) % PHRASES.length);
-      setPhase("in");
+      setLeaving(false);
     }, 2900);
     return () => {
       clearTimeout(outTimer);
@@ -24,8 +24,8 @@ export function RotatingHeadline() {
   }, [index]);
 
   return (
-    <div className="mt-6 w-full">
-      <h1 className="font-serif text-4xl leading-tight text-cream md:text-6xl">
+    <div className="w-full">
+      <h1 className="mt-6 font-serif text-4xl leading-tight text-cream md:text-6xl">
         I am
       </h1>
       <div
@@ -34,13 +34,12 @@ export function RotatingHeadline() {
       >
         <span
           key={index}
-          className={
-            "block w-full max-w-full break-words px-2 text-center font-serif text-2xl uppercase leading-tight tracking-wide text-gold transition-all duration-500 ease-out sm:text-3xl md:text-5xl " +
-            (phase === "in"
-              ? "translate-y-0 opacity-100"
-              : "-translate-y-6 opacity-0")
-          }
-          style={phase === "in" ? { animation: "none" } : undefined}
+          className="block w-full max-w-full break-words px-2 text-center font-serif text-2xl uppercase leading-tight tracking-wide text-gold sm:text-3xl md:text-5xl"
+          style={{
+            animation: leaving
+              ? "hero-phrase-out 500ms ease-in forwards"
+              : "hero-phrase-in 500ms ease-out both",
+          }}
         >
           {PHRASES[index]}
         </span>
