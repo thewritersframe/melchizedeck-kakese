@@ -23,8 +23,12 @@ export const Route = createFileRoute("/admin")({
 const PAGES: { page: string; sections: { key: string; label: string; fields: FieldSpec[] }[] }[] = [
   { page: "home", sections: [
     { key: "hero", label: "Hero", fields: [
+      { name: "videoUrl", label: "Hero background video", type: "video" },
+      { name: "posterUrl", label: "Hero poster image (shown while the video loads)", type: "image" },
       { name: "eyebrow", label: "Eyebrow" },
-      { name: "title", label: "Title" },
+      { name: "rotatingPrefix", label: "Static line above the moving words (e.g. I am)" },
+      { name: "rotatingPhrases", label: "Moving words — one per line", type: "textarea" },
+      { name: "title", label: "Title (unused when moving words are set)" },
       { name: "subtitle", label: "Subtitle", type: "textarea" },
       { name: "ctaPrimaryLabel", label: "Primary button label" },
       { name: "ctaPrimaryTo", label: "Primary button link" },
