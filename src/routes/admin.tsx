@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Moderation } from "@/components/admin/Moderation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Loader2, Trash2, Plus, Upload, LogOut, ImageIcon } from "lucide-react";
@@ -202,6 +203,7 @@ function Admin() {
             <TabsTrigger value="collections">Collections</TabsTrigger>
             <TabsTrigger value="payments">Payments</TabsTrigger>
             <TabsTrigger value="inbox">Inbox</TabsTrigger>
+            <TabsTrigger value="moderation">Moderation</TabsTrigger>
           </TabsList>
 
           <TabsContent value="pages" className="mt-6">
@@ -234,6 +236,7 @@ function Admin() {
 
           <TabsContent value="payments" className="mt-6"><PaymentsSettings /></TabsContent>
           <TabsContent value="inbox" className="mt-6"><Inbox /></TabsContent>
+          <TabsContent value="moderation" className="mt-6"><Moderation /></TabsContent>
         </Tabs>
       </section>
     </SiteLayout>
