@@ -235,6 +235,7 @@ function Admin() {
 
           <TabsContent value="payments" className="mt-6"><PaymentsSettings /></TabsContent>
           <TabsContent value="inbox" className="mt-6"><Inbox /></TabsContent>
+          <TabsContent value="moderation" className="mt-6"><Moderation /></TabsContent>
         </Tabs>
       </section>
     </SiteLayout>
