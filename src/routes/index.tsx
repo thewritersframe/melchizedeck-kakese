@@ -9,9 +9,7 @@ import { RotatingHeadline } from "@/components/site/RotatingHeadline";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      {
-        title: "Melchizedeck Kakese — Author, Screenwriter & Advocate",
-      },
+      { title: "Melchizedeck Kakese — Author, Screenwriter & Advocate" },
       {
         name: "description",
         content:
@@ -19,25 +17,17 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content:
-          "Melchizedeck Kakese — Author, Screenwriter & Advocate",
+        content: "Melchizedeck Kakese — Author, Screenwriter & Advocate",
       },
       {
         property: "og:description",
         content:
           "Books, screenplays, essays and events from Tanzanian author and screenwriter Melchizedeck Kakese.",
       },
-      {
-        property: "og:type",
-        content: "website",
-      },
-      {
-        name: "twitter:card",
-        content: "summary_large_image",
-      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-
   component: Index,
 });
 
@@ -49,7 +39,14 @@ type Hero = {
   ctaPrimaryTo: string;
   ctaSecondaryLabel: string;
   ctaSecondaryTo: string;
+  videoUrl?: string;
+  posterUrl?: string;
+  rotatingPrefix?: string;
+  rotatingPhrases?: string[] | string;
 };
+
+const DEFAULT_HERO_VIDEO = "/VID_20260817_122335_118%20%282%29.mp4";
+const DEFAULT_HERO_POSTER = "/20260705_145620.jpg";
 
 type Featured = {
   label: string;
@@ -64,10 +61,7 @@ type Featured = {
 
 type Pillars = {
   title: string;
-  items: {
-    title: string;
-    body: string;
-  }[];
+  items: { title: string; body: string }[];
 };
 
 const ICONS = [PenLine, BookOpen, Sparkles];
@@ -82,62 +76,67 @@ function Index() {
   const f = featured?.content;
   const p = pillars?.content;
 
-  const featuredImage =
-    f?.imageUrl || books?.[0]?.image_url || "";
+  const featuredImage = f?.imageUrl || books?.[0]?.image_url || "";
+
+  const heroVideo = (h?.videoUrl || "").trim() || DEFAULT_HERO_VIDEO;
+  const heroPoster = (h?.posterUrl || "").trim() || DEFAULT_HERO_POSTER;
+  const phrases = Array.isArray(h?.rotatingPhrases)
+    ? h?.rotatingPhrases
+    : String(h?.rotatingPhrases ?? "")
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean);
 
   return (
     <SiteLayout>
-
-      {/* =========================================================
-          HERO SECTION
-      ========================================================= */}
-
-      <section className="relative min-h-[80vh] overflow-hidden">
-
-        {/* Background Video */}
+      {/* HERO */}
+      <section className="relative -mt-px min-h-[88svh] overflow-hidden">
+        {/* Background video */}
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url("${heroPoster}")` }}
+        />
         <video
+          key={heroVideo}
           autoPlay
           muted
           loop
           playsInline
-          poster="/20260705_145620.jpg"
-          className="absolute inset-0 h-full w-full object-cover"
-        >
-          <source
-            src="/VID_20260817_122335_118%20%282%29.mp4"
-            type="video/mp4"
-          />
-        </video>
+          preload="auto"
+          poster={heroPoster}
+          src={heroVideo}
+          onLoadedData={(e) => {
+            const v = e.currentTarget;
+            v.style.opacity = "1";
+            void v.play().catch(() => {});
+          }}
+          onError={(e) => { e.currentTarget.style.display = "none"; }}
+          className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-700"
+        />
 
-        {/* Dark Overlay */}
+        {/* Dark overlay for readable text */}
         <div className="absolute inset-0 bg-black/60" />
 
-        {/* Hero Content */}
-        <div className="relative z-10 mx-auto flex min-h-[80vh] max-w-4xl flex-col items-center justify-center px-6 py-24 text-center">
-
-          {/* Eyebrow */}
-          <p className="font-accent text-xs font-medium uppercase tracking-[0.3em] text-gold">
+        {/* Hero content */}
+        <div className="relative z-10 mx-auto flex min-h-[88svh] max-w-4xl flex-col items-center justify-center px-6 py-24 text-center">
+          <p className="text-xs font-medium font-accent uppercase tracking-[0.3em] text-gold">
             {h?.eyebrow}
           </p>
 
-          {/* Rotating Headline */}
-          <RotatingHeadline />
+          <RotatingHeadline prefix={h?.rotatingPrefix || "I am"} phrases={phrases} />
 
-          {/* Subtitle */}
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/90 md:text-lg">
             {h?.subtitle}
           </p>
 
-          {/* Buttons */}
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-
             {h?.ctaPrimaryLabel && (
               <Link
                 to={h.ctaPrimaryTo || "/books"}
                 className="inline-flex items-center gap-2 rounded-md bg-gold px-6 py-3 text-sm font-medium text-primary-foreground transition hover:opacity-90"
               >
                 {h.ctaPrimaryLabel}
-
                 <ArrowRight className="h-4 w-4" />
               </Link>
             )}
@@ -150,25 +149,16 @@ function Index() {
                 {h.ctaSecondaryLabel}
               </Link>
             )}
-
           </div>
         </div>
       </section>
 
-
-      {/* =========================================================
-          FEATURED SECTION
-      ========================================================= */}
-
+      {/* FEATURED */}
       {f && (
         <section className="border-t border-border/40 bg-background py-24">
-
           <div className="mx-auto grid max-w-6xl gap-12 px-6 md:grid-cols-2 md:items-center">
-
-            {/* Text */}
             <div className="order-2 md:order-1">
-
-              <p className="font-accent text-xs font-medium uppercase tracking-[0.3em] text-gold">
+              <p className="text-xs font-medium font-accent uppercase tracking-[0.3em] text-gold">
                 {f.label}
               </p>
 
@@ -180,36 +170,25 @@ function Index() {
                 {f.body}
               </p>
 
-              {/* Buttons */}
               <div className="mt-8 flex flex-wrap gap-3">
+                <Link
+                  to={f.primaryTo || "/books"}
+                  className="rounded-md bg-gold px-5 py-2.5 text-sm font-medium text-primary-foreground transition hover:opacity-90"
+                >
+                  {f.primaryLabel}
+                </Link>
 
-                {f.primaryLabel && (
-                  <Link
-                    to={f.primaryTo || "/books"}
-                    className="rounded-md bg-gold px-5 py-2.5 text-sm font-medium text-primary-foreground transition hover:opacity-90"
-                  >
-                    {f.primaryLabel}
-                  </Link>
-                )}
-
-                {f.secondaryLabel && (
-                  <Link
-                    to={f.secondaryTo || "/books"}
-                    className="rounded-md border border-border px-5 py-2.5 text-sm text-foreground transition hover:bg-muted"
-                  >
-                    {f.secondaryLabel}
-                  </Link>
-                )}
-
+                <Link
+                  to={f.secondaryTo || "/books"}
+                  className="rounded-md border border-border px-5 py-2.5 text-sm text-foreground transition hover:bg-muted"
+                >
+                  {f.secondaryLabel}
+                </Link>
               </div>
             </div>
 
-
-            {/* Featured Image */}
             <div className="order-1 md:order-2">
-
               <div className="relative mx-auto aspect-[3/4] w-full max-w-sm overflow-hidden rounded-lg border border-gold/20 bg-card shadow-2xl shadow-black/20">
-
                 {featuredImage ? (
                   <img
                     src={featuredImage}
@@ -222,39 +201,25 @@ function Index() {
                     {f.title}
                   </div>
                 )}
-
               </div>
             </div>
-
           </div>
         </section>
       )}
 
-
-      {/* =========================================================
-          EVENTS SLIDESHOW
-      ========================================================= */}
-
+      {/* EVENTS SLIDESHOW */}
       <EventsSlideshow />
 
-
-      {/* =========================================================
-          PILLARS SECTION
-      ========================================================= */}
-
+      {/* PILLARS */}
       {p && (
         <section className="bg-background py-24">
-
           <div className="mx-auto max-w-6xl px-6">
-
             <h2 className="text-center font-serif text-4xl text-foreground">
               {p.title}
             </h2>
 
             <div className="mt-14 grid gap-8 md:grid-cols-3">
-
               {p.items?.map((item, i) => {
-
                 const Icon = ICONS[i % ICONS.length];
 
                 return (
@@ -262,38 +227,27 @@ function Index() {
                     key={i}
                     className="rounded-xl border border-border/60 bg-card p-8 shadow-sm transition hover:border-gold/40"
                   >
-
-                    {/* Icon */}
                     <div className="flex h-12 w-12 items-center justify-center rounded-full border border-gold/40 text-gold">
                       <Icon className="h-5 w-5" />
                     </div>
 
-                    {/* Title */}
                     <h3 className="mt-6 font-serif text-2xl text-foreground">
                       {item.title}
                     </h3>
 
-                    {/* Description */}
                     <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                       {item.body}
                     </p>
-
                   </div>
                 );
               })}
-
             </div>
           </div>
         </section>
       )}
 
-
-      {/* =========================================================
-          SUPPORT VISION
-      ========================================================= */}
-
+      {/* SUPPORT */}
       <SupportVision />
-
     </SiteLayout>
   );
 }
