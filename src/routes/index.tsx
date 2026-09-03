@@ -78,35 +78,53 @@ function Index() {
 
   const featuredImage = f?.imageUrl || books?.[0]?.image_url || "";
 
+  const heroVideo = (h?.videoUrl || "").trim() || DEFAULT_HERO_VIDEO;
+  const heroPoster = (h?.posterUrl || "").trim() || DEFAULT_HERO_POSTER;
+  const phrases = Array.isArray(h?.rotatingPhrases)
+    ? h?.rotatingPhrases
+    : String(h?.rotatingPhrases ?? "")
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean);
+
   return (
     <SiteLayout>
       {/* HERO */}
-      <section className="relative min-h-[80vh] overflow-hidden">
+      <section className="relative -mt-px min-h-[88svh] overflow-hidden">
         {/* Background video */}
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url("${heroPoster}")` }}
+        />
         <video
+          key={heroVideo}
           autoPlay
           muted
           loop
           playsInline
-          poster="/20260705_145620.jpg"
-          className="absolute inset-0 h-full w-full object-cover"
-        >
-          <source
-            src="/VID_20260817_122335_118%20%282%29.mp4"
-            type="video/mp4"
-          />
-        </video>
+          preload="auto"
+          poster={heroPoster}
+          src={heroVideo}
+          onLoadedData={(e) => {
+            const v = e.currentTarget;
+            v.style.opacity = "1";
+            void v.play().catch(() => {});
+          }}
+          onError={(e) => { e.currentTarget.style.display = "none"; }}
+          className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-700"
+        />
 
         {/* Dark overlay for readable text */}
         <div className="absolute inset-0 bg-black/60" />
 
         {/* Hero content */}
-        <div className="relative z-10 mx-auto flex min-h-[80vh] max-w-4xl flex-col items-center justify-center px-6 py-24 text-center">
+        <div className="relative z-10 mx-auto flex min-h-[88svh] max-w-4xl flex-col items-center justify-center px-6 py-24 text-center">
           <p className="text-xs font-medium font-accent uppercase tracking-[0.3em] text-gold">
             {h?.eyebrow}
           </p>
 
-          <RotatingHeadline />
+          <RotatingHeadline prefix={h?.rotatingPrefix || "I am"} phrases={phrases} />
 
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/90 md:text-lg">
             {h?.subtitle}
