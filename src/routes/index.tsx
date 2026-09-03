@@ -39,7 +39,14 @@ type Hero = {
   ctaPrimaryTo: string;
   ctaSecondaryLabel: string;
   ctaSecondaryTo: string;
+  videoUrl?: string;
+  posterUrl?: string;
+  rotatingPrefix?: string;
+  rotatingPhrases?: string[] | string;
 };
+
+const DEFAULT_HERO_VIDEO = "/VID_20260817_122335_118%20%282%29.mp4";
+const DEFAULT_HERO_POSTER = "/20260705_145620.jpg";
 
 type Featured = {
   label: string;
