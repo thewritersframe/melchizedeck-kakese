@@ -202,6 +202,7 @@ function Admin() {
             <TabsTrigger value="collections">Collections</TabsTrigger>
             <TabsTrigger value="payments">Payments</TabsTrigger>
             <TabsTrigger value="inbox">Inbox</TabsTrigger>
+            <TabsTrigger value="moderation">Moderation</TabsTrigger>
           </TabsList>
 
           <TabsContent value="pages" className="mt-6">
