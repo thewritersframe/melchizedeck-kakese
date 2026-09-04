@@ -94,6 +94,16 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
       { name: "headingScale", label: "Heading size multiplier (0.8–1.5, default 1)" },
     ]},
 
+    { key: "community", label: "Join the Family (footer community block)", fields: [
+      { name: "eyebrow", label: "Eyebrow" },
+      { name: "title", label: "Title" },
+      { name: "body", label: "Invitation text", type: "textarea" },
+      { name: "instagram", label: "Instagram followers (baseline — auto-updated when API access is connected)" },
+      { name: "linkedin", label: "LinkedIn followers (baseline)" },
+      { name: "facebook", label: "Facebook followers (baseline)" },
+      { name: "threads", label: "Threads followers (baseline)" },
+      { name: "whatsapp", label: "WhatsApp channel followers (baseline)" },
+    ]},
     { key: "footer", label: "Footer & Social links", fields: [
 
       { name: "tagline", label: "Tagline" }, { name: "copyright", label: "Copyright text" },
