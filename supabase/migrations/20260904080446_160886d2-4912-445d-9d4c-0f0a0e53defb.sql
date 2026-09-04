@@ -1,0 +1,1 @@
+UPDATE public.page_sections SET content = jsonb_set(content, '{eyebrow}', '"You''re invited"') WHERE page='site' AND section_key='community';

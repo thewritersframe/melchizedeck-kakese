@@ -4,6 +4,7 @@ import { Menu, X, ShieldCheck, Instagram, Facebook, Linkedin, Mail, MessageCircl
 import { useIsAdmin, useSection } from "@/lib/cms";
 import { useTypography } from "@/lib/fonts";
 import { CookieConsent } from "@/components/site/CookieConsent";
+import { JoinTheFamily } from "@/components/site/JoinTheFamily";
 import { cn } from "@/lib/utils";
 import bgPhoto from "@/assets/kakese-community.jpg.asset.json";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
@@ -176,7 +177,16 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       <main className="flex-1">{children}</main>
 
       <footer className="border-t border-border/40 bg-background/60">
-        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-10">
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-12">
+          <JoinTheFamily
+            links={{
+              instagram: socials.instagram,
+              linkedin: socials.linkedin,
+              facebook: socials.facebook,
+              threads: socials.threads,
+              whatsapp: socials.whatsapp,
+            }}
+          />
           <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <div className="font-serif text-lg text-cream">M.<span className="text-gold">Kakese</span></div>
