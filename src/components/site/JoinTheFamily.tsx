@@ -26,17 +26,16 @@ export function JoinTheFamily({ links }: { links: Links }) {
   const { data: section } = useSection<Community>("site", "community");
   const c = section?.content ?? {};
   const baseline = {
-    instagram: c.instagram,
-    linkedin: c.linkedin,
-    facebook: c.facebook,
-    threads: c.threads,
-    whatsapp: c.whatsapp,
+    instagram: c.instagram ?? DEFAULT_COUNTS.instagram,
+    linkedin: c.linkedin ?? DEFAULT_COUNTS.linkedin,
+    facebook: c.facebook ?? DEFAULT_COUNTS.facebook,
+    threads: c.threads ?? DEFAULT_COUNTS.threads,
+    whatsapp: c.whatsapp ?? DEFAULT_COUNTS.whatsapp,
   };
   const fetchFollowers = useServerFn(getSocialFollowers);
   const { data: followers } = useQuery({
     queryKey: ["social-followers", baseline],
     queryFn: () => fetchFollowers({ data: { baseline } }),
-    enabled: !!section,
     staleTime: 30 * 60 * 1000,
   });
 
