@@ -22,6 +22,14 @@ const PLATFORMS: { key: keyof SocialCounts; label: string; icon: ReactNode }[] =
   { key: "whatsapp", label: "WhatsApp", icon: <MessageCircle className="h-4 w-4" /> },
 ];
 
+const DEFAULT_COUNTS: SocialCounts = {
+  instagram: 1155,
+  linkedin: 822,
+  facebook: 430,
+  threads: 229,
+  whatsapp: 23,
+};
+
 export function JoinTheFamily({ links }: { links: Links }) {
   const { data: section } = useSection<Community>("site", "community");
   const c = section?.content ?? {};
