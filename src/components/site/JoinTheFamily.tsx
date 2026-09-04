@@ -56,7 +56,7 @@ export function JoinTheFamily({ links }: { links: Links }) {
       <div className="grid gap-10 md:grid-cols-2 md:items-center">
         <div>
           <p className="text-xs font-accent uppercase tracking-[0.3em] text-gold">
-            {c.eyebrow ?? "Join the family"}
+            {c.eyebrow ?? "You're invited"}
           </p>
           <h2 className="mt-3 font-serif text-3xl text-foreground md:text-4xl">
             {c.title ?? "JOIN THE FAMILY"}
