@@ -4,6 +4,7 @@ import { Menu, X, ShieldCheck, Instagram, Facebook, Linkedin, Mail, MessageCircl
 import { useIsAdmin, useSection } from "@/lib/cms";
 import { useTypography } from "@/lib/fonts";
 import { CookieConsent } from "@/components/site/CookieConsent";
+import { JoinTheFamily } from "@/components/site/JoinTheFamily";
 import { cn } from "@/lib/utils";
 import bgPhoto from "@/assets/kakese-community.jpg.asset.json";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
