@@ -45,9 +45,18 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
       { name: "secondaryLabel", label: "Secondary button label" },
       { name: "secondaryTo", label: "Secondary button link" },
     ]},
-    { key: "pillars", label: "What Drives the Work", fields: [
+    { key: "pillars", label: "What I Do (three pillars)", fields: [
+      { name: "eyebrow", label: "Eyebrow" },
       { name: "title", label: "Section title" },
       { name: "items", label: "Pillars (JSON array of {title, body})", type: "json" },
+      { name: "projectsNote", label: "Line above the Projects button" },
+      { name: "projectsLabel", label: "Projects button label" },
+    ]},
+    { key: "impact", label: "Impact Numbers (animated counters)", fields: [
+      { name: "eyebrow", label: "Eyebrow" },
+      { name: "title", label: "Section title" },
+      { name: "items", label: "Stats (JSON array of {label, value, suffix})", type: "json" },
+      { name: "note", label: "Small note under the numbers", type: "textarea" },
     ]},
     { key: "newsletter", label: "Newsletter", fields: [
       { name: "title", label: "Title" },
