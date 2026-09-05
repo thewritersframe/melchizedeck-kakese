@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useSection, useCollection } from "@/lib/cms";
 import { SupportVision } from "@/components/site/SupportVision";
-import { ArrowRight, BookOpen, PenLine, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpen, PenLine, Sparkles, Users, HeartHandshake, FolderOpen } from "lucide-react";
+import { ImpactNumbers } from "@/components/site/ImpactNumbers";
 import { EventsSlideshow } from "@/components/site/EventsSlideshow";
 import { RotatingHeadline } from "@/components/site/RotatingHeadline";
 
