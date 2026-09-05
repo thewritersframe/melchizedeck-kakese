@@ -48,42 +48,13 @@ function About() {
 
 
       {achievements && achievements.length > 0 && (
-        <section className="mx-auto max-w-6xl px-6 pb-24">
-          <div className="mb-8 flex items-end justify-between border-b border-border/40 pb-4">
-            <div>
-              <p className="text-xs font-accent uppercase tracking-[0.3em] text-gold">Gallery</p>
-              <h2 className="mt-2 font-serif text-3xl text-cream md:text-4xl">Achievements</h2>
-            </div>
+        <section className="mx-auto max-w-5xl px-6 pb-24">
+          <div className="mb-12 border-b border-border/40 pb-4">
+            <p className="text-xs font-accent uppercase tracking-[0.3em] text-gold">{t?.eyebrow ?? "Journey"}</p>
+            <h2 className="mt-2 font-serif text-3xl text-cream md:text-4xl">{t?.title ?? "Milestones"}</h2>
+            {t?.body && <p className="mt-3 max-w-2xl text-muted-foreground">{t.body}</p>}
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {achievements.map((a) => {
-              const meta = (a.meta ?? {}) as { year?: string; location?: string; url?: string };
-              const card = (
-                <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-border/60 bg-background/40 transition hover:border-gold/60">
-                  {a.image_url && (
-                    <div className="aspect-[4/3] w-full overflow-hidden bg-background/60">
-                      <SmartImage src={a.image_url} alt={a.title} className="h-full w-full object-cover transition group-hover:scale-105" />
-                    </div>
-                  )}
-                  <div className="flex flex-1 flex-col p-5">
-                    <h3 className="font-serif text-xl text-cream">{a.title}</h3>
-                    {(meta.year || meta.location) && (
-                      <p className="mt-1 text-xs uppercase tracking-[0.2em] text-gold/80">
-                        {[meta.year, meta.location].filter(Boolean).join(" · ")}
-                      </p>
-                    )}
-                    {a.subtitle && <p className="mt-2 text-sm text-muted-foreground">{a.subtitle}</p>}
-                    {a.body && <ExpandableText text={a.body} threshold={180} className="mt-3 text-sm text-muted-foreground" />}
-                  </div>
-                </article>
-              );
-              return meta.url ? (
-                <a key={a.id} href={meta.url} target="_blank" rel="noreferrer">{card}</a>
-              ) : (
-                <div key={a.id}>{card}</div>
-              );
-            })}
-          </div>
+          <Timeline items={achievements} />
         </section>
       )}
     </SiteLayout>
