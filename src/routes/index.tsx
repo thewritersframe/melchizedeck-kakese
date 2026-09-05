@@ -88,7 +88,7 @@ function Index() {
 
   const h = hero?.content;
   const f = featured?.content;
-  const p = pillars?.content;
+  const p: Pillars = pillars?.content?.items?.length ? pillars.content : DEFAULT_PILLARS;
 
   const featuredImage = f?.imageUrl || books?.[0]?.image_url || "";
 
