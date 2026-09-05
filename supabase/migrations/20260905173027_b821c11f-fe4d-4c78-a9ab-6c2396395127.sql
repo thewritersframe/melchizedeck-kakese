@@ -1,0 +1,11 @@
+INSERT INTO public.page_sections (page, section_key, content) VALUES
+('home', 'whatido', '{"eyebrow":"What I Do","title":"What I Do","items":[{"title":"Writing & Publishing","body":"Placeholder text. Books, essays and screenplays that carry African stories to wider audiences."},{"title":"Youth Advocacy","body":"Placeholder text. Programmes and mentorship that help young people find and use their voice."},{"title":"Leadership & Community Work","body":"Placeholder text. Building teams, platforms and communities that outlast a single project."}],"projectsLabel":"View Projects","projectsNote":"See what I have founded and contributed to."}'::jsonb),
+('home', 'impact', '{"eyebrow":"Impact","title":"Impact in Numbers","note":"Figures are indicative placeholders while final numbers are confirmed.","items":[{"label":"Young people reached","value":"12000","suffix":"+"},{"label":"Schools worked with","value":"45","suffix":"+"},{"label":"Books published","value":"4","suffix":""},{"label":"Projects founded","value":"6","suffix":""},{"label":"Countries & events","value":"9","suffix":"+"}]}'::jsonb),
+('projects', 'header', '{"title":"Projects","body":"Initiatives I have founded or contributed to."}'::jsonb),
+('about', 'timeline', '{"eyebrow":"Journey","title":"Milestones","body":"A story arc of the work so far — and where it is heading."}'::jsonb)
+ON CONFLICT DO NOTHING;
+
+INSERT INTO public.content_items (collection, title, subtitle, body, sort_order, meta) VALUES
+('project', 'The Writer''s Frame', 'Founder', 'Placeholder description. A platform nurturing young African writers through workshops, publishing support and community.', 1, '{"role":"Founder","url":""}'::jsonb),
+('project', 'Youth Voices Initiative', 'Co-creator', 'Placeholder description. School-based programme helping students turn lived experience into written and spoken work.', 2, '{"role":"Co-creator","url":""}'::jsonb),
+('project', 'Community Reading Drive', 'Contributor', 'Placeholder description. Distributing books and running reading circles in under-served communities.', 3, '{"role":"Contributor","url":""}'::jsonb);

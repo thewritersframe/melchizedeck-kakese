@@ -45,16 +45,36 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
       { name: "secondaryLabel", label: "Secondary button label" },
       { name: "secondaryTo", label: "Secondary button link" },
     ]},
-    { key: "pillars", label: "What Drives the Work", fields: [
+    { key: "pillars", label: "What I Do (three pillars)", fields: [
+      { name: "eyebrow", label: "Eyebrow" },
       { name: "title", label: "Section title" },
       { name: "items", label: "Pillars (JSON array of {title, body})", type: "json" },
+      { name: "projectsNote", label: "Line above the Projects button" },
+      { name: "projectsLabel", label: "Projects button label" },
+    ]},
+    { key: "impact", label: "Impact Numbers (animated counters)", fields: [
+      { name: "eyebrow", label: "Eyebrow" },
+      { name: "title", label: "Section title" },
+      { name: "items", label: "Stats (JSON array of {label, value, suffix})", type: "json" },
+      { name: "note", label: "Small note under the numbers", type: "textarea" },
     ]},
     { key: "newsletter", label: "Newsletter", fields: [
       { name: "title", label: "Title" },
       { name: "body", label: "Body", type: "textarea" },
     ]},
   ]},
+  { page: "projects", sections: [
+    { key: "header", label: "Projects page header", fields: [
+      { name: "title", label: "Title" },
+      { name: "body", label: "Intro", type: "textarea" },
+    ]},
+  ]},
   { page: "about", sections: [
+    { key: "timeline", label: "Milestones timeline heading", fields: [
+      { name: "eyebrow", label: "Eyebrow" },
+      { name: "title", label: "Title" },
+      { name: "body", label: "Intro", type: "textarea" },
+    ]},
     { key: "main", label: "About", fields: [
       { name: "title", label: "Title" },
       { name: "body", label: "Body (used only if no story blocks below)", type: "textarea" },
@@ -150,8 +170,12 @@ const COLLECTIONS: { key: string; label: string; extraMeta: MetaField[]; lockabl
     { name: "date", label: "Date" }, { name: "location", label: "Location" }, { name: "url", label: "Details link" },
   ]},
   { key: "advocacy", label: "Advocacy & adventures", extraMeta: [] },
-  { key: "achievement", label: "Achievements", extraMeta: [
-    { name: "year", label: "Year" },
+  { key: "project", label: "Projects", extraMeta: [
+    { name: "role", label: "My role (e.g. Founder, Contributor)" },
+    { name: "url", label: "Project link (optional)" },
+  ]},
+  { key: "achievement", label: "Milestones / Achievements (timeline)", extraMeta: [
+    { name: "year", label: "Year (use 'Future' for what's coming)" },
     { name: "location", label: "Location" },
     { name: "url", label: "Related link (optional)" },
   ]},

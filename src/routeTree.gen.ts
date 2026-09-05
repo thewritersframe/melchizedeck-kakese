@@ -13,6 +13,7 @@ import { Route as UnlockRouteImport } from './routes/unlock'
 import { Route as SupportThanksRouteImport } from './routes/support-thanks'
 import { Route as SpeechesRouteImport } from './routes/speeches'
 import { Route as ScriptsRouteImport } from './routes/scripts'
+import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as EventsRouteImport } from './routes/events'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BooksRouteImport } from './routes/books'
@@ -42,6 +43,11 @@ const SpeechesRoute = SpeechesRouteImport.update({
 const ScriptsRoute = ScriptsRouteImport.update({
   id: '/scripts',
   path: '/scripts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsRoute = ProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EventsRoute = EventsRouteImport.update({
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/books': typeof BooksRoute
   '/contact': typeof ContactRoute
   '/events': typeof EventsRoute
+  '/projects': typeof ProjectsRoute
   '/scripts': typeof ScriptsRoute
   '/speeches': typeof SpeechesRoute
   '/support-thanks': typeof SupportThanksRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByTo {
   '/books': typeof BooksRoute
   '/contact': typeof ContactRoute
   '/events': typeof EventsRoute
+  '/projects': typeof ProjectsRoute
   '/scripts': typeof ScriptsRoute
   '/speeches': typeof SpeechesRoute
   '/support-thanks': typeof SupportThanksRoute
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/books': typeof BooksRoute
   '/contact': typeof ContactRoute
   '/events': typeof EventsRoute
+  '/projects': typeof ProjectsRoute
   '/scripts': typeof ScriptsRoute
   '/speeches': typeof SpeechesRoute
   '/support-thanks': typeof SupportThanksRoute
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
     | '/books'
     | '/contact'
     | '/events'
+    | '/projects'
     | '/scripts'
     | '/speeches'
     | '/support-thanks'
@@ -172,6 +182,7 @@ export interface FileRouteTypes {
     | '/books'
     | '/contact'
     | '/events'
+    | '/projects'
     | '/scripts'
     | '/speeches'
     | '/support-thanks'
@@ -188,6 +199,7 @@ export interface FileRouteTypes {
     | '/books'
     | '/contact'
     | '/events'
+    | '/projects'
     | '/scripts'
     | '/speeches'
     | '/support-thanks'
@@ -205,6 +217,7 @@ export interface RootRouteChildren {
   BooksRoute: typeof BooksRoute
   ContactRoute: typeof ContactRoute
   EventsRoute: typeof EventsRoute
+  ProjectsRoute: typeof ProjectsRoute
   ScriptsRoute: typeof ScriptsRoute
   SpeechesRoute: typeof SpeechesRoute
   SupportThanksRoute: typeof SupportThanksRoute
@@ -240,6 +253,13 @@ declare module '@tanstack/react-router' {
       path: '/scripts'
       fullPath: '/scripts'
       preLoaderRoute: typeof ScriptsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects': {
+      id: '/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof ProjectsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/events': {
@@ -325,6 +345,7 @@ const rootRouteChildren: RootRouteChildren = {
   BooksRoute: BooksRoute,
   ContactRoute: ContactRoute,
   EventsRoute: EventsRoute,
+  ProjectsRoute: ProjectsRoute,
   ScriptsRoute: ScriptsRoute,
   SpeechesRoute: SpeechesRoute,
   SupportThanksRoute: SupportThanksRoute,
