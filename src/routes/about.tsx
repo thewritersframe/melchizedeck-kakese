@@ -23,6 +23,8 @@ export const Route = createFileRoute("/about")({
 function About() {
   const { data } = useSection<{ title: string; body: string; imageUrl?: string; blocks?: unknown }>("about", "main");
   const { data: achievements } = useCollection("achievement");
+  const { data: timeline } = useSection<{ eyebrow?: string; title?: string; body?: string }>("about", "timeline");
+  const t = timeline?.content;
   const c = data?.content;
   const blocks = parseBlocks(c?.blocks);
   return (
