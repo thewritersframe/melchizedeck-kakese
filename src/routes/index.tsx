@@ -224,41 +224,58 @@ function Index() {
       {/* EVENTS SLIDESHOW */}
       <EventsSlideshow />
 
-      {/* PILLARS */}
-      {p && (
-        <section className="bg-background py-24">
-          <div className="mx-auto max-w-6xl px-6">
-            <h2 className="text-center font-serif text-4xl text-foreground">
-              {p.title}
-            </h2>
+      {/* WHAT I DO */}
+      <section className="bg-background py-24">
+        <div className="mx-auto max-w-6xl px-6">
+          <p className="text-center text-xs font-accent uppercase tracking-[0.3em] text-gold">
+            {p.eyebrow ?? "What I Do"}
+          </p>
+          <h2 className="mt-3 text-center font-serif text-4xl text-foreground">
+            {p.title ?? "What I Do"}
+          </h2>
 
-            <div className="mt-14 grid gap-8 md:grid-cols-3">
-              {p.items?.map((item, i) => {
-                const Icon = ICONS[i % ICONS.length];
+          <div className="mt-14 grid gap-8 md:grid-cols-3">
+            {p.items?.map((item, i) => {
+              const Icon = ICONS[i % ICONS.length];
 
-                return (
-                  <div
-                    key={i}
-                    className="rounded-xl border border-border/60 bg-card p-8 shadow-sm transition hover:border-gold/40"
-                  >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-gold/40 text-gold">
-                      <Icon className="h-5 w-5" />
-                    </div>
-
-                    <h3 className="mt-6 font-serif text-2xl text-foreground">
-                      {item.title}
-                    </h3>
-
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                      {item.body}
-                    </p>
+              return (
+                <div
+                  key={i}
+                  className="rounded-xl border border-border/60 bg-card p-8 shadow-sm transition hover:border-gold/40"
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-gold/40 text-gold">
+                    <Icon className="h-5 w-5" />
                   </div>
-                );
-              })}
-            </div>
+
+                  <h3 className="mt-6 font-serif text-2xl text-foreground">
+                    {item.title}
+                  </h3>
+
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    {item.body}
+                  </p>
+                </div>
+              );
+            })}
           </div>
-        </section>
-      )}
+
+          <div className="mt-12 flex flex-col items-center gap-3 text-center">
+            {p.projectsNote && (
+              <p className="text-sm text-muted-foreground">{p.projectsNote}</p>
+            )}
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-2 rounded-md bg-gold px-6 py-3 text-sm font-medium text-primary-foreground transition hover:opacity-90"
+            >
+              <FolderOpen className="h-4 w-4" />
+              {p.projectsLabel || "View Projects"}
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* IMPACT NUMBERS */}
+      <ImpactNumbers />
 
       {/* SUPPORT */}
       <SupportVision />
