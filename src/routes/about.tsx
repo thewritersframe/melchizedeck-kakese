@@ -4,6 +4,7 @@ import { useCollection, useSection } from "@/lib/cms";
 import { SmartImage } from "@/components/site/SmartImage";
 import { AboutBlocks, parseBlocks } from "@/components/site/AboutBlocks";
 import { ExpandableText } from "@/components/site/ExpandableText";
+import { Timeline } from "@/components/site/Timeline";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
