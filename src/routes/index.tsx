@@ -60,11 +60,24 @@ type Featured = {
 };
 
 type Pillars = {
+  eyebrow?: string;
   title: string;
   items: { title: string; body: string }[];
+  projectsLabel?: string;
+  projectsNote?: string;
 };
 
-const ICONS = [PenLine, BookOpen, Sparkles];
+const ICONS = [PenLine, Users, HeartHandshake, BookOpen, Sparkles];
+
+const DEFAULT_PILLARS: Pillars = {
+  eyebrow: "What I Do",
+  title: "What I Do",
+  items: [
+    { title: "Writing & Publishing", body: "Placeholder text. Books, essays and screenplays that carry African stories to wider audiences." },
+    { title: "Youth Advocacy", body: "Placeholder text. Programmes and mentorship that help young people find and use their voice." },
+    { title: "Leadership & Community Work", body: "Placeholder text. Building teams, platforms and communities that outlast a single project." },
+  ],
+};
 
 function Index() {
   const { data: hero } = useSection<Hero>("home", "hero");
