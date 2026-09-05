@@ -170,8 +170,12 @@ const COLLECTIONS: { key: string; label: string; extraMeta: MetaField[]; lockabl
     { name: "date", label: "Date" }, { name: "location", label: "Location" }, { name: "url", label: "Details link" },
   ]},
   { key: "advocacy", label: "Advocacy & adventures", extraMeta: [] },
-  { key: "achievement", label: "Achievements", extraMeta: [
-    { name: "year", label: "Year" },
+  { key: "project", label: "Projects", extraMeta: [
+    { name: "role", label: "My role (e.g. Founder, Contributor)" },
+    { name: "url", label: "Project link (optional)" },
+  ]},
+  { key: "achievement", label: "Milestones / Achievements (timeline)", extraMeta: [
+    { name: "year", label: "Year (use 'Future' for what's coming)" },
     { name: "location", label: "Location" },
     { name: "url", label: "Related link (optional)" },
   ]},
