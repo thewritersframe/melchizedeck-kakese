@@ -63,7 +63,18 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
       { name: "body", label: "Body", type: "textarea" },
     ]},
   ]},
+  { page: "projects", sections: [
+    { key: "header", label: "Projects page header", fields: [
+      { name: "title", label: "Title" },
+      { name: "body", label: "Intro", type: "textarea" },
+    ]},
+  ]},
   { page: "about", sections: [
+    { key: "timeline", label: "Milestones timeline heading", fields: [
+      { name: "eyebrow", label: "Eyebrow" },
+      { name: "title", label: "Title" },
+      { name: "body", label: "Intro", type: "textarea" },
+    ]},
     { key: "main", label: "About", fields: [
       { name: "title", label: "Title" },
       { name: "body", label: "Body (used only if no story blocks below)", type: "textarea" },
