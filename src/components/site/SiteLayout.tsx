@@ -33,6 +33,7 @@ const JUNGLE_SVG = `data:image/svg+xml;utf8,${encodeURIComponent(
 const NAV = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
+  { to: "/projects", label: "Projects" },
   { to: "/books", label: "Books" },
   { to: "/scripts", label: "Scripts" },
   { to: "/blog", label: "Blog" },
