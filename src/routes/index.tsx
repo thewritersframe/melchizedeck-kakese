@@ -2,7 +2,15 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useSection, useCollection } from "@/lib/cms";
 import { SupportVision } from "@/components/site/SupportVision";
-import { ArrowRight, BookOpen, PenLine, Sparkles, Users, HeartHandshake, FolderOpen } from "lucide-react";
+import {
+  ArrowRight,
+  BookOpen,
+  PenLine,
+  Sparkles,
+  Users,
+  HeartHandshake,
+  FolderOpen,
+} from "lucide-react";
 import { ImpactNumbers } from "@/components/site/ImpactNumbers";
 import { EventsSlideshow } from "@/components/site/EventsSlideshow";
 import { RotatingHeadline } from "@/components/site/RotatingHeadline";
@@ -10,23 +18,32 @@ import { RotatingHeadline } from "@/components/site/RotatingHeadline";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Melchizedeck Kakese — Author, Screenwriter & Advocate" },
+      {
+        title: "Melchizedeck Kakese — Author, Screenwriter & Youth Advocate",
+      },
       {
         name: "description",
         content:
-          "Books, screenplays, essays and events from Tanzanian author and screenwriter Melchizedeck Kakese.",
+          "Explore the books, screenplays, creative work, youth initiatives and community projects of Tanzanian author, screenwriter and youth advocate Melchizedeck Kakese.",
       },
       {
         property: "og:title",
-        content: "Melchizedeck Kakese — Author, Screenwriter & Advocate",
+        content:
+          "Melchizedeck Kakese — Author, Screenwriter & Youth Advocate",
       },
       {
         property: "og:description",
         content:
-          "Books, screenplays, essays and events from Tanzanian author and screenwriter Melchizedeck Kakese.",
+          "Books, screenplays, creative work, youth initiatives and community projects from Tanzanian author, screenwriter and youth advocate Melchizedeck Kakese.",
       },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
+      {
+        property: "og:type",
+        content: "website",
+      },
+      {
+        name: "twitter:card",
+        content: "summary_large_image",
+      },
     ],
   }),
   component: Index,
@@ -63,21 +80,45 @@ type Featured = {
 type Pillars = {
   eyebrow?: string;
   title: string;
-  items: { title: string; body: string }[];
+  items: {
+    title: string;
+    body: string;
+  }[];
   projectsLabel?: string;
   projectsNote?: string;
 };
 
-const ICONS = [PenLine, Users, HeartHandshake, BookOpen, Sparkles];
+const ICONS = [
+  PenLine,
+  Users,
+  HeartHandshake,
+  BookOpen,
+  Sparkles,
+];
 
 const DEFAULT_PILLARS: Pillars = {
   eyebrow: "What I Do",
-  title: "What I Do",
+  title: "Ideas into words. Words into impact.",
   items: [
-    { title: "Writing & Publishing", body: "Placeholder text. Books, essays and screenplays that carry African stories to wider audiences." },
-    { title: "Youth Advocacy", body: "Placeholder text. Programmes and mentorship that help young people find and use their voice." },
-    { title: "Leadership & Community Work", body: "Placeholder text. Building teams, platforms and communities that outlast a single project." },
+    {
+      title: "Writing & Publishing",
+      body:
+        "I write books, poetry, screenplays and essays that explore human experience, African stories and the questions that shape how we see the world.",
+    },
+    {
+      title: "Youth Advocacy",
+      body:
+        "I create platforms and opportunities that help young people discover their voices, express their ideas and take an active role in shaping their communities.",
+    },
+    {
+      title: "Leadership & Community Work",
+      body:
+        "I build and lead youth-centered initiatives that bring together creativity, communication, leadership and community action to turn ideas into meaningful work.",
+    },
   ],
+  projectsLabel: "Explore My Projects",
+  projectsNote:
+    "Discover the initiatives, platforms and creative work behind the journey.",
 };
 
 function Index() {
@@ -88,14 +129,23 @@ function Index() {
 
   const h = hero?.content;
   const f = featured?.content;
-  const p: Pillars = pillars?.content?.items?.length ? pillars.content : DEFAULT_PILLARS;
 
-  const featuredImage = f?.imageUrl || books?.[0]?.image_url || "";
+  const p: Pillars =
+    pillars?.content?.items?.length
+      ? pillars.content
+      : DEFAULT_PILLARS;
 
-  const heroVideo = (h?.videoUrl || "").trim() || DEFAULT_HERO_VIDEO;
-  const heroPoster = (h?.posterUrl || "").trim() || DEFAULT_HERO_POSTER;
+  const featuredImage =
+    f?.imageUrl || books?.[0]?.image_url || "";
+
+  const heroVideo =
+    (h?.videoUrl || "").trim() || DEFAULT_HERO_VIDEO;
+
+  const heroPoster =
+    (h?.posterUrl || "").trim() || DEFAULT_HERO_POSTER;
+
   const phrases = Array.isArray(h?.rotatingPhrases)
-    ? h?.rotatingPhrases
+    ? h.rotatingPhrases
     : String(h?.rotatingPhrases ?? "")
         .split("\n")
         .map((s) => s.trim())
@@ -103,14 +153,20 @@ function Index() {
 
   return (
     <SiteLayout>
-      {/* HERO */}
+      {/* =========================================================
+          HERO
+      ========================================================== */}
       <section className="relative -mt-px min-h-[88svh] overflow-hidden">
-        {/* Background video */}
+        {/* Background poster */}
         <div
           aria-hidden
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url("${heroPoster}")` }}
+          style={{
+            backgroundImage: `url("${heroPoster}")`,
+          }}
         />
+
+        {/* Background video */}
         <video
           key={heroVideo}
           autoPlay
@@ -121,86 +177,114 @@ function Index() {
           poster={heroPoster}
           src={heroVideo}
           onLoadedData={(e) => {
-            const v = e.currentTarget;
-            v.style.opacity = "1";
-            void v.play().catch(() => {});
+            const video = e.currentTarget;
+            video.style.opacity = "1";
+            void video.play().catch(() => {});
           }}
-          onError={(e) => { e.currentTarget.style.display = "none"; }}
+          onError={(e) => {
+            e.currentTarget.style.display = "none";
+          }}
           className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-700"
         />
 
-        {/* Dark overlay for readable text */}
-        <div className="absolute inset-0 bg-black/60" />
+        {/* Dark overlay */}
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-black/60"
+        />
 
         {/* Hero content */}
         <div className="relative z-10 mx-auto flex min-h-[88svh] max-w-4xl flex-col items-center justify-center px-6 py-24 text-center">
-          <p className="text-xs font-medium font-accent uppercase tracking-[0.3em] text-gold">
-            {h?.eyebrow}
-          </p>
+          {h?.eyebrow && (
+            <p className="text-xs font-medium font-accent uppercase tracking-[0.3em] text-gold">
+              {h.eyebrow}
+            </p>
+          )}
 
-          <RotatingHeadline prefix={h?.rotatingPrefix || "I am"} phrases={phrases} />
+          <RotatingHeadline
+            prefix={h?.rotatingPrefix || "I am"}
+            phrases={phrases}
+          />
 
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/90 md:text-lg">
-            {h?.subtitle}
-          </p>
+          {h?.subtitle && (
+            <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/90 md:text-lg">
+              {h.subtitle}
+            </p>
+          )}
 
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            {h?.ctaPrimaryLabel && (
-              <Link
-                to={h.ctaPrimaryTo || "/books"}
-                className="inline-flex items-center gap-2 rounded-md bg-gold px-6 py-3 text-sm font-medium text-primary-foreground transition hover:opacity-90"
-              >
-                {h.ctaPrimaryLabel}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            )}
+          {(h?.ctaPrimaryLabel || h?.ctaSecondaryLabel) && (
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+              {h?.ctaPrimaryLabel && (
+                <Link
+                  to={h.ctaPrimaryTo || "/books"}
+                  className="inline-flex items-center gap-2 rounded-md bg-gold px-6 py-3 text-sm font-medium text-primary-foreground transition hover:opacity-90"
+                >
+                  {h.ctaPrimaryLabel}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              )}
 
-            {h?.ctaSecondaryLabel && (
-              <Link
-                to={h.ctaSecondaryTo || "/blog"}
-                className="inline-flex rounded-md border border-white/50 px-6 py-3 text-sm text-white transition hover:bg-white/10"
-              >
-                {h.ctaSecondaryLabel}
-              </Link>
-            )}
-          </div>
+              {h?.ctaSecondaryLabel && (
+                <Link
+                  to={h.ctaSecondaryTo || "/blog"}
+                  className="inline-flex rounded-md border border-white/50 px-6 py-3 text-sm text-white transition hover:bg-white/10"
+                >
+                  {h.ctaSecondaryLabel}
+                </Link>
+              )}
+            </div>
+          )}
         </div>
       </section>
 
-      {/* FEATURED */}
+      {/* =========================================================
+          FEATURED
+      ========================================================== */}
       {f && (
         <section className="border-t border-border/40 bg-background py-24">
           <div className="mx-auto grid max-w-6xl gap-12 px-6 md:grid-cols-2 md:items-center">
+            {/* Text */}
             <div className="order-2 md:order-1">
-              <p className="text-xs font-medium font-accent uppercase tracking-[0.3em] text-gold">
-                {f.label}
-              </p>
+              {f.label && (
+                <p className="text-xs font-medium font-accent uppercase tracking-[0.3em] text-gold">
+                  {f.label}
+                </p>
+              )}
 
               <h2 className="mt-4 font-serif text-4xl text-foreground">
                 {f.title}
               </h2>
 
-              <p className="mt-4 text-muted-foreground">
-                {f.body}
-              </p>
+              {f.body && (
+                <p className="mt-4 leading-relaxed text-muted-foreground">
+                  {f.body}
+                </p>
+              )}
 
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link
-                  to={f.primaryTo || "/books"}
-                  className="rounded-md bg-gold px-5 py-2.5 text-sm font-medium text-primary-foreground transition hover:opacity-90"
-                >
-                  {f.primaryLabel}
-                </Link>
+              {(f.primaryLabel || f.secondaryLabel) && (
+                <div className="mt-8 flex flex-wrap gap-3">
+                  {f.primaryLabel && (
+                    <Link
+                      to={f.primaryTo || "/books"}
+                      className="rounded-md bg-gold px-5 py-2.5 text-sm font-medium text-primary-foreground transition hover:opacity-90"
+                    >
+                      {f.primaryLabel}
+                    </Link>
+                  )}
 
-                <Link
-                  to={f.secondaryTo || "/books"}
-                  className="rounded-md border border-border px-5 py-2.5 text-sm text-foreground transition hover:bg-muted"
-                >
-                  {f.secondaryLabel}
-                </Link>
-              </div>
+                  {f.secondaryLabel && (
+                    <Link
+                      to={f.secondaryTo || "/books"}
+                      className="rounded-md border border-border px-5 py-2.5 text-sm text-foreground transition hover:bg-muted"
+                    >
+                      {f.secondaryLabel}
+                    </Link>
+                  )}
+                </div>
+              )}
             </div>
 
+            {/* Image */}
             <div className="order-1 md:order-2">
               <div className="relative mx-auto aspect-[3/4] w-full max-w-sm overflow-hidden rounded-lg border border-gold/20 bg-card shadow-2xl shadow-black/20">
                 {featuredImage ? (
@@ -221,36 +305,48 @@ function Index() {
         </section>
       )}
 
-      {/* EVENTS SLIDESHOW */}
+      {/* =========================================================
+          EVENTS
+      ========================================================== */}
       <EventsSlideshow />
 
-      {/* WHAT I DO */}
+      {/* =========================================================
+          WHAT I DO
+      ========================================================== */}
       <section className="bg-background py-24">
         <div className="mx-auto max-w-6xl px-6">
-          <p className="text-center text-xs font-accent uppercase tracking-[0.3em] text-gold">
-            {p.eyebrow ?? "What I Do"}
-          </p>
-          <h2 className="mt-3 text-center font-serif text-4xl text-foreground">
-            {p.title ?? "What I Do"}
-          </h2>
+          {/* Section heading */}
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-xs font-accent uppercase tracking-[0.3em] text-gold">
+              {p.eyebrow ?? "What I Do"}
+            </p>
 
+            <h2 className="mt-3 font-serif text-4xl text-foreground md:text-5xl">
+              {p.title ?? "Ideas into words. Words into impact."}
+            </h2>
+          </div>
+
+          {/* Pillars */}
           <div className="mt-14 grid gap-8 md:grid-cols-3">
             {p.items?.map((item, i) => {
               const Icon = ICONS[i % ICONS.length];
 
               return (
                 <div
-                  key={i}
-                  className="rounded-xl border border-border/60 bg-card p-8 shadow-sm transition hover:border-gold/40"
+                  key={`${item.title}-${i}`}
+                  className="group rounded-xl border border-border/60 bg-card p-8 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-lg"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-gold/40 text-gold">
+                  {/* Icon */}
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-gold/40 text-gold transition group-hover:bg-gold group-hover:text-primary-foreground">
                     <Icon className="h-5 w-5" />
                   </div>
 
+                  {/* Title */}
                   <h3 className="mt-6 font-serif text-2xl text-foreground">
                     {item.title}
                   </h3>
 
+                  {/* Description */}
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                     {item.body}
                   </p>
@@ -259,25 +355,34 @@ function Index() {
             })}
           </div>
 
+          {/* Projects CTA */}
           <div className="mt-12 flex flex-col items-center gap-3 text-center">
             {p.projectsNote && (
-              <p className="text-sm text-muted-foreground">{p.projectsNote}</p>
+              <p className="max-w-xl text-sm leading-relaxed text-muted-foreground">
+                {p.projectsNote}
+              </p>
             )}
+
             <Link
               to="/projects"
               className="inline-flex items-center gap-2 rounded-md bg-gold px-6 py-3 text-sm font-medium text-primary-foreground transition hover:opacity-90"
             >
               <FolderOpen className="h-4 w-4" />
-              {p.projectsLabel || "View Projects"}
+              {p.projectsLabel || "Explore My Projects"}
+              <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* IMPACT NUMBERS */}
+      {/* =========================================================
+          IMPACT NUMBERS
+      ========================================================== */}
       <ImpactNumbers />
 
-      {/* SUPPORT */}
+      {/* =========================================================
+          SUPPORT / VISION
+      ========================================================== */}
       <SupportVision />
     </SiteLayout>
   );
