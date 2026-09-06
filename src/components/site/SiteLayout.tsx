@@ -30,18 +30,50 @@ const JUNGLE_SVG = `data:image/svg+xml;utf8,${encodeURIComponent(
   </svg>`
 )}`;
 
-const NAV = [
+type NavChild = { to: string; hash?: string; label: string };
+type NavNode = { to: string; label: string; children?: NavChild[] };
+
+const NAV: NavNode[] = [
   { to: "/", label: "Home" },
+  { to: "/about", label: "About" },
+  { to: "/projects", label: "Projects" },
+  {
+    to: "/books",
+    label: "My Archive",
+    children: [
+      { to: "/books", label: "Books" },
+      { to: "/scripts", label: "Scripts" },
+      { to: "/blog", label: "Blog" },
+    ],
+  },
+  {
+    to: "/advocacy",
+    label: "Journey",
+    children: [
+      { to: "/advocacy", label: "Advocacy" },
+      { to: "/events", label: "Events" },
+      { to: "/advocacy", hash: "adventures", label: "Adventures" },
+      { to: "/speeches", label: "Speeches" },
+    ],
+  },
+  { to: "/contact", label: "Contact & Partner" },
+];
+
+const FOOTER_LINKS: NavChild[] = [
   { to: "/about", label: "About" },
   { to: "/projects", label: "Projects" },
   { to: "/books", label: "Books" },
   { to: "/scripts", label: "Scripts" },
   { to: "/blog", label: "Blog" },
+  { to: "/advocacy", label: "Advocacy" },
   { to: "/events", label: "Events" },
   { to: "/speeches", label: "Speeches" },
-  { to: "/advocacy", label: "Advocacy & Adventures" },
   { to: "/contact", label: "Contact & Partner" },
-] as const;
+];
+
+function projectAnchor(p: { slug: string | null; id: string }) {
+  return `project-${p.slug || p.id}`;
+}
 
 const DEFAULT_SOCIALS = {
   instagram: "https://www.instagram.com/melchizedeckkakese",
