@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
-import { Menu, X, ShieldCheck, Instagram, Facebook, Linkedin, Mail, MessageCircle, ShoppingBag, AtSign, Link2 } from "lucide-react";
-import { useIsAdmin, useSection } from "@/lib/cms";
+import { Menu, X, ShieldCheck, ChevronDown, Instagram, Facebook, Linkedin, Mail, MessageCircle, ShoppingBag, AtSign, Link2 } from "lucide-react";
+import { useIsAdmin, useSection, useCollection } from "@/lib/cms";
 import { useTypography } from "@/lib/fonts";
 import { CookieConsent } from "@/components/site/CookieConsent";
 import { JoinTheFamily } from "@/components/site/JoinTheFamily";
