@@ -50,8 +50,10 @@ function Counter({ target, run }: { target: number; run: boolean }) {
   return <>{value.toLocaleString()}</>;
 }
 
-export function ImpactNumbers() {
-  const { data } = useSection<Impact>("home", "impact");
+export function ImpactNumbers({ initialData }: { initialData?: PageSection<Impact> | null } = {}) {
+  const { data } = useSection<Impact>("home", "impact", {
+    ...(initialData !== undefined ? { initialData } : {}),
+  });
   const c = data?.content;
   const items = (Array.isArray(c?.items) && c.items.length ? c.items : DEFAULTS).slice(0, 8);
   const { ref, inView } = useInView<HTMLDivElement>();
