@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { useSection } from "@/lib/cms";
+import { useSection, type PageSection } from "@/lib/cms";
 
 type Stat = { label: string; value: string | number; suffix?: string; prefix?: string };
-type Impact = { eyebrow?: string; title?: string; note?: string; items?: Stat[] };
+export type Impact = { eyebrow?: string; title?: string; note?: string; items?: Stat[] };
 
 const DEFAULTS: Stat[] = [
   { label: "Young people reached", value: 12000, suffix: "+" },
@@ -50,8 +50,10 @@ function Counter({ target, run }: { target: number; run: boolean }) {
   return <>{value.toLocaleString()}</>;
 }
 
-export function ImpactNumbers() {
-  const { data } = useSection<Impact>("home", "impact");
+export function ImpactNumbers({ initialData }: { initialData?: PageSection<Impact> | null } = {}) {
+  const { data } = useSection<Impact>("home", "impact", {
+    ...(initialData !== undefined ? { initialData } : {}),
+  });
   const c = data?.content;
   const items = (Array.isArray(c?.items) && c.items.length ? c.items : DEFAULTS).slice(0, 8);
   const { ref, inView } = useInView<HTMLDivElement>();
