@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { useSection } from "@/lib/cms";
+import { useSection, type PageSection } from "@/lib/cms";
 
 type Stat = { label: string; value: string | number; suffix?: string; prefix?: string };
-type Impact = { eyebrow?: string; title?: string; note?: string; items?: Stat[] };
+export type Impact = { eyebrow?: string; title?: string; note?: string; items?: Stat[] };
 
 const DEFAULTS: Stat[] = [
   { label: "Young people reached", value: 12000, suffix: "+" },
