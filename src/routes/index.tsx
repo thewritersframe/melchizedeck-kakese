@@ -147,10 +147,20 @@ const DEFAULT_PILLARS: Pillars = {
 };
 
 function Index() {
-  const { data: hero } = useSection<Hero>("home", "hero");
-  const { data: featured } = useSection<Featured>("home", "featured");
-  const { data: pillars } = useSection<Pillars>("home", "pillars");
-  const { data: books } = useCollection("book");
+  const preloaded = Route.useLoaderData();
+  const { data: hero } = useSection<Hero>("home", "hero", {
+    initialData: preloaded.hero,
+  });
+  const { data: featured } = useSection<Featured>("home", "featured", {
+    initialData: preloaded.featured,
+  });
+  const { data: pillars } = useSection<Pillars>("home", "pillars", {
+    initialData: preloaded.pillars,
+  });
+  const { data: books } = useCollection("book", {
+    initialData: preloaded.books,
+  });
+
 
   const h = hero?.content;
   const f = featured?.content;
