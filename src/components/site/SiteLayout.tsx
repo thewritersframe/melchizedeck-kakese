@@ -132,21 +132,52 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     <Link to="/" className="font-serif text-xl tracking-wide text-cream">
       M.<span className="text-gold">Kakese</span>
     </Link>
-    <nav className="hidden items-center gap-7 lg:flex">
-      {NAV.map((item) => (
-        <Link
-          key={item.to}
-          to={item.to}
-          className={cn(
-            "text-sm transition-colors hover:text-gold",
-            pathname === item.to
-              ? "text-gold"
-              : "text-muted-foreground"
-          )}
-        >
-          {item.label}
-        </Link>
-      ))}
+    <nav className="hidden items-center gap-6 lg:flex">
+      {navTree.map((item) =>
+        item.children && item.children.length > 0 ? (
+          <div key={item.label} className="group relative">
+            <Link
+              to={item.to}
+              className={cn(
+                "inline-flex items-center gap-1 text-sm transition-colors hover:text-gold",
+                item.children.some((c) => c.to === pathname) || pathname === item.to
+                  ? "text-gold"
+                  : "text-muted-foreground",
+              )}
+            >
+              {item.label}
+              <ChevronDown className="h-3.5 w-3.5" />
+            </Link>
+            <div className="invisible absolute left-0 top-full z-50 pt-3 opacity-0 transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+              <div className="min-w-[220px] rounded-lg border border-border/60 bg-background/95 p-2 shadow-lg backdrop-blur">
+                {item.children.map((c) => (
+                  <Link
+                    key={`${c.to}-${c.label}`}
+                    to={c.to}
+                    hash={c.hash}
+                    className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground transition hover:bg-gold/10 hover:text-gold"
+                  >
+                    <span className="text-gold/50">└</span>
+                    <span className="truncate">{c.label}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <Link
+            key={item.to}
+            to={item.to}
+            className={cn(
+              "text-sm transition-colors hover:text-gold",
+              pathname === item.to ? "text-gold" : "text-muted-foreground",
+            )}
+          >
+            {item.label}
+          </Link>
+        ),
+      )}
+
 
       {isAdmin && (
         <Link
