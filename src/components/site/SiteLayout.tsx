@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
-import { Menu, X, ShieldCheck, Instagram, Facebook, Linkedin, Mail, MessageCircle, ShoppingBag, AtSign, Link2 } from "lucide-react";
-import { useIsAdmin, useSection } from "@/lib/cms";
+import { Menu, X, ShieldCheck, ChevronDown, Instagram, Facebook, Linkedin, Mail, MessageCircle, ShoppingBag, AtSign, Link2 } from "lucide-react";
+import { useIsAdmin, useSection, useCollection } from "@/lib/cms";
 import { useTypography } from "@/lib/fonts";
 import { CookieConsent } from "@/components/site/CookieConsent";
 import { JoinTheFamily } from "@/components/site/JoinTheFamily";
@@ -30,18 +30,50 @@ const JUNGLE_SVG = `data:image/svg+xml;utf8,${encodeURIComponent(
   </svg>`
 )}`;
 
-const NAV = [
+type NavChild = { to: string; hash?: string; label: string };
+type NavNode = { to: string; label: string; children?: NavChild[] };
+
+const NAV: NavNode[] = [
   { to: "/", label: "Home" },
+  { to: "/about", label: "About" },
+  { to: "/projects", label: "Projects" },
+  {
+    to: "/books",
+    label: "My Archive",
+    children: [
+      { to: "/books", label: "Books" },
+      { to: "/scripts", label: "Scripts" },
+      { to: "/blog", label: "Blog" },
+    ],
+  },
+  {
+    to: "/advocacy",
+    label: "Journey",
+    children: [
+      { to: "/advocacy", label: "Advocacy" },
+      { to: "/events", label: "Events" },
+      { to: "/advocacy", hash: "adventures", label: "Adventures" },
+      { to: "/speeches", label: "Speeches" },
+    ],
+  },
+  { to: "/contact", label: "Contact & Partner" },
+];
+
+const FOOTER_LINKS: NavChild[] = [
   { to: "/about", label: "About" },
   { to: "/projects", label: "Projects" },
   { to: "/books", label: "Books" },
   { to: "/scripts", label: "Scripts" },
   { to: "/blog", label: "Blog" },
+  { to: "/advocacy", label: "Advocacy" },
   { to: "/events", label: "Events" },
   { to: "/speeches", label: "Speeches" },
-  { to: "/advocacy", label: "Advocacy & Adventures" },
   { to: "/contact", label: "Contact & Partner" },
-] as const;
+];
+
+function projectAnchor(p: { slug: string | null; id: string }) {
+  return `project-${p.slug || p.id}`;
+}
 
 const DEFAULT_SOCIALS = {
   instagram: "https://www.instagram.com/melchizedeckkakese",
@@ -80,6 +112,19 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   const { data: bgSection } = useSection<{ imageUrl?: string }>("site", "background");
   const bgImage = useVerifiedBackground(bgSection?.content?.imageUrl ?? "", bgPhoto.url);
   const socials: Socials = { ...DEFAULT_SOCIALS, ...(footer?.content ?? {}) };
+  const { data: projectItems } = useCollection("project");
+  const navTree: NavNode[] = NAV.map((node) =>
+    node.to === "/projects"
+      ? {
+          ...node,
+          children: (projectItems ?? []).map((p) => ({
+            to: "/projects",
+            hash: projectAnchor(p),
+            label: p.title,
+          })),
+        }
+      : node,
+  );
 
   return (
     <div className="relative flex min-h-screen flex-col">
@@ -100,21 +145,52 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     <Link to="/" className="font-serif text-xl tracking-wide text-cream">
       M.<span className="text-gold">Kakese</span>
     </Link>
-    <nav className="hidden items-center gap-7 lg:flex">
-      {NAV.map((item) => (
-        <Link
-          key={item.to}
-          to={item.to}
-          className={cn(
-            "text-sm transition-colors hover:text-gold",
-            pathname === item.to
-              ? "text-gold"
-              : "text-muted-foreground"
-          )}
-        >
-          {item.label}
-        </Link>
-      ))}
+    <nav className="hidden items-center gap-6 lg:flex">
+      {navTree.map((item) =>
+        item.children && item.children.length > 0 ? (
+          <div key={item.label} className="group relative">
+            <Link
+              to={item.to}
+              className={cn(
+                "inline-flex items-center gap-1 text-sm transition-colors hover:text-gold",
+                item.children.some((c) => c.to === pathname) || pathname === item.to
+                  ? "text-gold"
+                  : "text-muted-foreground",
+              )}
+            >
+              {item.label}
+              <ChevronDown className="h-3.5 w-3.5" />
+            </Link>
+            <div className="invisible absolute left-0 top-full z-50 pt-3 opacity-0 transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+              <div className="min-w-[220px] rounded-lg border border-border/60 bg-background/95 p-2 shadow-lg backdrop-blur">
+                {item.children.map((c) => (
+                  <Link
+                    key={`${c.to}-${c.label}`}
+                    to={c.to}
+                    hash={c.hash}
+                    className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground transition hover:bg-gold/10 hover:text-gold"
+                  >
+                    <span className="text-gold/50">└</span>
+                    <span className="truncate">{c.label}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <Link
+            key={item.to}
+            to={item.to}
+            className={cn(
+              "text-sm transition-colors hover:text-gold",
+              pathname === item.to ? "text-gold" : "text-muted-foreground",
+            )}
+          >
+            {item.label}
+          </Link>
+        ),
+      )}
+
 
       {isAdmin && (
         <Link
@@ -145,21 +221,36 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   {open && (
     <div className="border-t border-border/40 bg-background/95 lg:hidden">
       <nav className="mx-auto flex max-w-7xl flex-col px-6 py-4">
-        {NAV.map((item) => (
-          <Link
-            key={item.to}
-            to={item.to}
-            onClick={() => setOpen(false)}
-            className={cn(
-              "py-2 text-sm",
-              pathname === item.to
-                ? "text-gold"
-                : "text-muted-foreground"
+        {navTree.map((item) => (
+          <div key={item.label}>
+            <Link
+              to={item.to}
+              onClick={() => setOpen(false)}
+              className={cn(
+                "block py-2 text-sm",
+                pathname === item.to ? "text-gold" : "text-muted-foreground",
+              )}
+            >
+              {item.label}
+            </Link>
+            {item.children && item.children.length > 0 && (
+              <div className="ml-3 border-l border-border/60 pl-3">
+                {item.children.map((c) => (
+                  <Link
+                    key={`${c.to}-${c.label}`}
+                    to={c.to}
+                    hash={c.hash}
+                    onClick={() => setOpen(false)}
+                    className="block py-1.5 text-sm text-muted-foreground hover:text-gold"
+                  >
+                    {c.label}
+                  </Link>
+                ))}
+              </div>
             )}
-          >
-            {item.label}
-          </Link>
+          </div>
         ))}
+
 
         {isAdmin && (
           <Link
@@ -194,7 +285,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               <p className="mt-1 max-w-md text-sm text-muted-foreground">{footer?.content?.tagline ?? "Words that move continents."}</p>
             </div>
             <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
-              {NAV.slice(1).map((n) => (
+              {FOOTER_LINKS.map((n) => (
                 <Link key={n.to} to={n.to} className="hover:text-gold">{n.label}</Link>
               ))}
             </div>
