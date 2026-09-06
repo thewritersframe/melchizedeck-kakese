@@ -23,34 +23,48 @@ export type ContentItem = {
   updated_at: string;
 };
 
-export function useSection<T = Record<string, unknown>>(page: string, key: string) {
+export async function fetchSection<T = Record<string, unknown>>(page: string, key: string) {
+  const { data, error } = await supabase
+    .from("page_sections")
+    .select("*")
+    .eq("page", page)
+    .eq("section_key", key)
+    .maybeSingle();
+  if (error) throw error;
+  return (data as unknown as PageSection<T> | null);
+}
+
+export async function fetchCollection(collection: string, opts: { admin?: boolean } = {}) {
+  let q = supabase.from("content_items").select("*").eq("collection", collection).order("sort_order").order("created_at", { ascending: false });
+  if (!opts.admin) q = q.eq("published", true);
+  const { data, error } = await q;
+  if (error) throw error;
+  return (data ?? []) as unknown as ContentItem[];
+}
+
+export function useSection<T = Record<string, unknown>>(
+  page: string,
+  key: string,
+  opts: { initialData?: PageSection<T> | null } = {},
+) {
   return useQuery({
     queryKey: ["section", page, key],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("page_sections")
-        .select("*")
-        .eq("page", page)
-        .eq("section_key", key)
-        .maybeSingle();
-      if (error) throw error;
-      return (data as unknown as PageSection<T> | null);
-    },
+    queryFn: () => fetchSection<T>(page, key),
+    ...(opts.initialData !== undefined ? { initialData: opts.initialData } : {}),
   });
 }
 
-export function useCollection(collection: string, opts: { admin?: boolean } = {}) {
+export function useCollection(
+  collection: string,
+  opts: { admin?: boolean; initialData?: ContentItem[] } = {},
+) {
   return useQuery({
     queryKey: ["collection", collection, opts.admin ?? false],
-    queryFn: async () => {
-      let q = supabase.from("content_items").select("*").eq("collection", collection).order("sort_order").order("created_at", { ascending: false });
-      if (!opts.admin) q = q.eq("published", true);
-      const { data, error } = await q;
-      if (error) throw error;
-      return (data ?? []) as unknown as ContentItem[];
-    },
+    queryFn: () => fetchCollection(collection, opts),
+    ...(opts.initialData !== undefined ? { initialData: opts.initialData } : {}),
   });
 }
+
 
 export function useIsAdmin() {
   return useQuery({

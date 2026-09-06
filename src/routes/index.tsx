@@ -1,6 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
-import { useSection, useCollection } from "@/lib/cms";
+import {
+  useSection,
+  useCollection,
+  fetchSection,
+  fetchCollection,
+} from "@/lib/cms";
 import { SupportVision } from "@/components/site/SupportVision";
 import {
   ArrowRight,
@@ -16,8 +21,26 @@ import { EventsSlideshow } from "@/components/site/EventsSlideshow";
 import { RotatingHeadline } from "@/components/site/RotatingHeadline";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
+  loader: async () => {
+    const [hero, featured, pillars, books] = await Promise.all([
+      fetchSection<Hero>("home", "hero").catch(() => null),
+      fetchSection<Featured>("home", "featured").catch(() => null),
+      fetchSection<Pillars>("home", "pillars").catch(() => null),
+      fetchCollection("book").catch(() => []),
+    ]);
+    return { hero, featured, pillars, books };
+  },
+  head: ({ loaderData }) => {
+    const video =
+      (loaderData?.hero?.content?.videoUrl || "").trim() || DEFAULT_HERO_VIDEO;
+    const poster =
+      (loaderData?.hero?.content?.posterUrl || "").trim() || DEFAULT_HERO_POSTER;
+    return {
+      links: [
+        { rel: "preload", as: "image", href: poster, fetchpriority: "high" },
+        { rel: "preload", as: "video", href: video, type: "video/mp4" },
+      ],
+      meta: [
       {
         title: "Melchizedeck Kakese — Author, Screenwriter & Youth Advocate",
       },
@@ -45,9 +68,11 @@ export const Route = createFileRoute("/")({
         content: "summary_large_image",
       },
     ],
-  }),
+    };
+  },
   component: Index,
 });
+
 
 type Hero = {
   eyebrow: string;
@@ -122,10 +147,20 @@ const DEFAULT_PILLARS: Pillars = {
 };
 
 function Index() {
-  const { data: hero } = useSection<Hero>("home", "hero");
-  const { data: featured } = useSection<Featured>("home", "featured");
-  const { data: pillars } = useSection<Pillars>("home", "pillars");
-  const { data: books } = useCollection("book");
+  const preloaded = Route.useLoaderData();
+  const { data: hero } = useSection<Hero>("home", "hero", {
+    initialData: preloaded.hero,
+  });
+  const { data: featured } = useSection<Featured>("home", "featured", {
+    initialData: preloaded.featured,
+  });
+  const { data: pillars } = useSection<Pillars>("home", "pillars", {
+    initialData: preloaded.pillars,
+  });
+  const { data: books } = useCollection("book", {
+    initialData: preloaded.books,
+  });
+
 
   const h = hero?.content;
   const f = featured?.content;
