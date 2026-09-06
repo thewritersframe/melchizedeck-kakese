@@ -112,6 +112,19 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   const { data: bgSection } = useSection<{ imageUrl?: string }>("site", "background");
   const bgImage = useVerifiedBackground(bgSection?.content?.imageUrl ?? "", bgPhoto.url);
   const socials: Socials = { ...DEFAULT_SOCIALS, ...(footer?.content ?? {}) };
+  const { data: projectItems } = useCollection("project");
+  const navTree: NavNode[] = NAV.map((node) =>
+    node.to === "/projects"
+      ? {
+          ...node,
+          children: (projectItems ?? []).map((p) => ({
+            to: "/projects",
+            hash: projectAnchor(p),
+            label: p.title,
+          })),
+        }
+      : node,
+  );
 
   return (
     <div className="relative flex min-h-screen flex-col">
