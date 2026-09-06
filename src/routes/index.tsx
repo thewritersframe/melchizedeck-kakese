@@ -16,19 +16,20 @@ import {
   HeartHandshake,
   FolderOpen,
 } from "lucide-react";
-import { ImpactNumbers } from "@/components/site/ImpactNumbers";
+import { ImpactNumbers, type Impact } from "@/components/site/ImpactNumbers";
 import { EventsSlideshow } from "@/components/site/EventsSlideshow";
 import { RotatingHeadline } from "@/components/site/RotatingHeadline";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
-    const [hero, featured, pillars, books] = await Promise.all([
+    const [hero, featured, pillars, impact, books] = await Promise.all([
       fetchSection<Hero>("home", "hero").catch(() => null),
       fetchSection<Featured>("home", "featured").catch(() => null),
       fetchSection<Pillars>("home", "pillars").catch(() => null),
+      fetchSection<Impact>("home", "impact").catch(() => null),
       fetchCollection("book").catch(() => []),
     ]);
-    return { hero, featured, pillars, books };
+    return { hero, featured, pillars, impact, books };
   },
   head: ({ loaderData }) => {
     const video =
@@ -413,7 +414,7 @@ function Index() {
       {/* =========================================================
           IMPACT NUMBERS
       ========================================================== */}
-      <ImpactNumbers />
+      <ImpactNumbers initialData={preloaded.impact} />
 
       {/* =========================================================
           SUPPORT / VISION
