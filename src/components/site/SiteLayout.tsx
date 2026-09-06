@@ -285,7 +285,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               <p className="mt-1 max-w-md text-sm text-muted-foreground">{footer?.content?.tagline ?? "Words that move continents."}</p>
             </div>
             <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
-              {NAV.slice(1).map((n) => (
+              {FOOTER_LINKS.map((n) => (
                 <Link key={n.to} to={n.to} className="hover:text-gold">{n.label}</Link>
               ))}
             </div>
