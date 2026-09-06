@@ -221,21 +221,36 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   {open && (
     <div className="border-t border-border/40 bg-background/95 lg:hidden">
       <nav className="mx-auto flex max-w-7xl flex-col px-6 py-4">
-        {NAV.map((item) => (
-          <Link
-            key={item.to}
-            to={item.to}
-            onClick={() => setOpen(false)}
-            className={cn(
-              "py-2 text-sm",
-              pathname === item.to
-                ? "text-gold"
-                : "text-muted-foreground"
+        {navTree.map((item) => (
+          <div key={item.label}>
+            <Link
+              to={item.to}
+              onClick={() => setOpen(false)}
+              className={cn(
+                "block py-2 text-sm",
+                pathname === item.to ? "text-gold" : "text-muted-foreground",
+              )}
+            >
+              {item.label}
+            </Link>
+            {item.children && item.children.length > 0 && (
+              <div className="ml-3 border-l border-border/60 pl-3">
+                {item.children.map((c) => (
+                  <Link
+                    key={`${c.to}-${c.label}`}
+                    to={c.to}
+                    hash={c.hash}
+                    onClick={() => setOpen(false)}
+                    className="block py-1.5 text-sm text-muted-foreground hover:text-gold"
+                  >
+                    {c.label}
+                  </Link>
+                ))}
+              </div>
             )}
-          >
-            {item.label}
-          </Link>
+          </div>
         ))}
+
 
         {isAdmin && (
           <Link
