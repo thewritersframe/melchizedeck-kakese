@@ -45,7 +45,8 @@ function Projects() {
             return (
               <article
                 key={p.id}
-                className="flex h-full flex-col overflow-hidden rounded-xl border border-border/60 bg-card/70 transition hover:border-gold/50"
+                id={`project-${p.slug || p.id}`}
+                className="flex h-full scroll-mt-28 flex-col overflow-hidden rounded-xl border border-border/60 bg-card/70 transition hover:border-gold/50"
               >
                 {p.image_url && (
                   <div className="aspect-[16/10] w-full overflow-hidden bg-background/60">
