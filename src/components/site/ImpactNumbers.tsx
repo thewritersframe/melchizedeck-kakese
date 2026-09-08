@@ -5,11 +5,11 @@ type Stat = { label: string; value: string | number; suffix?: string; prefix?: s
 export type Impact = { eyebrow?: string; title?: string; note?: string; items?: Stat[] };
 
 const DEFAULTS: Stat[] = [
-  { label: "Young people reached", value: 12000, suffix: "+" },
-  { label: "Schools worked with", value: 45, suffix: "+" },
+  { label: "Young people reached", value: 1000, suffix: "+" },
+  { label: "Organizations worked with", value: 3, suffix: "+" },
   { label: "Books published", value: 4 },
-  { label: "Projects founded", value: 6 },
-  { label: "Countries & events", value: 9, suffix: "+" },
+  { label: "Projects founded", value: 1 },
+  { label: "Countries & events", value: 3, suffix: "+" },
 ];
 
 function useInView<T extends HTMLElement>() {
