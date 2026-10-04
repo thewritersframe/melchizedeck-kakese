@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
-import { Menu, X, ShieldCheck, ChevronDown, Instagram, Facebook, Linkedin, Mail, MessageCircle, ShoppingBag, AtSign, Link2 } from "lucide-react";
+import { Menu, X, ShieldCheck, ChevronDown, Instagram, Facebook, Linkedin, Mail, MessageCircle, ShoppingBag, AtSign, Link2, Gamepad2 } from "lucide-react";
 import { useIsAdmin, useSection, useCollection } from "@/lib/cms";
 import { useTypography } from "@/lib/fonts";
 import { CookieConsent } from "@/components/site/CookieConsent";
@@ -61,6 +61,7 @@ const NAV: NavNode[] = [
 
 const FOOTER_LINKS: NavChild[] = [
   { to: "/about", label: "About" },
+  { to: "/about-game", label: "About: Game Mode" },
   { to: "/projects", label: "Projects" },
   { to: "/books", label: "Books" },
   { to: "/scripts", label: "Scripts" },
@@ -291,6 +292,16 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             </div>
           </div>
           <SocialsBar socials={socials} />
+          <Link
+            to="/about-game"
+            className="group flex items-center justify-between gap-4 rounded-md border border-gold/35 bg-gold/5 px-5 py-4 transition hover:border-gold/70 hover:bg-gold/10"
+          >
+            <span className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full border border-gold/40 text-gold"><Gamepad2 className="h-5 w-5" /></span>
+              <span><strong className="block font-serif text-base text-cream">About Me: Game Mode</strong><span className="text-xs text-muted-foreground">Play through my story</span></span>
+            </span>
+            <span className="text-gold transition group-hover:translate-x-1">→</span>
+          </Link>
           <p className="text-xs text-muted-foreground">{footer?.content?.copyright ?? "© Melchizedeck Kakese."}</p>
         </div>
       </footer>
