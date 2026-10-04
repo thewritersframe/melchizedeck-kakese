@@ -82,6 +82,16 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
       { name: "blocks", label: "Story blocks", type: "blocks" },
     ]},
   ]},
+  { page: "about-game", sections: [
+    { key: "main", label: "About Me: Game Mode", fields: [
+      { name: "eyebrow", label: "Small introduction" },
+      { name: "title", label: "Opening title" },
+      { name: "intro", label: "Opening description", type: "textarea" },
+      { name: "startLabel", label: "Start button label" },
+      { name: "sceneImage", label: "Game world background", type: "image" },
+      { name: "chapters", label: "Chapters (JSON array of {year, marker, title, body})", type: "json" },
+    ]},
+  ]},
 
   { page: "books", sections: [{ key: "header", label: "Header", fields: [{ name: "title", label: "Title" }, { name: "body", label: "Intro", type: "textarea" }] }] },
   { page: "scripts", sections: [{ key: "header", label: "Header", fields: [{ name: "title", label: "Title" }, { name: "body", label: "Intro", type: "textarea" }] }] },

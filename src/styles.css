@@ -193,6 +193,30 @@
   @keyframes hero-phrase-out { from { opacity: 1; } to { opacity: 1; } }
 }
 
+@keyframes game-character-step {
+  0%, 100% { translate: 0 0; rotate: 0deg; }
+  35% { translate: 0 -5px; rotate: -0.7deg; }
+  70% { translate: 0 -2px; rotate: 0.7deg; }
+}
+
+@utility bg-game-veil {
+  background: linear-gradient(90deg, color-mix(in oklab, var(--background) 88%, transparent) 0%, color-mix(in oklab, var(--background) 50%, transparent) 48%, color-mix(in oklab, var(--background) 35%, transparent) 100%);
+}
+
+@utility bg-game-ground {
+  background: linear-gradient(0deg, color-mix(in oklab, var(--background) 98%, transparent) 0%, color-mix(in oklab, var(--background) 74%, transparent) 58%, transparent 100%);
+}
+
+.game-character-walk { animation: game-character-step 700ms ease-in-out; }
+
+@media (max-width: 640px) {
+  .bg-game-veil { background: linear-gradient(0deg, color-mix(in oklab, var(--background) 88%, transparent) 0%, color-mix(in oklab, var(--background) 38%, transparent) 100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-shell *, .game-character-walk { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
 
 @utility bg-hero-pattern {
   background-color: var(--color-background);
