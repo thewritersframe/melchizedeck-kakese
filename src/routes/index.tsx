@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { pageHead, PERSON_LD, WEBSITE_LD, SITE_URL } from "@/lib/seo";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import {
   useSection,
@@ -36,39 +37,21 @@ export const Route = createFileRoute("/")({
       (loaderData?.hero?.content?.videoUrl || "").trim() || DEFAULT_HERO_VIDEO;
     const poster =
       (loaderData?.hero?.content?.posterUrl || "").trim() || DEFAULT_HERO_POSTER;
+    const seo = pageHead({
+      path: "/",
+      title: "Melchizedeck Kakese | Author, Screenwriter & Youth Advocate",
+      description:
+        "Melchizedeck Kakese is a Tanzanian author, screenwriter, youth advocate and founder of The Writer's Frame, sharing books, screenplays and youth projects.",
+      image: poster.startsWith("http") ? poster : `${SITE_URL}${poster}`,
+      jsonLd: [PERSON_LD, WEBSITE_LD],
+    });
     return {
+      ...seo,
       links: [
+        ...seo.links,
         { rel: "preload", as: "image", href: poster, fetchpriority: "high" },
         { rel: "preload", as: "video", href: video, type: "video/mp4" },
       ],
-      meta: [
-      {
-        title: "Melchizedeck Kakese — Author, Screenwriter & Youth Advocate",
-      },
-      {
-        name: "description",
-        content:
-          "Explore the books, screenplays, creative work, youth initiatives and community projects of Tanzanian author, screenwriter and youth advocate Melchizedeck Kakese.",
-      },
-      {
-        property: "og:title",
-        content:
-          "Melchizedeck Kakese — Author, Screenwriter & Youth Advocate",
-      },
-      {
-        property: "og:description",
-        content:
-          "Books, screenplays, creative work, youth initiatives and community projects from Tanzanian author, screenwriter and youth advocate Melchizedeck Kakese.",
-      },
-      {
-        property: "og:type",
-        content: "website",
-      },
-      {
-        name: "twitter:card",
-        content: "summary_large_image",
-      },
-    ],
     };
   },
   component: Index,
