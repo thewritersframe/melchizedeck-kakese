@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { useReviewSummaries } from "@/lib/engagement";
 import { ReviewsSection } from "@/components/site/ReviewsSection";
 import { Stars } from "@/components/site/Stars";
@@ -21,7 +22,7 @@ import { supabase } from "@/integrations/supabase/client";
 type Header = { title: string; body: string };
 
 export const Route = createFileRoute("/scripts")({
-  head: () => ({ meta: [{ title: "Scripts — Melchizedeck Kakese" }, { name: "description", content: "Screenplays and teleplays." }] }),
+  head: () => pageHead({ path: "/scripts", title: "Screenplays & Scripts | Melchizedeck Kakese", description: "Screenplays and teleplays by screenwriter Melchizedeck Kakese. Read loglines and synopses for free and request full screenplay treatments.", type: "website" }),
   component: Scripts,
 });
 

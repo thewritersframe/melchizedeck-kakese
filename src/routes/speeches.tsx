@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { SiteLayout } from "@/components/site/SiteLayout";
@@ -8,7 +9,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { CalendarDays, MapPin, Play, Clock } from "lucide-react";
 
 export const Route = createFileRoute("/speeches")({
-  head: () => ({
+  head: () => pageHead({ path: "/speeches", title: "Speeches & Talks | Melchizedeck Kakese", description: "Watch recorded speeches, talks and keynotes by Melchizedeck Kakese on storytelling, youth advocacy, leadership and African narratives.", type: "website" }),
     meta: [
       { title: "Speeches — Melchizedeck Kakese" },
       { name: "description", content: "Watch recorded speeches, talks and keynotes by Melchizedeck Kakese on storytelling, advocacy and African narratives." },

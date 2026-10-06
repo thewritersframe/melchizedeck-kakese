@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { useReviewSummaries } from "@/lib/engagement";
 import { ReviewsSection } from "@/components/site/ReviewsSection";
 import { Stars } from "@/components/site/Stars";
@@ -20,7 +21,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/books")({
-  head: () => ({ meta: [{ title: "Books — Melchizedeck Kakese" }, { name: "description", content: "Books by Melchizedeck Kakese." }] }),
+  head: () => pageHead({ path: "/books", title: "Books by Melchizedeck Kakese | Novels, Poetry & Essays", description: "Discover books by Tanzanian author Melchizedeck Kakese: read samples, explore genres and buy novels, poetry and essays exploring human experience.", type: "website" }),
   component: Books,
 });
 

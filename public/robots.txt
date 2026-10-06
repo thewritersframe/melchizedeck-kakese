@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /auth
+Disallow: /unlock
+Disallow: /support-thanks
+Disallow: /api/
+
+Sitemap: https://melchizedeck-kakese.vercel.app/sitemap.xml
