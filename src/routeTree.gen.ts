@@ -21,6 +21,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as EventsRouteImport } from './routes/events'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ScriptsRouteImport } from './routes/scripts'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SpeechesRouteImport } from './routes/speeches'
 import { Route as SupportThanksRouteImport } from './routes/support-thanks'
 import { Route as UnlockRouteImport } from './routes/unlock'
@@ -86,6 +87,11 @@ const ScriptsRoute = ScriptsRouteImport.update({
   path: '/scripts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SpeechesRoute = SpeechesRouteImport.update({
   id: '/speeches',
   path: '/speeches',
@@ -120,6 +126,7 @@ export interface FileRoutesByFullPath {
   '/events': typeof EventsRoute
   '/projects': typeof ProjectsRoute
   '/scripts': typeof ScriptsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speeches': typeof SpeechesRoute
   '/support-thanks': typeof SupportThanksRoute
   '/unlock': typeof UnlockRoute
@@ -138,6 +145,7 @@ export interface FileRoutesByTo {
   '/events': typeof EventsRoute
   '/projects': typeof ProjectsRoute
   '/scripts': typeof ScriptsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speeches': typeof SpeechesRoute
   '/support-thanks': typeof SupportThanksRoute
   '/unlock': typeof UnlockRoute
@@ -157,6 +165,7 @@ export interface FileRoutesById {
   '/events': typeof EventsRoute
   '/projects': typeof ProjectsRoute
   '/scripts': typeof ScriptsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speeches': typeof SpeechesRoute
   '/support-thanks': typeof SupportThanksRoute
   '/unlock': typeof UnlockRoute
@@ -177,6 +186,7 @@ export interface FileRouteTypes {
     | '/events'
     | '/projects'
     | '/scripts'
+    | '/sitemap.xml'
     | '/speeches'
     | '/support-thanks'
     | '/unlock'
@@ -195,6 +205,7 @@ export interface FileRouteTypes {
     | '/events'
     | '/projects'
     | '/scripts'
+    | '/sitemap.xml'
     | '/speeches'
     | '/support-thanks'
     | '/unlock'
@@ -213,6 +224,7 @@ export interface FileRouteTypes {
     | '/events'
     | '/projects'
     | '/scripts'
+    | '/sitemap.xml'
     | '/speeches'
     | '/support-thanks'
     | '/unlock'
@@ -232,6 +244,7 @@ export interface RootRouteChildren {
   EventsRoute: typeof EventsRoute
   ProjectsRoute: typeof ProjectsRoute
   ScriptsRoute: typeof ScriptsRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SpeechesRoute: typeof SpeechesRoute
   SupportThanksRoute: typeof SupportThanksRoute
   UnlockRoute: typeof UnlockRoute
@@ -324,6 +337,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ScriptsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/speeches': {
       id: '/speeches'
       path: '/speeches'
@@ -368,6 +388,7 @@ const rootRouteChildren: RootRouteChildren = {
   EventsRoute: EventsRoute,
   ProjectsRoute: ProjectsRoute,
   ScriptsRoute: ScriptsRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SpeechesRoute: SpeechesRoute,
   SupportThanksRoute: SupportThanksRoute,
   UnlockRoute: UnlockRoute,
