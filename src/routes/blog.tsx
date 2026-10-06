@@ -10,14 +10,6 @@ import { ExpandableText } from "@/components/site/ExpandableText";
 
 export const Route = createFileRoute("/blog")({
   head: () => pageHead({ path: "/blog", title: "Blog & Essays | Melchizedeck Kakese", description: "Essays, reflections and stories by Melchizedeck Kakese on writing, African narratives, youth, creativity and the questions that shape our world.", type: "website" }),
-    meta: [
-      { title: "Blog — Melchizedeck Kakese" },
-      {
-        name: "description",
-        content: "Essays and reflections.",
-      },
-    ],
-  }),
   component: Blog,
 });
 
