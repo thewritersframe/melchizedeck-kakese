@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { SiteLayout } from "@/components/site/SiteLayout";
@@ -8,15 +9,7 @@ import { CommentsSection } from "@/components/site/CommentsSection";
 import { ExpandableText } from "@/components/site/ExpandableText";
 
 export const Route = createFileRoute("/blog")({
-  head: () => ({
-    meta: [
-      { title: "Blog — Melchizedeck Kakese" },
-      {
-        name: "description",
-        content: "Essays and reflections.",
-      },
-    ],
-  }),
+  head: () => pageHead({ path: "/blog", title: "Blog & Essays | Melchizedeck Kakese", description: "Essays, reflections and stories by Melchizedeck Kakese on writing, African narratives, youth, creativity and the questions that shape our world.", type: "website" }),
   component: Blog,
 });
 

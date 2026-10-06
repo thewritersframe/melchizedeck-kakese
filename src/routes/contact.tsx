@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useSection } from "@/lib/cms";
@@ -10,7 +11,7 @@ import { toast } from "sonner";
 import { Mail, MapPin } from "lucide-react";
 
 export const Route = createFileRoute("/contact")({
-  head: () => ({ meta: [{ title: "Contact & Partner — Melchizedeck Kakese" }, { name: "description", content: "For collaborations, speaking, or partnerships." }] }),
+  head: () => pageHead({ path: "/contact", title: "Contact & Partner | Melchizedeck Kakese", description: "Get in touch with Melchizedeck Kakese for collaborations, speaking engagements, writing projects, youth programmes and partnerships.", type: "website" }),
   component: Contact,
 });
 

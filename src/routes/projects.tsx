@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useCollection, useSection } from "@/lib/cms";
@@ -6,23 +7,7 @@ import { ExpandableText } from "@/components/site/ExpandableText";
 import { ArrowUpRight } from "lucide-react";
 
 export const Route = createFileRoute("/projects")({
-  head: () => ({
-    meta: [
-      { title: "Projects — Melchizedeck Kakese" },
-      {
-        name: "description",
-        content:
-          "Initiatives founded and supported by Melchizedeck Kakese — writing platforms, youth programmes and community work.",
-      },
-      { property: "og:title", content: "Projects — Melchizedeck Kakese" },
-      {
-        property: "og:description",
-        content: "Initiatives founded and supported by Melchizedeck Kakese.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () => pageHead({ path: "/projects", title: "Projects & Initiatives | Melchizedeck Kakese", description: "Initiatives founded and supported by Melchizedeck Kakese, including The Writer's Frame, writing platforms, youth programmes and community work.", type: "website" }),
   component: Projects,
 });
 

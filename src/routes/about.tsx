@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useCollection, useSection } from "@/lib/cms";
@@ -6,16 +7,7 @@ import { ExpandableText } from "@/components/site/ExpandableText";
 import { Timeline } from "@/components/site/Timeline";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: "About — Melchizedeck Kakese" },
-      { name: "description", content: "The story, the work and the achievements of Melchizedeck Kakese — author, screenwriter and youth advocate." },
-      { property: "og:title", content: "About Melchizedeck Kakese" },
-      { property: "og:description", content: "The story, the work and the achievements of Melchizedeck Kakese." },
-      { property: "og:type", content: "profile" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () => pageHead({ path: "/about", title: "About Melchizedeck Kakese | Author, Screenwriter & Youth Advocate", description: "The story of Melchizedeck Kakese: Tanzanian author, screenwriter and youth advocate, his milestones, achievements and the journey behind The Writer's Frame.", type: "profile" }),
   component: About,
 });
 

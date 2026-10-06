@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useSection, useCollection } from "@/lib/cms";
@@ -5,7 +6,7 @@ import { CalendarDays, MapPin } from "lucide-react";
 import { ExpandableText } from "@/components/site/ExpandableText";
 
 export const Route = createFileRoute("/events")({
-  head: () => ({ meta: [{ title: "Events — Melchizedeck Kakese" }, { name: "description", content: "Speaking engagements, readings, and workshops." }] }),
+  head: () => pageHead({ path: "/events", title: "Events, Talks & Workshops | Melchizedeck Kakese", description: "Speaking engagements, readings, workshops and youth events featuring author and youth advocate Melchizedeck Kakese, newest first.", type: "website" }),
   component: Events,
 });
 

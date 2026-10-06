@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useSection, useCollection } from "@/lib/cms";
@@ -6,7 +7,7 @@ import { ExpandableText } from "@/components/site/ExpandableText";
 
 
 export const Route = createFileRoute("/advocacy")({
-  head: () => ({ meta: [{ title: "Advocacy & Adventures — Melchizedeck Kakese" }, { name: "description", content: "Youth advocacy work and stories from the road." }] }),
+  head: () => pageHead({ path: "/advocacy", title: "Youth Advocacy & Adventures | Melchizedeck Kakese", description: "Youth advocacy work, community initiatives and stories from the road by Melchizedeck Kakese, empowering young people to find their voices.", type: "website" }),
   component: Advocacy,
 });
 
