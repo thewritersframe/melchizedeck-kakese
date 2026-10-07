@@ -2,19 +2,15 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, Play, Pause, CalendarDays, MapPin } from "lucide-react";
 import { useCollection, type ContentItem } from "@/lib/cms";
+import { latestFirst } from "@/lib/journey";
 
 type EventMeta = { date?: string; location?: string; url?: string };
 
-function toTime(ev: ContentItem) {
-  const d = (ev.meta as EventMeta)?.date ?? ev.created_at;
-  return new Date(d || 0).getTime();
-}
-
-export function EventsSlideshow() {
-  const { data: items } = useCollection("event");
+export function EventsSlideshow({ initialData }: { initialData?: ContentItem[] }) {
+  const { data: items } = useCollection("event", { initialData });
 
   const events = useMemo(
-    () => [...(items ?? [])].sort((a, b) => toTime(b) - toTime(a)).slice(0, 6),
+    () => latestFirst(items ?? []).slice(0, 6),
     [items],
   );
 
@@ -61,7 +57,8 @@ export function EventsSlideshow() {
 
   if (!events.length) return null;
 
-  const ev = events[current];
+  const activeIndex = current % events.length;
+  const ev = events[activeIndex];
   const meta = (ev.meta ?? {}) as EventMeta;
 
   return (
@@ -70,8 +67,8 @@ export function EventsSlideshow() {
         {events.map((e, i) => (
           <div
             key={e.id}
-            aria-hidden={i !== current}
-            className={`absolute inset-0 transition-opacity duration-700 ${i === current ? "opacity-100" : "opacity-0"}`}
+            aria-hidden={i !== activeIndex}
+            className={`absolute inset-0 transition-opacity duration-700 ${i === activeIndex ? "opacity-100" : "opacity-0"}`}
           >
             {e.image_url && (
               <img
@@ -132,7 +129,7 @@ export function EventsSlideshow() {
                     <ChevronRight className="h-4 w-4" />
                   </button>
                   <span className="ml-2 text-sm text-muted-foreground">
-                    {String(current + 1).padStart(2, "0")} / {String(events.length).padStart(2, "0")}
+                    {String(activeIndex + 1).padStart(2, "0")} / {String(events.length).padStart(2, "0")}
                   </span>
                 </div>
               )}
