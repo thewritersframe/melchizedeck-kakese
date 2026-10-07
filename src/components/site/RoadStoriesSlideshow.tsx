@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SmartImage } from "@/components/site/SmartImage";
 import { ExpandableText } from "@/components/site/ExpandableText";
 import { useCollection, type ContentItem } from "@/lib/cms";
 import { latestFirst } from "@/lib/journey";
@@ -45,8 +44,9 @@ export function RoadStoriesSlideshow({ initialData }: { initialData: ContentItem
         <p className="font-accent text-xs uppercase text-gold">Advocacy & Adventures</p>
         <h2 id="road-stories-title" className="mt-3 font-serif text-4xl text-foreground md:text-5xl">Stories on the Road</h2>
         <div className="mt-10 grid gap-8 md:grid-cols-2 md:items-center">
-          <div className="aspect-[4/3] overflow-hidden rounded-lg bg-muted">
-            <SmartImage key={story.id} src={story.image_url} alt={story.title} fallbackLabel={story.title} className="h-full w-full object-contain motion-safe:animate-in motion-safe:fade-in motion-safe:duration-700" loading="eager" decoding="async" />
+          <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-muted">
+            <div aria-hidden className="absolute inset-0 flex items-center justify-center p-8 text-center font-serif text-xl text-muted-foreground">{story.title}</div>
+            {story.image_url && <img key={story.image_url} src={story.image_url} alt={story.title} onError={(event) => { event.currentTarget.style.visibility = "hidden"; }} className="relative h-full w-full bg-muted object-contain" loading="eager" decoding="async" />}
           </div>
           <div className="min-w-0">
             <h3 className="break-words font-serif text-3xl text-foreground">{story.title}</h3>

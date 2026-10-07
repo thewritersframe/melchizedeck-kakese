@@ -21,7 +21,6 @@ import { ImpactNumbers, type Impact } from "@/components/site/ImpactNumbers";
 import { EventsSlideshow } from "@/components/site/EventsSlideshow";
 import { RotatingHeadline } from "@/components/site/RotatingHeadline";
 import { RoadStoriesSlideshow } from "@/components/site/RoadStoriesSlideshow";
-import { SmartImage } from "@/components/site/SmartImage";
 import { latestFirst } from "@/lib/journey";
 
 export const Route = createFileRoute("/")({
@@ -326,11 +325,12 @@ function Index() {
             <div className="order-1 md:order-2">
               <div className="relative mx-auto aspect-[3/4] w-full max-w-sm overflow-hidden rounded-lg border border-gold/20 bg-card shadow-2xl shadow-black/20">
                 {featuredImage ? (
-                  <SmartImage
+                  <img
                     key={featuredImage}
                     src={featuredImage}
                     alt={f.title}
                     loading="eager"
+                    onError={(event) => { event.currentTarget.style.visibility = "hidden"; }}
                     className="h-full w-full object-cover"
                   />
                 ) : (

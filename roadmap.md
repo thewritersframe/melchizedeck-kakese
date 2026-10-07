@@ -1,3 +1,3 @@
-- [ ] Make Point of Focus derive from the latest published event and preload event content.
-- [ ] Add preloaded Stories on the Road using advocacy/adventure content, with one-minute slides and controls.
-- [ ] Verify homepage content and slideshow behavior.
+- [x] Make Point of Focus derive from the latest published event and preload event content.
+- [x] Add preloaded Stories on the Road using advocacy/adventure content, with one-minute slides and controls.
+- [x] Verify homepage content and slideshow behavior.
