@@ -25,6 +25,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SpeechesRouteImport } from './routes/speeches'
 import { Route as SupportThanksRouteImport } from './routes/support-thanks'
 import { Route as UnlockRouteImport } from './routes/unlock'
+import { Route as ScriptsIdRouteImport } from './routes/scripts_.$id'
 import { Route as ApiPublicSelcomWebhookRouteImport } from './routes/api/public/selcom/webhook'
 
 const IndexRoute = IndexRouteImport.update({
@@ -107,6 +108,11 @@ const UnlockRoute = UnlockRouteImport.update({
   path: '/unlock',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ScriptsIdRoute = ScriptsIdRouteImport.update({
+  id: '/scripts_/$id',
+  path: '/scripts/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicSelcomWebhookRoute = ApiPublicSelcomWebhookRouteImport.update({
   id: '/api/public/selcom/webhook',
   path: '/api/public/selcom/webhook',
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/speeches': typeof SpeechesRoute
   '/support-thanks': typeof SupportThanksRoute
   '/unlock': typeof UnlockRoute
+  '/scripts/$id': typeof ScriptsIdRoute
   '/api/public/selcom/webhook': typeof ApiPublicSelcomWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/speeches': typeof SpeechesRoute
   '/support-thanks': typeof SupportThanksRoute
   '/unlock': typeof UnlockRoute
+  '/scripts/$id': typeof ScriptsIdRoute
   '/api/public/selcom/webhook': typeof ApiPublicSelcomWebhookRoute
 }
 export interface FileRoutesById {
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/speeches': typeof SpeechesRoute
   '/support-thanks': typeof SupportThanksRoute
   '/unlock': typeof UnlockRoute
+  '/scripts_/$id': typeof ScriptsIdRoute
   '/api/public/selcom/webhook': typeof ApiPublicSelcomWebhookRoute
 }
 export interface FileRouteTypes {
@@ -190,6 +199,7 @@ export interface FileRouteTypes {
     | '/speeches'
     | '/support-thanks'
     | '/unlock'
+    | '/scripts/$id'
     | '/api/public/selcom/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -209,6 +219,7 @@ export interface FileRouteTypes {
     | '/speeches'
     | '/support-thanks'
     | '/unlock'
+    | '/scripts/$id'
     | '/api/public/selcom/webhook'
   id:
     | '__root__'
@@ -228,6 +239,7 @@ export interface FileRouteTypes {
     | '/speeches'
     | '/support-thanks'
     | '/unlock'
+    | '/scripts_/$id'
     | '/api/public/selcom/webhook'
   fileRoutesById: FileRoutesById
 }
@@ -248,6 +260,7 @@ export interface RootRouteChildren {
   SpeechesRoute: typeof SpeechesRoute
   SupportThanksRoute: typeof SupportThanksRoute
   UnlockRoute: typeof UnlockRoute
+  ScriptsIdRoute: typeof ScriptsIdRoute
   ApiPublicSelcomWebhookRoute: typeof ApiPublicSelcomWebhookRoute
 }
 
@@ -365,6 +378,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnlockRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/scripts_/$id': {
+      id: '/scripts_/$id'
+      path: '/scripts/$id'
+      fullPath: '/scripts/$id'
+      preLoaderRoute: typeof ScriptsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/selcom/webhook': {
       id: '/api/public/selcom/webhook'
       path: '/api/public/selcom/webhook'
@@ -392,6 +412,7 @@ const rootRouteChildren: RootRouteChildren = {
   SpeechesRoute: SpeechesRoute,
   SupportThanksRoute: SupportThanksRoute,
   UnlockRoute: UnlockRoute,
+  ScriptsIdRoute: ScriptsIdRoute,
   ApiPublicSelcomWebhookRoute: ApiPublicSelcomWebhookRoute,
 }
 export const routeTree = rootRouteImport
