@@ -2,7 +2,7 @@ import { pageHead } from "@/lib/seo";
 import { useReviewSummaries } from "@/lib/engagement";
 import { ReviewsSection } from "@/components/site/ReviewsSection";
 import { Stars } from "@/components/site/Stars";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useSection, useCollection, type ContentItem } from "@/lib/cms";
 import { SmartImage } from "@/components/site/SmartImage";
@@ -141,8 +141,10 @@ const { data: reviewSummaries } = useReviewSummaries(itemIds);
                     </>
                   )}
                   <div className="mt-4 flex flex-wrap gap-2">
-                    <Button size="sm" variant="outline" onClick={() => setSynopsisItem(it)}>
-                      <BookOpen className="mr-1 h-3.5 w-3.5" /> Read Synopsis
+                    <Button size="sm" variant="outline" asChild>
+                      <Link to="/scripts/$id" params={{ id: it.slug || it.id }}>
+                        <BookOpen className="mr-1 h-3.5 w-3.5" /> Read Synopsis
+                      </Link>
                     </Button>
                     {treatmentLocked ? (
                       <>
