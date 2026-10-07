@@ -10,3 +10,5 @@
 <!-- LOVABLE:END -->
 
 - Keep the standard biography at `/about` and the immersive interactive biography at `/about-game`; this preserves a readable profile while allowing an experimental experience.
+- Derive homepage focus and event ordering with the shared journey sorter from published CMS events; do not persist a separate event copy that can become stale.
+- Preload homepage journey collections in its route loader and share collection query keys with admin invalidation; road stories reuse the advocacy collection so existing editing controls remain authoritative.

@@ -20,17 +20,21 @@ import {
 import { ImpactNumbers, type Impact } from "@/components/site/ImpactNumbers";
 import { EventsSlideshow } from "@/components/site/EventsSlideshow";
 import { RotatingHeadline } from "@/components/site/RotatingHeadline";
+import { RoadStoriesSlideshow } from "@/components/site/RoadStoriesSlideshow";
+import { latestFirst } from "@/lib/journey";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
-    const [hero, featured, pillars, impact, books] = await Promise.all([
+    const [hero, featured, pillars, impact, books, events, stories] = await Promise.all([
       fetchSection<Hero>("home", "hero").catch(() => null),
       fetchSection<Featured>("home", "featured").catch(() => null),
       fetchSection<Pillars>("home", "pillars").catch(() => null),
       fetchSection<Impact>("home", "impact").catch(() => null),
       fetchCollection("book").catch(() => []),
+      fetchCollection("event").catch(() => []),
+      fetchCollection("advocacy").catch(() => []),
     ]);
-    return { hero, featured, pillars, impact, books };
+    return { hero, featured, pillars, impact, books, events, stories };
   },
   head: ({ loaderData }) => {
     const video =
@@ -144,10 +148,24 @@ function Index() {
   const { data: books } = useCollection("book", {
     initialData: preloaded.books,
   });
+  const { data: events } = useCollection("event", {
+    initialData: preloaded.events,
+    refetchInterval: 60_000,
+  });
 
 
   const h = hero?.content;
-  const f = featured?.content;
+  const latestEvent = latestFirst(events ?? [])[0];
+  const f: Featured | undefined = latestEvent ? {
+    label: featured?.content?.label || "Point of Focus",
+    title: latestEvent.title,
+    body: latestEvent.body || latestEvent.subtitle || "",
+    imageUrl: latestEvent.image_url || "",
+    primaryLabel: "View events",
+    primaryTo: "/events",
+    secondaryLabel: "",
+    secondaryTo: "",
+  } : featured?.content;
 
   const p: Pillars =
     pillars?.content?.items?.length
@@ -155,7 +173,7 @@ function Index() {
       : DEFAULT_PILLARS;
 
   const featuredImage =
-    f?.imageUrl || books?.[0]?.image_url || "";
+    f?.imageUrl || (latestEvent ? "" : books?.[0]?.image_url) || "";
 
   const heroVideo =
     (h?.videoUrl || "").trim() || DEFAULT_HERO_VIDEO;
@@ -308,9 +326,11 @@ function Index() {
               <div className="relative mx-auto aspect-[3/4] w-full max-w-sm overflow-hidden rounded-lg border border-gold/20 bg-card shadow-2xl shadow-black/20">
                 {featuredImage ? (
                   <img
+                    key={featuredImage}
                     src={featuredImage}
                     alt={f.title}
                     loading="eager"
+                    onError={(event) => { event.currentTarget.style.visibility = "hidden"; }}
                     className="h-full w-full object-cover"
                   />
                 ) : (
@@ -327,7 +347,8 @@ function Index() {
       {/* =========================================================
           EVENTS
       ========================================================== */}
-      <EventsSlideshow />
+      <EventsSlideshow initialData={preloaded.events} />
+      <RoadStoriesSlideshow initialData={preloaded.stories} />
 
       {/* =========================================================
           WHAT I DO

@@ -56,11 +56,12 @@ export function useSection<T = Record<string, unknown>>(
 
 export function useCollection(
   collection: string,
-  opts: { admin?: boolean; initialData?: ContentItem[] } = {},
+  opts: { admin?: boolean; initialData?: ContentItem[]; refetchInterval?: number } = {},
 ) {
   return useQuery({
     queryKey: ["collection", collection, opts.admin ?? false],
     queryFn: () => fetchCollection(collection, opts),
+    refetchInterval: opts.refetchInterval,
     ...(opts.initialData !== undefined ? { initialData: opts.initialData } : {}),
   });
 }
