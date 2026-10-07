@@ -150,7 +150,7 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
   ]},
 ];
 
-type MetaField = { name: string; label: string; type?: "text" | "bool" | "video" };
+type MetaField = { name: string; label: string; type?: "text" | "bool" | "video" | "textarea" };
 const COLLECTIONS: { key: string; label: string; extraMeta: MetaField[]; lockable?: boolean }[] = [
   { key: "book", label: "Books", lockable: true, extraMeta: [
     { name: "genre", label: "Genre" },
@@ -169,6 +169,7 @@ const COLLECTIONS: { key: string; label: string; extraMeta: MetaField[]; lockabl
     { name: "read_time", label: "Read time (e.g. 5 min)" },
   ]},
   { key: "script", label: "Scripts", lockable: true, extraMeta: [
+    { name: "synopsis", label: "Synopsis (shown on its own page — Body above is the logline)", type: "textarea" },
     { name: "genre", label: "Genre" },
     { name: "status", label: "Status" },
     { name: "price", label: "Price (numeric — overrides standard price)" },
@@ -552,6 +553,15 @@ function ItemEditor({ item, extraMeta, lockable, onChange }: { item: Item; extra
                     onChange={(e) => setForm({ ...form, meta: { ...(form.meta as Record<string, unknown>), [m.name]: e.target.checked } })} />
                   {m.label}
                 </label>
+              );
+            }
+            if (m.type === "textarea") {
+              return (
+                <div key={m.name} className="grid gap-1">
+                  <span className="text-xs text-muted-foreground">{m.label}</span>
+                  <Textarea rows={10} placeholder={m.label} value={String(cur ?? "")}
+                    onChange={(e) => setForm({ ...form, meta: { ...(form.meta as Record<string, unknown>), [m.name]: e.target.value } })} />
+                </div>
               );
             }
             if (m.type === "video") {
