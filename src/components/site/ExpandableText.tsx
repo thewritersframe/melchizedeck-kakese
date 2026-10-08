@@ -12,7 +12,7 @@ export function ExpandableText({
   threshold?: number;
   className?: string;
   /** When set, "Read more" navigates to this page instead of expanding in place. */
-  moreHref?: string;
+  moreHref?: "/events" | "/advocacy" | "/projects" | "/about" | "/blog" | "/books" | "/scripts" | "/speeches" | "/contact";
 }) {
   const [open, setOpen] = useState(false);
   const long = text.length > threshold;
