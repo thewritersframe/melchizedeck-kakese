@@ -42,9 +42,9 @@ function Highlight({ items, category, href, label, icon: Icon }: {
         <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-6">
           <Button asChild variant="link" className="h-auto whitespace-normal p-0 text-left">
             {href === "/scripts" ? (
-              <Link to="/scripts/$id" params={{ id: item.id }}>{label}<ArrowRight /></Link>
+              <Link to="/scripts/$id" params={{ id: item.slug || item.id }}>{label}<ArrowRight /></Link>
             ) : (
-              <Link to={href} hash={item.id}>{label}<ArrowRight /></Link>
+              <Link to={href} hash={href === "/blog" ? item.slug ?? item.id : undefined}>{label}<ArrowRight /></Link>
             )}
           </Button>
           {items.length > 1 && <div className="flex items-center gap-1">
