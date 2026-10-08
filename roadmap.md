@@ -1,5 +1,5 @@
 - [x] Make Point of Focus derive from the latest published event and preload event content.
 - [x] Add preloaded Stories on the Road using advocacy/adventure content, with one-minute slides and controls.
 - [x] Verify homepage content and slideshow behavior.
-- [ ] Add photo-led screenplay, book, and blog highlights from published archive content.
-- [ ] Verify highlight photos, excerpts, and relevant reading links.
+- [x] Add photo-led screenplay, book, and blog highlights from published archive content.
+- [x] Verify highlight photos, excerpts, and relevant reading links.
