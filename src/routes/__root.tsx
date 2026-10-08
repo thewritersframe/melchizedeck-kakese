@@ -40,53 +40,115 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
+
   useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
+    reportLovableError(error, {
+      boundary: "tanstack_root_error_component",
+    });
   }, [error]);
+
   return (
     <div className="bg-hero-pattern flex min-h-screen items-center justify-center px-4">
       <div className="max-w-md text-center">
         <h1 className="font-serif text-2xl">Something went wrong</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Try again or head home.</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Try again or head home.
+        </p>
+
         <div className="mt-6 flex justify-center gap-2">
           <button
-            onClick={() => { router.invalidate(); reset(); }}
+            onClick={() => {
+              router.invalidate();
+              reset();
+            }}
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
           >
             Try again
           </button>
-          <a href="/" className="rounded-md border border-border px-4 py-2 text-sm hover:bg-accent/10">Home</a>
+
+          <a
+            href="/"
+            className="rounded-md border border-border px-4 py-2 text-sm hover:bg-accent/10"
+          >
+            Home
+          </a>
         </div>
       </div>
     </div>
   );
 }
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Melchizedeck Kakese | Author, Screenwriter & Youth Advocate" },
-      { name: "description", content: "Melchizedeck Kakese is a Tanzanian author, screenwriter, youth advocate and founder of The Writer's Frame, sharing books, screenplays and youth projects." },
-      { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "Melchizedeck Kakese" },
-      { property: "og:locale", content: "en_US" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [
-      { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" },
-    ],
-  }),
-  shellComponent: RootShell,
-  component: RootComponent,
-  notFoundComponent: NotFoundComponent,
-  errorComponent: ErrorComponent,
-});
+export const Route =
+  createRootRouteWithContext<{ queryClient: QueryClient }>()({
+    head: () => ({
+      meta: [
+        { charSet: "utf-8" },
+        {
+          name: "viewport",
+          content: "width=device-width, initial-scale=1",
+        },
+        {
+          title:
+            "Melchizedeck Kakese | Author, Screenwriter & Youth Advocate",
+        },
+        {
+          name: "description",
+          content:
+            "Melchizedeck Kakese is a Tanzanian author, screenwriter, youth advocate and founder of The Writer's Frame, sharing books, screenplays and youth projects.",
+        },
+        {
+          property: "og:type",
+          content: "website",
+        },
+        {
+          property: "og:site_name",
+          content: "Melchizedeck Kakese",
+        },
+        {
+          property: "og:locale",
+          content: "en_US",
+        },
+        {
+          name: "twitter:card",
+          content: "summary_large_image",
+        },
+      ],
+
+      links: [
+        {
+          rel: "stylesheet",
+          href: appCss,
+        },
+
+        {
+          rel: "icon",
+          href: "/M_20261008_222601_0000.png",
+          type: "image/png",
+        },
+
+        {
+          rel: "preconnect",
+          href: "https://fonts.googleapis.com",
+        },
+
+        {
+          rel: "preconnect",
+          href: "https://fonts.gstatic.com",
+          crossOrigin: "anonymous",
+        },
+
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Inter:wght@300;400;500;600&display=swap",
+        },
+      ],
+    }),
+
+    shellComponent: RootShell,
+    component: RootComponent,
+    notFoundComponent: NotFoundComponent,
+    errorComponent: ErrorComponent,
+  });
 
 const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('theme');var r=document.documentElement;r.classList.remove('light','dark');if(t==='light'){r.classList.add('light');}else if(t==='dark'){r.classList.add('dark');}else if(!t||t==='system'){r.classList.add(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');}}catch(e){document.documentElement.classList.add('dark');}})();`;
 
@@ -95,8 +157,13 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en" className="dark">
       <head>
         <HeadContent />
-        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: THEME_SCRIPT,
+          }}
+        />
       </head>
+
       <body>
         {children}
         <Scripts />
@@ -108,15 +175,25 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
+
   useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "SIGNED_IN" || event === "SIGNED_OUT" || event === "USER_UPDATED") {
+      if (
+        event === "SIGNED_IN" ||
+        event === "SIGNED_OUT" ||
+        event === "USER_UPDATED"
+      ) {
         router.invalidate();
-        if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
+
+        if (event !== "SIGNED_OUT") {
+          queryClient.invalidateQueries();
+        }
       }
     });
+
     return () => sub.subscription.unsubscribe();
   }, [router, queryClient]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
