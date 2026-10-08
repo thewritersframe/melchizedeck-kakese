@@ -23,10 +23,11 @@ import { RotatingHeadline } from "@/components/site/RotatingHeadline";
 import { RoadStoriesSlideshow } from "@/components/site/RoadStoriesSlideshow";
 import { ExpandableText } from "@/components/site/ExpandableText";
 import { latestFirst } from "@/lib/journey";
+import { ArchiveHighlights } from "@/components/site/ArchiveHighlights";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
-    const [hero, featured, pillars, impact, books, events, stories] = await Promise.all([
+    const [hero, featured, pillars, impact, books, events, stories, scripts, blogs] = await Promise.all([
       fetchSection<Hero>("home", "hero").catch(() => null),
       fetchSection<Featured>("home", "featured").catch(() => null),
       fetchSection<Pillars>("home", "pillars").catch(() => null),
@@ -34,8 +35,10 @@ export const Route = createFileRoute("/")({
       fetchCollection("book").catch(() => []),
       fetchCollection("event").catch(() => []),
       fetchCollection("advocacy").catch(() => []),
+      fetchCollection("script").catch(() => []),
+      fetchCollection("blog").catch(() => []),
     ]);
-    return { hero, featured, pillars, impact, books, events, stories };
+    return { hero, featured, pillars, impact, books, events, stories, scripts, blogs };
   },
   head: ({ loaderData }) => {
     const video =
@@ -348,6 +351,7 @@ function Index() {
       ========================================================== */}
       <EventsSlideshow initialData={preloaded.events} />
       <RoadStoriesSlideshow initialData={preloaded.stories} />
+      <ArchiveHighlights books={preloaded.books} scripts={preloaded.scripts} blogs={preloaded.blogs} />
 
       {/* =========================================================
           WHAT I DO
