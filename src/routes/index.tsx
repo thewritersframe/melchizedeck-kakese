@@ -294,7 +294,7 @@ function Index() {
               </h2>
 
               {f.body && (
-                <ExpandableText key={latestEvent?.id ?? f.body} text={f.body} threshold={240} className="mt-4 text-muted-foreground" />
+                <ExpandableText key={latestEvent?.id ?? f.body} text={f.body} threshold={240} moreHref={latestEvent ? "/events" : undefined} className="mt-4 text-muted-foreground" />
               )}
 
               {(f.primaryLabel || f.secondaryLabel) && (
@@ -386,7 +386,7 @@ function Index() {
                   </h3>
 
                   {/* Description */}
-                  <ExpandableText key={item.body} text={item.body} className="mt-3 text-sm text-muted-foreground" />
+                  <ExpandableText key={item.body} text={item.body} moreHref="/projects" className="mt-3 text-sm text-muted-foreground" />
                 </div>
               );
             })}

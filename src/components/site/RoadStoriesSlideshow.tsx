@@ -51,7 +51,7 @@ export function RoadStoriesSlideshow({ initialData }: { initialData: ContentItem
           <div className="min-w-0">
             <h3 className="break-words font-serif text-3xl text-foreground">{story.title}</h3>
             {story.subtitle && <p className="mt-3 text-gold">{story.subtitle}</p>}
-            {story.body && <ExpandableText key={story.id} text={story.body} threshold={420} className="mt-4 text-muted-foreground" />}
+            {story.body && <ExpandableText key={story.id} text={story.body} threshold={420} moreHref="/advocacy" className="mt-4 text-muted-foreground" />}
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button asChild><Link to="/advocacy">All stories</Link></Button>
               {stories.length > 1 && <>

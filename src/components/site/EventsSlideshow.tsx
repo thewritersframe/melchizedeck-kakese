@@ -103,7 +103,7 @@ export function EventsSlideshow({ initialData }: { initialData?: ContentItem[] }
                 </span>
               )}
             </div>
-            {ev.body && <ExpandableText key={ev.id} text={ev.body} className="mt-4 max-w-2xl text-sm text-muted-foreground" />}
+            {ev.body && <ExpandableText key={ev.id} text={ev.body} moreHref="/events" className="mt-4 max-w-2xl text-sm text-muted-foreground" />}
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link to="/events" className="rounded-md bg-gold px-5 py-2.5 text-sm font-medium text-primary-foreground transition hover:opacity-90">
