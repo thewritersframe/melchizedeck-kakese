@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, Play, Pause, CalendarDays, MapPin } from "lucide-react";
 import { useCollection, type ContentItem } from "@/lib/cms";
 import { latestFirst } from "@/lib/journey";
+import { ExpandableText } from "@/components/site/ExpandableText";
 
 type EventMeta = { date?: string; location?: string; url?: string };
 
@@ -102,7 +103,7 @@ export function EventsSlideshow({ initialData }: { initialData?: ContentItem[] }
                 </span>
               )}
             </div>
-            {ev.body && <p className="mt-4 max-w-2xl line-clamp-3 text-sm text-muted-foreground">{ev.body}</p>}
+            {ev.body && <ExpandableText key={ev.id} text={ev.body} className="mt-4 max-w-2xl text-sm text-muted-foreground" />}
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link to="/events" className="rounded-md bg-gold px-5 py-2.5 text-sm font-medium text-primary-foreground transition hover:opacity-90">

@@ -21,6 +21,7 @@ import { ImpactNumbers, type Impact } from "@/components/site/ImpactNumbers";
 import { EventsSlideshow } from "@/components/site/EventsSlideshow";
 import { RotatingHeadline } from "@/components/site/RotatingHeadline";
 import { RoadStoriesSlideshow } from "@/components/site/RoadStoriesSlideshow";
+import { ExpandableText } from "@/components/site/ExpandableText";
 import { latestFirst } from "@/lib/journey";
 
 export const Route = createFileRoute("/")({
@@ -293,9 +294,7 @@ function Index() {
               </h2>
 
               {f.body && (
-                <p className="mt-4 leading-relaxed text-muted-foreground">
-                  {f.body}
-                </p>
+                <ExpandableText key={latestEvent?.id ?? f.body} text={f.body} threshold={240} className="mt-4 text-muted-foreground" />
               )}
 
               {(f.primaryLabel || f.secondaryLabel) && (
@@ -387,9 +386,7 @@ function Index() {
                   </h3>
 
                   {/* Description */}
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                    {item.body}
-                  </p>
+                  <ExpandableText key={item.body} text={item.body} className="mt-3 text-sm text-muted-foreground" />
                 </div>
               );
             })}
