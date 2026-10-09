@@ -1,5 +1,5 @@
 import { pageHead } from "@/lib/seo";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useCollection, useSection } from "@/lib/cms";
 import { AboutBlocks, parseBlocks } from "@/components/site/AboutBlocks";
