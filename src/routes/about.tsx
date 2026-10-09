@@ -23,10 +23,6 @@ function About() {
       <section className="mx-auto max-w-4xl px-6 py-24">
         <div className="flex flex-wrap items-end justify-between gap-5">
           <h1 className="font-serif text-5xl text-cream">{c?.title ?? "About"}</h1>
-          <div className="flex rounded-md border border-border/60 bg-background/60 p-1 text-xs font-medium backdrop-blur">
-            <span className="rounded bg-gold px-3 py-2 text-primary-foreground">Classic About</span>
-            <Link to="/about-game" className="rounded px-3 py-2 text-muted-foreground transition hover:text-gold">Game Mode</Link>
-          </div>
         </div>
         {c?.imageUrl && (
           <div className="mt-10 overflow-hidden rounded-lg border border-border/60 bg-background/40">

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useSection, type PageSection } from "@/lib/cms";
+import { parseList, useSection, type PageSection } from "@/lib/cms";
 
 type Stat = { label: string; value: string | number; suffix?: string; prefix?: string };
 export type Impact = { eyebrow?: string; title?: string; note?: string; items?: Stat[] };
@@ -55,7 +55,8 @@ export function ImpactNumbers({ initialData }: { initialData?: PageSection<Impac
     ...(initialData !== undefined ? { initialData } : {}),
   });
   const c = data?.content;
-  const items = (Array.isArray(c?.items) && c.items.length ? c.items : DEFAULTS).slice(0, 8);
+  const parsed = parseList<Stat>(c?.items).filter((s) => s && s.label);
+  const items = (parsed.length ? parsed : DEFAULTS).slice(0, 8);
   const { ref, inView } = useInView<HTMLDivElement>();
 
   return (

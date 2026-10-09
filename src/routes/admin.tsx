@@ -82,16 +82,6 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
       { name: "blocks", label: "Story blocks", type: "blocks" },
     ]},
   ]},
-  { page: "about-game", sections: [
-    { key: "main", label: "About Me: Game Mode", fields: [
-      { name: "eyebrow", label: "Small introduction" },
-      { name: "title", label: "Opening title" },
-      { name: "intro", label: "Opening description", type: "textarea" },
-      { name: "startLabel", label: "Start button label" },
-      { name: "sceneImage", label: "Game world background", type: "image" },
-      { name: "chapters", label: "Chapters (JSON array of {year, marker, title, body})", type: "json" },
-    ]},
-  ]},
 
   { page: "books", sections: [{ key: "header", label: "Header", fields: [{ name: "title", label: "Title" }, { name: "body", label: "Intro", type: "textarea" }] }] },
   { page: "scripts", sections: [{ key: "header", label: "Header", fields: [{ name: "title", label: "Title" }, { name: "body", label: "Intro", type: "textarea" }] }] },
@@ -451,6 +441,7 @@ function FieldInput({ field, value, onChange }: { field: FieldSpec; value: unkno
           try { onChange(JSON.parse(e.target.value)); }
           catch { onChange(e.target.value); }
         }} className="mt-1.5 font-mono text-xs" />
+        {typeof value === "string" && value.trim() && (() => { try { JSON.parse(value); return null; } catch { return <span className="mt-1 block text-xs text-destructive">This list has a formatting mistake (check quotes, commas and line breaks inside text). It may not show on the site until fixed.</span>; } })()}
       </label>
     );
   }

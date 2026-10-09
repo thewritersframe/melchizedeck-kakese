@@ -216,3 +216,16 @@ export async function uploadMedia(file: File, opts: UploadOptions = {}): Promise
 
   return signed;
 }
+
+/** Reads a list saved from the admin JSON box, tolerating text saved with stray line breaks. */
+export function parseList<T>(value: unknown): T[] {
+  if (Array.isArray(value)) return value as T[];
+  if (typeof value !== "string" || !value.trim()) return [];
+  for (const attempt of [value, value.replace(/\r?\n/g, " ")]) {
+    try {
+      const parsed = JSON.parse(attempt);
+      if (Array.isArray(parsed)) return parsed as T[];
+    } catch { /* try next */ }
+  }
+  return [];
+}

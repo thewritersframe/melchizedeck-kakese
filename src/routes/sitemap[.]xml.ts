@@ -6,7 +6,6 @@ const BASE_URL = "https://melchizedeck-kakese.vercel.app";
 const PUBLIC_PATHS = [
   "/",
   "/about",
-  "/about-game",
   "/advocacy",
   "/blog",
   "/books",
