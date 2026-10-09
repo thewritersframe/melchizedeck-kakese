@@ -116,7 +116,7 @@ export const startCheckout = createServerFn({ method: "POST" })
           merchant_remarks: `Unlock: ${item.title}`,
         },
         creds,
-      ););
+      ));
     } catch (err) {
       if (!manual.payLink && !manual.qrPayload) throw err;
       console.error("Selcom hosted checkout failed; showing QR/till instead", err);

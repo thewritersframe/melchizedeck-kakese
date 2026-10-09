@@ -115,7 +115,7 @@ export const startDonation = createServerFn({ method: "POST" })
           merchant_remarks: "Support My Vision contribution",
         },
         creds,
-      ););
+      ));
     } catch (err) {
       if (!manual.payLink && !manual.qrPayload) throw err;
       console.error("Selcom hosted checkout failed; showing QR/till instead", err);
