@@ -100,21 +100,27 @@ export const startCheckout = createServerFn({ method: "POST" })
     }
 
     const { webhook, redirect_url, cancel_url } = buildReturnUrls(purchase.order_ref);
-    const { checkoutUrl } = await createSelcomCheckoutOrder(
-      {
-        order_id: purchase.order_ref,
-        buyer_email: email,
-        buyer_name: email.split("@")[0] || "Buyer",
-        buyer_phone: data.phone ?? "",
-        amount,
-        currency,
-        webhook,
-        redirect_url,
-        cancel_url,
-        merchant_remarks: `Unlock: ${item.title}`,
-      },
-      creds,
-    );
+    let checkoutUrl: string | null = null;
+    try {
+      ({ checkoutUrl } = await createSelcomCheckoutOrder(
+        {
+          order_id: purchase.order_ref,
+          buyer_email: email,
+          buyer_name: email.split("@")[0] || "Buyer",
+          buyer_phone: data.phone ?? "",
+          amount,
+          currency,
+          webhook,
+          redirect_url,
+          cancel_url,
+          merchant_remarks: `Unlock: ${item.title}`,
+        },
+        creds,
+      ););
+    } catch (err) {
+      if (!manual.payLink && !manual.qrPayload) throw err;
+      console.error("Selcom hosted checkout failed; showing QR/till instead", err);
+    }
 
     return {
       orderRef: purchase.order_ref,

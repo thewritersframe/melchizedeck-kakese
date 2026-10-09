@@ -99,21 +99,27 @@ export const startDonation = createServerFn({ method: "POST" })
       donation.order_ref,
       "/support-thanks",
     );
-    const { checkoutUrl } = await createSelcomCheckoutOrder(
-      {
-        order_id: donation.order_ref,
-        buyer_email: email,
-        buyer_name: name ?? email.split("@")[0] ?? "Supporter",
-        buyer_phone: phone ?? "",
-        amount,
-        currency,
-        webhook,
-        redirect_url,
-        cancel_url,
-        merchant_remarks: "Support My Vision contribution",
-      },
-      creds,
-    );
+    let checkoutUrl: string | null = null;
+    try {
+      ({ checkoutUrl } = await createSelcomCheckoutOrder(
+        {
+          order_id: donation.order_ref,
+          buyer_email: email,
+          buyer_name: name ?? email.split("@")[0] ?? "Supporter",
+          buyer_phone: phone ?? "",
+          amount,
+          currency,
+          webhook,
+          redirect_url,
+          cancel_url,
+          merchant_remarks: "Support My Vision contribution",
+        },
+        creds,
+      ););
+    } catch (err) {
+      if (!manual.payLink && !manual.qrPayload) throw err;
+      console.error("Selcom hosted checkout failed; showing QR/till instead", err);
+    }
 
     return {
       orderRef: donation.order_ref,
