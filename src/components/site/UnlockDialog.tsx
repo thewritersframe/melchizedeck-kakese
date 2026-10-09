@@ -30,15 +30,16 @@ export function UnlockDialog({ item, onClose, price, itemPrice, itemCurrency }: 
     onSuccess: (r) => {
       setStoredEmail(email);
       qc.invalidateQueries({ queryKey: ["unlocks", email.trim().toLowerCase()] });
-      if (r.checkoutUrl) {
-        window.location.href = r.checkoutUrl;
-      } else if (r.manual && (r.manual.payLink || r.manual.qrPayload)) {
+      if (r.manual && (r.manual.payLink || r.manual.qrPayload)) {
         setManual({
           orderRef: r.orderRef,
           amount: Number(r.amount),
           currency: r.currency,
           ...r.manual,
+          payLink: r.manual.payLink || r.checkoutUrl || null,
         });
+      } else if (r?.checkoutUrl) {
+        window.location.href = r.checkoutUrl;
       } else {
         toast.success(`Order ${r.orderRef.slice(0, 8)} created. Once payment is completed you'll get access — refresh this page after paying.`);
         onClose();

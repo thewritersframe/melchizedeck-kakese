@@ -61,16 +61,16 @@ export function SupportVision() {
       });
     },
     onSuccess: (res) => {
-      if (res?.checkoutUrl) {
-        toast.success("Redirecting to secure checkout…");
-        window.location.href = res.checkoutUrl;
-      } else if (res?.manual && (res.manual.payLink || res.manual.qrPayload)) {
+      if (res?.manual && (res.manual.payLink || res.manual.qrPayload)) {
         setManual({
           orderRef: res.orderRef,
           amount: Number(res.amount),
           currency: res.currency,
           ...res.manual,
+          payLink: res.manual.payLink || res.checkoutUrl || null,
         });
+      } else if (res?.checkoutUrl) {
+        window.location.href = res.checkoutUrl;
       } else {
         toast.error("Could not open checkout. Please try again.");
       }
