@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
-import { Route as AboutGameRouteImport } from './routes/about-game'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AdvocacyRouteImport } from './routes/advocacy'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -36,11 +35,6 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutGameRoute = AboutGameRouteImport.update({
-  id: '/about-game',
-  path: '/about-game',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -122,7 +116,6 @@ const ApiPublicSelcomWebhookRoute = ApiPublicSelcomWebhookRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/about-game': typeof AboutGameRoute
   '/admin': typeof AdminRoute
   '/advocacy': typeof AdvocacyRoute
   '/auth': typeof AuthRoute
@@ -142,7 +135,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/about-game': typeof AboutGameRoute
   '/admin': typeof AdminRoute
   '/advocacy': typeof AdvocacyRoute
   '/auth': typeof AuthRoute
@@ -163,7 +155,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/about-game': typeof AboutGameRoute
   '/admin': typeof AdminRoute
   '/advocacy': typeof AdvocacyRoute
   '/auth': typeof AuthRoute
@@ -185,7 +176,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
-    | '/about-game'
     | '/admin'
     | '/advocacy'
     | '/auth'
@@ -205,7 +195,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
-    | '/about-game'
     | '/admin'
     | '/advocacy'
     | '/auth'
@@ -225,7 +214,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
-    | '/about-game'
     | '/admin'
     | '/advocacy'
     | '/auth'
@@ -246,7 +234,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  AboutGameRoute: typeof AboutGameRoute
   AdminRoute: typeof AdminRoute
   AdvocacyRoute: typeof AdvocacyRoute
   AuthRoute: typeof AuthRoute
@@ -278,13 +265,6 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about-game': {
-      id: '/about-game'
-      path: '/about-game'
-      fullPath: '/about-game'
-      preLoaderRoute: typeof AboutGameRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -398,7 +378,6 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  AboutGameRoute: AboutGameRoute,
   AdminRoute: AdminRoute,
   AdvocacyRoute: AdvocacyRoute,
   AuthRoute: AuthRoute,
