@@ -5,6 +5,7 @@ import {
   useSection,
   useCollection,
   fetchSection,
+  parseList,
   fetchCollection,
 } from "@/lib/cms";
 import { SupportVision } from "@/components/site/SupportVision";
@@ -171,10 +172,10 @@ function Index() {
     secondaryTo: "",
   } : featured?.content;
 
-  const p: Pillars =
-    pillars?.content?.items?.length
-      ? pillars.content
-      : DEFAULT_PILLARS;
+  const pillarItems = parseList<Pillars["items"][number]>(pillars?.content?.items).filter((i) => i && i.title);
+  const p: Pillars = pillarItems.length
+    ? { ...DEFAULT_PILLARS, ...pillars!.content, items: pillarItems }
+    : { ...DEFAULT_PILLARS, ...(pillars?.content ?? {}), items: DEFAULT_PILLARS.items };
 
   const featuredImage =
     f?.imageUrl || (latestEvent ? "" : books?.[0]?.image_url) || "";
