@@ -11,6 +11,11 @@ export const Route = createFileRoute("/unlock")({
   head: () => ({
     meta: [
       { title: "Confirming your payment — Melchizedeck Kakese" },
+      { property: "og:title", content: "Confirming your payment — Melchizedeck Kakese" },
+      { property: "og:description", content: "Confirm your payment for access to Melchizedeck Kakese’s books and screenplays." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "robots", content: "noindex" },
       {
         name: "description",
         content:

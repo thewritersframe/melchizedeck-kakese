@@ -16,7 +16,7 @@ import { BlocksEditor } from "@/components/admin/BlocksEditor";
 import { FONT_OPTIONS, FONT_GROUPS, findFont } from "@/lib/fonts";
 
 export const Route = createFileRoute("/admin")({
-  head: () => ({ meta: [{ title: "Admin Dashboard" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Website Admin | Melchizedeck Kakese" }, { name: "description", content: "Manage biography photos, writing and events on Melchizedeck Kakese’s website." }, { property: "og:title", content: "Website Admin | Melchizedeck Kakese" }, { property: "og:description", content: "Manage biography photos, writing and events on Melchizedeck Kakese’s website." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: Admin,
 });
 

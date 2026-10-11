@@ -20,7 +20,7 @@ export function ExpandableText({
   const long = text.length > threshold;
   const shown = open || !long ? text : text.slice(0, threshold).replace(/\s+\S*$/, "") + "…";
   return (
-    <div className={className}>
+    <div className={`reading-paragraph ${className}`}>
       <div className={preserveLineBreaks ? "poetry whitespace-pre-wrap leading-relaxed" : "space-y-4 leading-relaxed"}>
         {preserveLineBreaks ? shown : shown.split(/\n\s*\n/).map((paragraph, i) => <p key={i}>{paragraph}</p>)}
       </div>

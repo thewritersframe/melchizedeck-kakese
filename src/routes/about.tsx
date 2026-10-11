@@ -20,6 +20,8 @@ function About() {
   const c = data?.content;
   const blocks = parseBlocks(c?.blocks);
   const gallery = parseBlocks(c?.gallery).filter((b): b is AboutPhoto => b.type === "image" && Boolean(b.url));
+  const biographyPhotos = blocks.flatMap((b) => b.type === "image" && b.url ? [b] : b.type === "text" && b.photo?.url ? [b.photo] : []);
+  const galleryPhotos = gallery.length ? gallery : biographyPhotos.length ? biographyPhotos : c?.imageUrl ? [{ type: "image" as const, url: c.imageUrl, caption: "Melchizedeck Kakese" }] : [];
   return (
     <SiteLayout>
       <section className="mx-auto max-w-6xl px-6 py-24">
@@ -45,7 +47,7 @@ function About() {
       </section>
 
 
-      <AboutGallery photos={gallery} title={c?.galleryTitle || "Photo Gallery"} />
+      <AboutGallery photos={galleryPhotos} title={c?.galleryTitle || "Photo Gallery"} />
 
       {achievements && achievements.length > 0 && (
         <section className="mx-auto max-w-5xl px-6 pb-24">

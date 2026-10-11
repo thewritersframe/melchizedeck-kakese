@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/auth")({
-  head: () => ({ meta: [{ title: "Sign in — Admin" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Admin Sign In | Melchizedeck Kakese" }, { name: "description", content: "Sign in to manage Melchizedeck Kakese’s website." }, { property: "og:title", content: "Admin Sign In | Melchizedeck Kakese" }, { property: "og:description", content: "Sign in to manage Melchizedeck Kakese’s website." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: Auth,
 });
 

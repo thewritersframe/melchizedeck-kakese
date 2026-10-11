@@ -192,8 +192,7 @@
     text-align: justify;
     text-align-last: auto;
   }
-  .site-reading div:has(> p):not(.poetry):not(:has(> h1)) {
-    /* Paragraph-only wrappers should use their column's full width. */
+  .site-reading .reading-paragraph {
     max-width: none;
   }
 }
