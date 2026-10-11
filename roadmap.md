@@ -3,6 +3,6 @@
 - [x] Verify homepage content and slideshow behavior.
 - [x] Add photo-led screenplay, book, and blog highlights from published archive content.
 - [x] Verify highlight photos, excerpts, and relevant reading links.
-- [ ] Add separate editable About gallery and inline biography photos.
-- [ ] Adjust desktop navigation and prose wrapping while preserving poems.
-- [ ] Verify About and desktop/mobile layouts.
+- [x] Add separate editable About gallery and inline biography photos.
+- [x] Adjust desktop navigation and prose wrapping while preserving poems.
+- [x] Verify About and desktop/mobile layouts.
