@@ -1,9 +1,10 @@
 import { SmartImage } from "@/components/site/SmartImage";
 import { cn } from "@/lib/utils";
 
+export type AboutPhoto = { type: "image"; url?: string; caption?: string; width?: "full" | "wide" | "half"; align?: "left" | "center" | "right" };
 export type AboutBlock =
-  | { type: "text"; text?: string }
-  | { type: "image"; url?: string; caption?: string; width?: "full" | "wide" | "half"; align?: "left" | "center" | "right" };
+  | { type: "text"; text?: string; photo?: AboutPhoto }
+  | AboutPhoto;
 
 export function isAboutBlock(v: unknown): v is AboutBlock {
   return !!v && typeof v === "object" && "type" in (v as Record<string, unknown>);
@@ -36,9 +37,15 @@ export function AboutBlocks({ blocks }: { blocks: AboutBlock[] }) {
         if (b.type === "text") {
           if (!b.text) return null;
           return (
-            <p key={i} className="whitespace-pre-wrap text-lg leading-relaxed text-muted-foreground">
-              {b.text}
-            </p>
+            <div key={i} className="flow-root text-lg leading-relaxed text-muted-foreground">
+              {b.photo?.url && (
+                <figure className={cn("mb-4 w-full md:w-2/5", b.photo.align === "right" ? "md:float-right md:ml-6" : "md:float-left md:mr-6")}>
+                  <SmartImage src={b.photo.url} alt={b.photo.caption ?? ""} className="h-auto w-full rounded-lg object-contain" wrapperClassName="!h-auto" />
+                  {b.photo.caption && <figcaption className="mt-2 text-sm text-gold/80">{b.photo.caption}</figcaption>}
+                </figure>
+              )}
+              {b.text.split(/\n\s*\n/).map((paragraph, j) => <p key={j} className="mb-4 last:mb-0">{paragraph}</p>)}
+            </div>
           );
         }
         if (!b.url) return null;

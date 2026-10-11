@@ -121,6 +121,7 @@ function Blog() {
                   <ExpandableText
                     text={post.body}
                     threshold={600}
+                    preserveLineBreaks={/poem|poetry/i.test(m.category ?? "")}
                     className="mt-6 text-muted-foreground"
                   />
                 )}

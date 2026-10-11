@@ -180,6 +180,23 @@
   .font-accent { font-family: var(--font-accent); }
 }
 
+/* Prose reflows naturally; blank lines still separate authored paragraphs. */
+.site-reading p:not(.poetry p) {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.site-reading .poetry p { white-space: pre-wrap; }
+@media (min-width: 768px) {
+  .site-reading p:not(.poetry p) {
+    max-width: none;
+    text-align: justify;
+    text-align-last: auto;
+  }
+  .site-reading .reading-paragraph {
+    max-width: none;
+  }
+}
+
 @keyframes hero-phrase-in {
   from { opacity: 0; transform: translateY(1.25rem); }
   to { opacity: 1; transform: translateY(0); }
