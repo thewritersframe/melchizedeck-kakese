@@ -117,7 +117,7 @@ const { data: reviewSummaries } = useReviewSummaries(itemIds);
     </div>
   );
 })()}
-                {b.body && <ExpandableText text={b.body} className="mt-3 text-sm text-muted-foreground" />}
+                {b.body && <ExpandableText text={b.body} preserveLineBreaks={/poem|poetry/i.test(m.genre ?? "")} className="mt-3 text-sm text-muted-foreground" />}
                 {locked ? (
                   <div className="mt-4 flex flex-wrap gap-2">
                     <Button size="sm" className="bg-gold text-primary-foreground hover:opacity-90" onClick={() => setOpenItem(b)}>

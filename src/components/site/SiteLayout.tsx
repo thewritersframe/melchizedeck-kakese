@@ -8,6 +8,7 @@ import { JoinTheFamily } from "@/components/site/JoinTheFamily";
 import { cn } from "@/lib/utils";
 import bgPhoto from "@/assets/kakese-community.jpg.asset.json";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
+import { Button } from "@/components/ui/button";
 const JUNGLE_SVG = `data:image/svg+xml;utf8,${encodeURIComponent(
   `<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420' viewBox='0 0 420 420'>
     <g fill='none' stroke='%23e5b567' stroke-width='1.2' stroke-linecap='round' opacity='0.55'>
@@ -141,11 +142,11 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 bg-background/55" />
 
 <header className="sticky top-0 z-40 border-b border-border/40 bg-background/80 backdrop-blur-md">
-  <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-    <Link to="/" className="font-serif text-xl tracking-wide text-cream">
+  <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-6 py-5 md:flex md:justify-between">
+    <Link to="/" className="min-w-0 shrink-0 truncate font-serif text-xl tracking-wide text-cream">
       M.<span className="text-gold">Kakese</span>
     </Link>
-    <nav className="hidden items-center gap-6 lg:flex">
+    <nav aria-label="Main navigation" className="hidden min-w-0 items-center gap-3 md:flex xl:gap-6">
       {navTree.map((item) =>
         item.children && item.children.length > 0 ? (
           <div key={item.label} className="group relative">
@@ -205,21 +206,22 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       <ThemeSwitcher />
     </nav>
 
-    <div className="flex items-center gap-3 lg:hidden">
+    <div className="flex shrink-0 items-center gap-3 md:hidden">
       <ThemeSwitcher />
 
-      <button
-        className="text-cream"
+      <Button
+        variant="ghost" size="icon" className="text-cream"
         onClick={() => setOpen((o) => !o)}
         aria-label="Menu"
+        aria-expanded={open}
       >
         {open ? <X /> : <Menu />}
-      </button>
+      </Button>
     </div>
   </div>
 
   {open && (
-    <div className="border-t border-border/40 bg-background/95 lg:hidden">
+    <div className="border-t border-border/40 bg-background/95 md:hidden">
       <nav className="mx-auto flex max-w-7xl flex-col px-6 py-4">
         {navTree.map((item) => (
           <div key={item.label}>
@@ -266,7 +268,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   )}
 </header>
 
-      <main className="flex-1">{children}</main>
+      <main className={cn("flex-1", pathname !== "/admin" && "site-reading")}>{children}</main>
 
       <footer className="border-t border-border/40 bg-background/60">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-12">

@@ -69,7 +69,7 @@ function SynopsisPage() {
         {item.image_url && (
           <img src={item.image_url} alt={item.title} className="mx-auto mt-8 max-h-[32rem] w-auto max-w-full rounded-lg object-contain" />
         )}
-        <div className="mt-8 whitespace-pre-wrap text-base leading-relaxed text-muted-foreground">{synopsis}</div>
+        <div className="mt-8 space-y-4 text-base leading-relaxed text-muted-foreground">{synopsis.split(/\n\s*\n/).map((paragraph, i) => <p key={i}>{paragraph}</p>)}</div>
       </article>
     </SiteLayout>
   );

@@ -2,7 +2,7 @@ import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useCollection, useSection } from "@/lib/cms";
-import { AboutBlocks, parseBlocks } from "@/components/site/AboutBlocks";
+import { AboutBlocks, parseBlocks, type AboutPhoto } from "@/components/site/AboutBlocks";
 import { ExpandableText } from "@/components/site/ExpandableText";
 import { Timeline } from "@/components/site/Timeline";
 import { AboutGallery } from "@/components/site/AboutGallery";
@@ -19,7 +19,7 @@ function About() {
   const t = timeline?.content;
   const c = data?.content;
   const blocks = parseBlocks(c?.blocks);
-  const gallery = parseBlocks(c?.gallery).filter((b) => b.type === "image" && Boolean(b.url));
+  const gallery = parseBlocks(c?.gallery).filter((b): b is AboutPhoto => b.type === "image" && Boolean(b.url));
   return (
     <SiteLayout>
       <section className="mx-auto max-w-6xl px-6 py-24">

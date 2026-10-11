@@ -13,3 +13,5 @@
 - Preload homepage journey collections in its route loader and share collection query keys with admin invalidation; road stories reuse the advocacy collection so existing editing controls remain authoritative.
 - Homepage archive highlights reuse preloaded published CMS book, script, and blog collections with shared query keys; existing admin edits remain authoritative without duplicating content.
 - Admin JSON list fields are read through `parseList` so slightly malformed saved text still renders instead of silently falling back to defaults.
+- Store About gallery and paragraph photos in the existing About section; reuse the block photo editor to keep admin uploads authoritative.
+- Reflow prose through shared reading styles and ExpandableText; preserve verse line breaks explicitly based on the content's poetry genre/category.
