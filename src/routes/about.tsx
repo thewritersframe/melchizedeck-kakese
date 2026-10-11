@@ -5,6 +5,7 @@ import { useCollection, useSection } from "@/lib/cms";
 import { AboutBlocks, parseBlocks } from "@/components/site/AboutBlocks";
 import { ExpandableText } from "@/components/site/ExpandableText";
 import { Timeline } from "@/components/site/Timeline";
+import { AboutGallery } from "@/components/site/AboutGallery";
 
 export const Route = createFileRoute("/about")({
   head: () => pageHead({ path: "/about", title: "About Melchizedeck Kakese | Author, Screenwriter & Youth Advocate", description: "The story of Melchizedeck Kakese: Tanzanian author, screenwriter and youth advocate, his milestones, achievements and the journey behind The Writer's Frame.", type: "profile" }),
@@ -12,15 +13,16 @@ export const Route = createFileRoute("/about")({
 });
 
 function About() {
-  const { data } = useSection<{ title: string; body: string; imageUrl?: string; blocks?: unknown }>("about", "main");
+  const { data } = useSection<{ title: string; body: string; imageUrl?: string; blocks?: unknown; gallery?: unknown; galleryTitle?: string }>("about", "main");
   const { data: achievements } = useCollection("achievement");
   const { data: timeline } = useSection<{ eyebrow?: string; title?: string; body?: string }>("about", "timeline");
   const t = timeline?.content;
   const c = data?.content;
   const blocks = parseBlocks(c?.blocks);
+  const gallery = parseBlocks(c?.gallery).filter((b) => b.type === "image" && Boolean(b.url));
   return (
     <SiteLayout>
-      <section className="mx-auto max-w-4xl px-6 py-24">
+      <section className="mx-auto max-w-6xl px-6 py-24">
         <div className="flex flex-wrap items-end justify-between gap-5">
           <h1 className="font-serif text-5xl text-cream">{c?.title ?? "About"}</h1>
         </div>
@@ -42,6 +44,8 @@ function About() {
         )}
       </section>
 
+
+      <AboutGallery photos={gallery} title={c?.galleryTitle || "Photo Gallery"} />
 
       {achievements && achievements.length > 0 && (
         <section className="mx-auto max-w-5xl px-6 pb-24">

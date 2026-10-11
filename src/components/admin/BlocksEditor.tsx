@@ -12,7 +12,7 @@ import { parseBlocks, type AboutBlock } from "@/components/site/AboutBlocks";
  * Admin editor for a page built out of paragraph + image blocks,
  * so photos can sit mid-paragraph and keep their own aspect ratio.
  */
-export function BlocksEditor({ value, onChange }: { value: unknown; onChange: (v: AboutBlock[]) => void }) {
+export function BlocksEditor({ value, onChange, photosOnly = false }: { value: unknown; onChange: (v: AboutBlock[]) => void; photosOnly?: boolean }) {
   const blocks = parseBlocks(value);
   const set = (i: number, patch: Partial<AboutBlock>) => {
     const next = blocks.map((b, idx) => (idx === i ? ({ ...b, ...patch } as AboutBlock) : b));
@@ -30,18 +30,18 @@ export function BlocksEditor({ value, onChange }: { value: unknown; onChange: (v
   return (
     <div className="rounded-lg border border-border/60 p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <span className="text-xs uppercase tracking-widest text-muted-foreground">Story blocks (paragraphs & photos)</span>
+        <span className="text-xs uppercase tracking-widest text-muted-foreground">{photosOnly ? "Gallery photos" : "Story blocks (paragraphs & photos)"}</span>
         <div className="flex gap-2">
-          <Button type="button" size="sm" variant="outline" onClick={() => onChange([...blocks, { type: "text", text: "" }])}>
+          {!photosOnly && <Button type="button" size="sm" variant="outline" onClick={() => onChange([...blocks, { type: "text", text: "" }])}>
             <Plus className="mr-1 h-3.5 w-3.5" /> Paragraph
-          </Button>
+          </Button>}
           <Button type="button" size="sm" variant="outline" onClick={() => onChange([...blocks, { type: "image", url: "", width: "full", align: "center" }])}>
             <Plus className="mr-1 h-3.5 w-3.5" /> Photo
           </Button>
         </div>
       </div>
 
-      {blocks.length === 0 && (
+      {blocks.length === 0 && !photosOnly && (
         <p className="mt-3 text-xs text-muted-foreground">
           No blocks yet — the plain “Body” text above is shown instead. Add paragraphs and photos here to build a longer, illustrated story.
         </p>
@@ -62,7 +62,13 @@ export function BlocksEditor({ value, onChange }: { value: unknown; onChange: (v
             </div>
 
             {b.type === "text" ? (
-              <Textarea rows={5} value={b.text ?? ""} onChange={(e) => set(i, { text: e.target.value })} placeholder="Write this part of the story…" />
+              <div className="space-y-3">
+                <Textarea rows={5} value={b.text ?? ""} onChange={(e) => set(i, { text: e.target.value })} placeholder="Write this part of the story…" />
+                <Button type="button" size="sm" variant="outline" onClick={() => set(i, { photo: b.photo ? undefined : { type: "image", align: "left", width: "half" } })}>
+                  <ImageIcon className="mr-2 h-4 w-4" />{b.photo ? "Remove paragraph photo" : "Add paragraph photo"}
+                </Button>
+                {b.photo && <ImageBlockFields block={b.photo} inline onPatch={(patch) => set(i, { photo: { ...b.photo, type: "image", ...patch } })} />}
+              </div>
             ) : (
               <ImageBlockFields block={b} onPatch={(patch) => set(i, patch)} />
             )}
@@ -73,7 +79,7 @@ export function BlocksEditor({ value, onChange }: { value: unknown; onChange: (v
   );
 }
 
-function ImageBlockFields({ block, onPatch }: { block: Extract<AboutBlock, { type: "image" }>; onPatch: (p: Partial<Extract<AboutBlock, { type: "image" }>>) => void }) {
+function ImageBlockFields({ block, onPatch, inline = false }: { block: Extract<AboutBlock, { type: "image" }>; onPatch: (p: Partial<Extract<AboutBlock, { type: "image" }>>) => void; inline?: boolean }) {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   return (
@@ -110,7 +116,7 @@ function ImageBlockFields({ block, onPatch }: { block: Extract<AboutBlock, { typ
       <Input value={block.url ?? ""} onChange={(e) => onPatch({ url: e.target.value })} placeholder="or paste image URL" />
       <Input value={block.caption ?? ""} onChange={(e) => onPatch({ caption: e.target.value })} placeholder="Caption (optional)" />
       <div className="flex flex-wrap gap-3">
-        <label className="text-xs text-muted-foreground">
+        {!inline && <label className="text-xs text-muted-foreground">
           Size
           <select
             value={block.width ?? "full"}
@@ -121,7 +127,7 @@ function ImageBlockFields({ block, onPatch }: { block: Extract<AboutBlock, { typ
             <option value="wide">Wide (85%)</option>
             <option value="half">Half width</option>
           </select>
-        </label>
+        </label>}
         <label className="text-xs text-muted-foreground">
           Position
           <select
@@ -129,7 +135,7 @@ function ImageBlockFields({ block, onPatch }: { block: Extract<AboutBlock, { typ
             onChange={(e) => onPatch({ align: e.target.value as "left" | "center" | "right" })}
             className="ml-2 rounded-md border border-border bg-background px-2 py-1 text-sm text-foreground"
           >
-            <option value="center">Centered</option>
+            {!inline && <option value="center">Centered</option>}
             <option value="left">Left</option>
             <option value="right">Right</option>
           </select>

@@ -80,6 +80,8 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
       { name: "body", label: "Body (used only if no story blocks below)", type: "textarea" },
       { name: "imageUrl", label: "Portrait image", type: "image" },
       { name: "blocks", label: "Story blocks", type: "blocks" },
+      { name: "galleryTitle", label: "Photo gallery title" },
+      { name: "gallery", label: "Photo gallery (separate from milestones)", type: "gallery" },
     ]},
   ]},
 
@@ -190,7 +192,7 @@ const COLLECTIONS: { key: string; label: string; extraMeta: MetaField[]; lockabl
 
 ];
 
-type FieldSpec = { name: string; label: string; type?: "text" | "textarea" | "image" | "json" | "video" | "blocks" | "font" };
+type FieldSpec = { name: string; label: string; type?: "text" | "textarea" | "image" | "json" | "video" | "blocks" | "gallery" | "font" };
 
 function Admin() {
   const nav = useNavigate();
@@ -329,10 +331,10 @@ function SectionEditor({ page, sectionKey, label, fields }: { page: string; sect
 function FieldInput({ field, value, onChange }: { field: FieldSpec; value: unknown; onChange: (v: unknown) => void }) {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
-  if (field.type === "blocks") {
+  if (field.type === "blocks" || field.type === "gallery") {
     return (
       <div>
-        <BlocksEditor value={value} onChange={(v) => onChange(v)} />
+        <BlocksEditor value={value} photosOnly={field.type === "gallery"} onChange={(v) => onChange(v)} />
       </div>
     );
   }
