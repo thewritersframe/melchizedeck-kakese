@@ -69,7 +69,7 @@ export default function MomentsSlideshow() {
         <img
           src={moment.image}
           alt={moment.title}
-          className="absolute inset-0 h-full w-full bg-muted object-contain transition-opacity duration-700"
+          className="absolute inset-0 h-full w-full object-cover transition-opacity duration-700"
         />
 
         {/* Dark overlay */}
