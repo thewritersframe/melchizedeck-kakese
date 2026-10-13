@@ -90,7 +90,7 @@ function Speeches() {
                   className="relative block aspect-video w-full overflow-hidden bg-background/60"
                   aria-label={`Play ${item.title}`}
                 >
-                  <SmartImage src={poster} alt={item.title} fallbackLabel={item.title} className="h-full w-full object-cover transition group-hover:scale-105" />
+                  <SmartImage src={poster} alt={item.title} fallbackLabel={item.title} className="h-full w-full object-contain bg-muted transition group-hover:scale-105" />
                   <span className="absolute inset-0 flex items-center justify-center bg-black/30 transition group-hover:bg-black/20">
                     <span className="flex h-14 w-14 items-center justify-center rounded-full border border-gold/60 bg-background/70 text-gold">
                       <Play className="h-6 w-6" />

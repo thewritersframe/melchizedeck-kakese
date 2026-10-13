@@ -24,7 +24,7 @@ function Advocacy() {
           {items?.map((it) => (
             <article key={it.id} className="overflow-hidden rounded-xl border border-border/60 bg-card/60 backdrop-blur">
               {it.image_url && (
-                <img src={it.image_url} alt={it.title} loading="lazy" className="aspect-[16/10] w-full object-cover" />
+                <img src={it.image_url} alt={it.title} loading="lazy" className="aspect-[16/10] w-full object-contain bg-muted" />
               )}
               <div className="p-6">
                 <h2 className="font-serif text-2xl text-cream">{it.title}</h2>
