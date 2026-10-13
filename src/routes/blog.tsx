@@ -113,7 +113,7 @@ function Blog() {
                     src={post.image_url}
                     alt={post.title}
                     loading="lazy"
-                    className="mt-6 aspect-[16/9] w-full rounded-lg border border-border/60 object-cover"
+                    className="mt-6 aspect-[16/9] w-full rounded-lg border border-border/60 bg-muted object-contain"
                   />
                 )}
 
