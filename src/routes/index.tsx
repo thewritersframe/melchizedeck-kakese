@@ -334,7 +334,7 @@ function Index() {
                     alt={f.title}
                     loading="eager"
                     onError={(event) => { event.currentTarget.style.visibility = "hidden"; }}
-                    className="h-full w-full object-contain"
+                    className="h-full w-full object-cover"
                   />
                 ) : (
                   <div className="flex h-full items-center justify-center p-8 text-center font-serif text-2xl text-gold/70">
