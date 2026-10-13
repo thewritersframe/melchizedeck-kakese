@@ -31,7 +31,7 @@ function Events() {
             return (
               <article key={ev.id} className="grid gap-6 rounded-xl border border-border/60 bg-card/60 p-6 backdrop-blur md:grid-cols-[1fr_2fr]">
                 {ev.image_url && (
-                  <img src={ev.image_url} alt={ev.title} loading="lazy" className="aspect-[4/3] w-full rounded-lg object-cover" />
+                  <img src={ev.image_url} alt={ev.title} loading="lazy" className="aspect-[4/3] w-full rounded-lg object-contain" />
                 )}
                 <div>
                   <h2 className="font-serif text-2xl text-cream">{ev.title}</h2>

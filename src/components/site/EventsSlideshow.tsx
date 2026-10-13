@@ -79,7 +79,7 @@ export function EventsSlideshow({ initialData }: { initialData?: ContentItem[] }
                 fetchPriority={i === 0 ? "high" : "low"}
                 decoding="async"
                 sizes="100vw"
-                className={`h-full w-full object-cover transition-opacity duration-500 ${ready[e.id] ? "opacity-100" : "opacity-0"}`}
+                className={`h-full w-full object-contain transition-opacity duration-500 ${ready[e.id] ? "opacity-100" : "opacity-0"}`}
               />
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/30" />
