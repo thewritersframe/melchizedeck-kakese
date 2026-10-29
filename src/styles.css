@@ -347,4 +347,127 @@ body {
     transition: none;
   }
 }
+/* =========================================
+   THE WRITER'S FRAME
+   MODERN EDITORIAL DESIGN SYSTEM
+========================================= */
 
+html,
+body {
+  font-family: 'DM Sans', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Playfair Display', Georgia, serif;
+  letter-spacing: -0.025em;
+}
+
+nav,
+button,
+label,
+.editorial-label {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Page background foundation */
+
+.site-page-background {
+  position: fixed;
+  inset: 0;
+  z-index: -20;
+  pointer-events: none;
+  background-color: #F5F2EA;
+  transition: background 0.3s ease;
+}
+
+.site-bg-home {
+  background:
+    radial-gradient(ellipse at 80% 10%, rgba(212,175,55,0.10), transparent 35%),
+    #F5F2EA;
+}
+
+.site-bg-about {
+  background: #FFFFFF;
+}
+
+.site-bg-projects {
+  background:
+    linear-gradient(135deg, #F5F2EA 0%, #FFFFFF 65%, #EEE8D9 100%);
+}
+
+.site-bg-books {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.12), transparent 45%),
+    #111111;
+}
+
+.site-bg-scripts {
+  background:
+    linear-gradient(145deg, #080808, #222222);
+}
+
+.site-bg-blog {
+  background: #F5F2EA;
+}
+
+.site-bg-advocacy {
+  background:
+    linear-gradient(135deg, #FFFFFF, #F5F2EA);
+}
+
+.site-bg-events {
+  background:
+    radial-gradient(ellipse at 90% 10%, rgba(212,175,55,0.10), transparent 40%),
+    #FFFFFF;
+}
+
+.site-bg-speeches {
+  background: #F5F2EA;
+}
+
+.site-bg-contact {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.12), transparent 45%),
+    #080808;
+}
+
+/* Elegant editorial dividers */
+
+.editorial-divider {
+  height: 2px;
+  width: 100%;
+  background: #D4AF37;
+}
+
+.editorial-kicker {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #A88935;
+}
+
+/* Gold hover details */
+
+.editorial-link {
+  transition: color 0.2s ease;
+}
+
+.editorial-link:hover {
+  color: #A88935;
+}
+
+/* Reduced motion accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+  .site-page-background,
+  .editorial-link {
+    transition: none;
+  }
+}
