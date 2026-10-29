@@ -233,3 +233,105 @@
     repeating-linear-gradient(45deg, oklch(0.82 0.16 78 / 0.04) 0 1px, transparent 1px 40px),
     repeating-linear-gradient(-45deg, oklch(0.82 0.16 78 / 0.04) 0 1px, transparent 1px 40px);
 }
+
+/* =========================================
+   THE WRITER'S FRAME
+   PAGE-SPECIFIC BACKGROUND SYSTEM
+========================================= */
+
+html,
+body {
+  background-color: #0B1630;
+}
+
+/* Shared background foundation */
+.site-page-background {
+  position: fixed;
+  inset: 0;
+  z-index: -20;
+  pointer-events: none;
+  transition: background 400ms ease;
+}
+
+/* HOME: cinematic deep navy */
+.site-bg-home {
+  background:
+    radial-gradient(ellipse at 50% 0%, #263C65 0%, transparent 55%),
+    linear-gradient(145deg, #0B1630, #142443 65%, #0B1630);
+}
+
+/* ABOUT: warm editorial atmosphere */
+.site-bg-about {
+  background:
+    radial-gradient(ellipse at 90% 15%, #263B5C 0%, transparent 45%),
+    linear-gradient(135deg, #0B1630, #172746);
+}
+
+/* PROJECTS: layered midnight blue */
+.site-bg-projects {
+  background:
+    radial-gradient(ellipse at 20% 20%, #263C65 0%, transparent 45%),
+    linear-gradient(160deg, #0B1630, #142443);
+}
+
+/* BOOKS: cinematic archive */
+.site-bg-books {
+  background:
+    radial-gradient(ellipse at 70% 10%, #283654 0%, transparent 45%),
+    linear-gradient(145deg, #101B32, #142443, #0B1630);
+}
+
+/* SCRIPTS: dramatic screenplay atmosphere */
+.site-bg-scripts {
+  background:
+    radial-gradient(ellipse at 50% 0%, #30405D 0%, transparent 40%),
+    linear-gradient(180deg, #101A30, #0B1630);
+}
+
+/* BLOG: calm reading atmosphere */
+.site-bg-blog {
+  background:
+    radial-gradient(ellipse at 80% 0%, #263B5C 0%, transparent 45%),
+    linear-gradient(160deg, #142443, #0B1630);
+}
+
+/* ADVOCACY: natural, warm atmosphere */
+.site-bg-advocacy {
+  background:
+    radial-gradient(ellipse at 15% 20%, #29453F 0%, transparent 40%),
+    linear-gradient(145deg, #0B1630, #142443);
+}
+
+/* EVENTS: energetic but restrained */
+.site-bg-events {
+  background:
+    radial-gradient(ellipse at 80% 10%, #4B3C35 0%, transparent 40%),
+    linear-gradient(145deg, #0B1630, #172746);
+}
+
+/* SPEECHES: elegant editorial atmosphere */
+.site-bg-speeches {
+  background:
+    radial-gradient(ellipse at 50% 0%, #33415C 0%, transparent 45%),
+    linear-gradient(180deg, #142443, #0B1630);
+}
+
+/* CONTACT: premium midnight blue */
+.site-bg-contact {
+  background:
+    radial-gradient(ellipse at 50% 0%, #263C65 0%, transparent 50%),
+    linear-gradient(145deg, #0B1630, #142443);
+}
+
+/* Gold details */
+.site-gold-glow {
+  box-shadow: 0 0 45px rgba(212, 175, 55, 0.08);
+}
+
+/* Respect accessibility preferences */
+@media (prefers-reduced-motion: reduce) {
+  .site-page-background {
+    transition: none;
+  }
+}
+
