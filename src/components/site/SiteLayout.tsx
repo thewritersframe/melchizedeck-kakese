@@ -106,6 +106,22 @@ function useVerifiedBackground(url: string, fallback: string) {
 
 export function SiteLayout({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  
+const backgroundPages: Record<string, string> = {
+  "/": "home",
+  "/about": "about",
+  "/projects": "projects",
+  "/books": "books",
+  "/scripts": "scripts",
+  "/blog": "blog",
+  "/advocacy": "advocacy",
+  "/events": "events",
+  "/speeches": "speeches",
+  "/contact": "contact",
+};
+
+const backgroundPage = backgroundPages[pathname] ?? "home";
+
   const [open, setOpen] = useState(false);
   const { data: isAdmin } = useIsAdmin();
   useTypography();
