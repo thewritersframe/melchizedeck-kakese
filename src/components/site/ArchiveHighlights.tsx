@@ -7,9 +7,9 @@ import { useCollection, type ContentItem } from "@/lib/cms";
 function HighlightPhoto({ item }: { item: ContentItem }) {
   const [failed, setFailed] = useState(false);
   return (
-    <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden border-b border-border/60 bg-muted">
+    <div className="relative flex shrink-0 items-center justify-center overflow-hidden border-b border-border/60 bg-muted">
       {item.image_url && !failed ? (
-        <img src={item.image_url} alt={item.title} loading="lazy" decoding="async" onError={() => setFailed(true)} className="h-full w-full object-contain" />
+        <img src={item.image_url} alt={item.title} loading="lazy" decoding="async" onError={() => setFailed(true)} className="block h-auto w-full" />
       ) : (
         <span className="p-8 text-center font-serif text-xl text-muted-foreground">{item.title}</span>
       )}
