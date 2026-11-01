@@ -3,7 +3,7 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useIsAdmin, uploadMedia, ALLOWED_VIDEO_TYPES, MAX_VIDEO_BYTES } from "@/lib/cms";
+import { useIsAdmin, uploadMedia, ALLOWED_VIDEO_TYPES, MAX_VIDEO_BYTES, parseList } from "@/lib/cms";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -48,7 +48,7 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
     { key: "pillars", label: "What I Do (three pillars)", fields: [
       { name: "eyebrow", label: "Eyebrow" },
       { name: "title", label: "Section title" },
-      { name: "items", label: "Pillars (JSON array of {title, body})", type: "json" },
+      { name: "items", label: "Work areas", type: "pillars" },
       { name: "projectsNote", label: "Line above the Projects button" },
       { name: "projectsLabel", label: "Projects button label" },
     ]},
@@ -194,7 +194,7 @@ const COLLECTIONS: { key: string; label: string; extraMeta: MetaField[]; lockabl
 
 ];
 
-type FieldSpec = { name: string; label: string; type?: "text" | "textarea" | "image" | "json" | "video" | "blocks" | "gallery" | "font" };
+type FieldSpec = { name: string; label: string; type?: "text" | "textarea" | "image" | "json" | "video" | "blocks" | "gallery" | "font" | "pillars" };
 
 function Admin() {
   const nav = useNavigate();
@@ -302,10 +302,13 @@ function SectionEditor({ page, sectionKey, label, fields }: { page: string; sect
   const save = useMutation({
     mutationFn: async () => {
       const payload = { page, section_key: sectionKey, content: form as never };
-      const { error } = await supabase.from("page_sections").upsert(payload as never, { onConflict: "page,section_key" });
+      const { data: saved, error } = await supabase.from("page_sections").upsert(payload as never, { onConflict: "page,section_key" }).select("*").single();
       if (error) throw error;
+      return saved;
     },
-    onSuccess: () => {
+    onSuccess: (saved) => {
+      qc.setQueryData(["section", page, sectionKey], saved);
+      qc.setQueryData(["admin-section", page, sectionKey], saved);
       toast.success(`${label} saved`);
       qc.invalidateQueries({ queryKey: ["section", page, sectionKey] });
       qc.invalidateQueries({ queryKey: ["admin-section", page, sectionKey] });
@@ -333,6 +336,26 @@ function SectionEditor({ page, sectionKey, label, fields }: { page: string; sect
 function FieldInput({ field, value, onChange }: { field: FieldSpec; value: unknown; onChange: (v: unknown) => void }) {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
+  if (field.type === "pillars") {
+    const items = parseList<Record<string, unknown>>(value);
+    return (
+      <div className="grid gap-5">
+        {items.map((item, index) => (
+          <fieldset key={index} className="grid gap-3 border-t border-border pt-4">
+            <legend className="text-sm font-medium text-foreground">Work area {index + 1}</legend>
+            <label className="grid gap-1.5 text-sm text-muted-foreground">
+              Title
+              <Input value={String(item.title ?? "")} onChange={(e) => onChange(items.map((entry, i) => i === index ? { ...entry, title: e.target.value } : entry))} />
+            </label>
+            <label className="grid gap-1.5 text-sm text-muted-foreground">
+              Description
+              <Textarea rows={4} value={String(item.body ?? "")} onChange={(e) => onChange(items.map((entry, i) => i === index ? { ...entry, body: e.target.value } : entry))} />
+            </label>
+          </fieldset>
+        ))}
+      </div>
+    );
+  }
   if (field.type === "blocks" || field.type === "gallery") {
     return (
       <div>
