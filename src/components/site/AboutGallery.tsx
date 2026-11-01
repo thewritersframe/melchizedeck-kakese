@@ -5,14 +5,14 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { SmartImage } from "@/components/site/SmartImage";
 import { type AboutPhoto } from "@/components/site/AboutBlocks";
 
-export function AboutGallery({ photos, title }: { photos: AboutPhoto[]; title: string }) {
+export function AboutGallery({ photos, title, embedded = false }: { photos: AboutPhoto[]; title: string; embedded?: boolean }) {
   const [selected, setSelected] = useState<number | null>(null);
   const photo = selected === null ? undefined : photos[selected];
   if (!photos.length) return null;
   return (
-    <section className="mx-auto max-w-6xl px-6 pb-24">
-      <h2 className="mb-8 border-b border-border/40 pb-4 font-serif text-3xl text-cream">{title}</h2>
-      <div className="grid grid-cols-2 items-start gap-4 md:grid-cols-3">
+    <section className={embedded ? "mt-6" : "mx-auto max-w-6xl px-6 pb-24"} aria-label={title}>
+      {embedded ? <h3 className="mb-3 font-serif text-xl text-foreground">{title}</h3> : <h2 className="mb-8 border-b border-border/40 pb-4 font-serif text-3xl text-cream">{title}</h2>}
+      <div className={embedded ? "grid grid-cols-2 items-start gap-3" : "grid grid-cols-2 items-start gap-4 md:grid-cols-3"}>
         {photos.map((item, i) => (
           <figure key={`${item.url}-${i}`}>
             <Button variant="ghost" className="h-auto w-full overflow-hidden rounded-lg p-0" aria-label={`Open photo ${i + 1}`} onClick={() => setSelected(i)}>
