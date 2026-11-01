@@ -28,7 +28,7 @@ function Projects() {
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {(projects ?? []).map((p) => {
             const meta = (p.meta ?? {}) as { role?: string; url?: string; gallery?: unknown; galleryTitle?: string };
-            const photos = parseBlocks(meta.gallery).filter((block) => block.type === "image" && !!block.url);
+            const photos = parseBlocks(meta.gallery).filter((block) => block.type === "image").filter((photo) => !!photo.url);
             const role = meta.role || p.subtitle || "";
             return (
               <article
