@@ -8,4 +8,4 @@
 - [x] Verify About and desktop/mobile layouts.
 - [x] Add independent project photo catalogues with admin uploads, captions, ordering and removal.
 - [x] Verify saved catalogues on the Projects page and photo viewer.
-- [ ] Correct homepage work areas and verify Admin saves through to the homepage.
+- [x] Correct homepage work areas and verify Admin saves through to the homepage.
