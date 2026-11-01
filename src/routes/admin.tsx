@@ -142,7 +142,7 @@ const PAGES: { page: string; sections: { key: string; label: string; fields: Fie
   ]},
 ];
 
-type MetaField = { name: string; label: string; type?: "text" | "bool" | "video" | "textarea" };
+type MetaField = { name: string; label: string; type?: "text" | "bool" | "video" | "textarea" | "gallery" };
 const COLLECTIONS: { key: string; label: string; extraMeta: MetaField[]; lockable?: boolean }[] = [
   { key: "book", label: "Books", lockable: true, extraMeta: [
     { name: "genre", label: "Genre" },
@@ -176,6 +176,8 @@ const COLLECTIONS: { key: string; label: string; extraMeta: MetaField[]; lockabl
   { key: "project", label: "Projects", extraMeta: [
     { name: "role", label: "My role (e.g. Founder, Contributor)" },
     { name: "url", label: "Project link (optional)" },
+    { name: "galleryTitle", label: "Photo catalogue title (optional)" },
+    { name: "gallery", label: "Project photo catalogue", type: "gallery" },
   ]},
   { key: "achievement", label: "Milestones / Achievements (timeline)", extraMeta: [
     { name: "year", label: "Year (use 'Future' for what's coming)" },
@@ -539,6 +541,14 @@ function ItemEditor({ item, extraMeta, lockable, onChange }: { item: Item; extra
           <Textarea rows={4} value={form.body ?? ""} onChange={(e) => setForm({ ...form, body: e.target.value })} placeholder="Body" />
           {extraMeta.map((m) => {
             const cur = (form.meta as Record<string, unknown>)?.[m.name];
+            if (m.type === "gallery") {
+              return (
+                <div key={m.name} className="grid gap-1" aria-label={m.label}>
+                  <span className="text-xs text-muted-foreground">{m.label}</span>
+                  <BlocksEditor value={cur} photosOnly onChange={(v) => setForm({ ...form, meta: { ...form.meta, [m.name]: v } })} />
+                </div>
+              );
+            }
             if (m.type === "bool") {
               return (
                 <label key={m.name} className="flex items-center gap-2 text-sm text-muted-foreground">

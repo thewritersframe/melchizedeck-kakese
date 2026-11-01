@@ -6,3 +6,5 @@
 - [x] Add separate editable About gallery and inline biography photos.
 - [x] Adjust desktop navigation and prose wrapping while preserving poems.
 - [x] Verify About and desktop/mobile layouts.
+- [x] Add independent project photo catalogues with admin uploads, captions, ordering and removal.
+- [x] Verify saved catalogues on the Projects page and photo viewer.

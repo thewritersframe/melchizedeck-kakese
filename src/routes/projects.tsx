@@ -4,6 +4,8 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { useCollection, useSection } from "@/lib/cms";
 import { SmartImage } from "@/components/site/SmartImage";
 import { ExpandableText } from "@/components/site/ExpandableText";
+import { AboutGallery } from "@/components/site/AboutGallery";
+import { parseBlocks } from "@/components/site/AboutBlocks";
 import { ArrowUpRight } from "lucide-react";
 
 export const Route = createFileRoute("/projects")({
@@ -25,7 +27,8 @@ function Projects() {
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {(projects ?? []).map((p) => {
-            const meta = (p.meta ?? {}) as { role?: string; url?: string };
+            const meta = (p.meta ?? {}) as { role?: string; url?: string; gallery?: unknown; galleryTitle?: string };
+            const photos = parseBlocks(meta.gallery).filter((block) => block.type === "image").filter((photo) => !!photo.url);
             const role = meta.role || p.subtitle || "";
             return (
               <article
@@ -46,6 +49,7 @@ function Projects() {
                   {p.body && (
                     <ExpandableText text={p.body} threshold={220} className="mt-4 text-sm text-muted-foreground" />
                   )}
+                  <AboutGallery photos={photos} title={meta.galleryTitle || "Photo catalogue"} embedded />
                   {meta.url && (
                     <a
                       href={meta.url}
