@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700&display=swap');
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
@@ -74,95 +73,83 @@
 }
 
 .dark {
-  --radius: 0.35rem;
+  --radius: 0.5rem;
 
-  --background: #080808;
+  /* The Writer's Frame brand palette */
+  --background: #0B1630;
   --foreground: #FFFFFF;
 
-  --card: #171717;
+  --card: #142443;
   --card-foreground: #FFFFFF;
 
-  --popover: #171717;
+  --popover: #142443;
   --popover-foreground: #FFFFFF;
 
   --primary: #D4AF37;
-  --primary-foreground: #080808;
+  --primary-foreground: #0B1630;
 
-  --secondary: #222222;
+  --secondary: #1B2D4F;
   --secondary-foreground: #FFFFFF;
 
-  --muted: #222222;
-  --muted-foreground: #BDBDBD;
+  --muted: #1B2D4F;
+  --muted-foreground: #C3CAD8;
 
   --accent: #D4AF37;
-  --accent-foreground: #080808;
+  --accent-foreground: #0B1630;
 
   --destructive: #DC4545;
   --destructive-foreground: #FFFFFF;
 
-  --border: #383838;
-  --input: #292929;
+  --border: #304263;
+  --input: #1B2D4F;
   --ring: #D4AF37;
 
   --gold: #D4AF37;
-  --gold-soft: #E8D18A;
-  --cream: #F5F2EA;
+  --gold-soft: #E4C66B;
+  --cream: #FFFFFF;
 
-  --sidebar: #111111;
+  --sidebar: #142443;
   --sidebar-foreground: #FFFFFF;
   --sidebar-primary: #D4AF37;
-  --sidebar-primary-foreground: #080808;
-  --sidebar-accent: #222222;
+  --sidebar-primary-foreground: #0B1630;
+  --sidebar-accent: #1B2D4F;
   --sidebar-accent-foreground: #FFFFFF;
-  --sidebar-border: #383838;
+  --sidebar-border: #304263;
   --sidebar-ring: #D4AF37;
 }
 
 .light {
-  --radius: 0.35rem;
-
-  --background: #F5F2EA;
-  --foreground: #171717;
-
-  --card: #FFFFFF;
-  --card-foreground: #171717;
-
-  --popover: #FFFFFF;
-  --popover-foreground: #171717;
-
-  --primary: #D4AF37;
-  --primary-foreground: #080808;
-
-  --secondary: #EAE6DC;
-  --secondary-foreground: #171717;
-
-  --muted: #ECE8DF;
-  --muted-foreground: #66615A;
-
-  --accent: #D4AF37;
-  --accent-foreground: #080808;
-
-  --destructive: #B42318;
-  --destructive-foreground: #FFFFFF;
-
-  --border: #D9D3C7;
-  --input: #E4DED2;
-  --ring: #D4AF37;
-
-  --gold: #D4AF37;
-  --gold-soft: #E8D18A;
-  --cream: #F5F2EA;
-
-  --sidebar: #FFFFFF;
-  --sidebar-foreground: #171717;
-  --sidebar-primary: #D4AF37;
-  --sidebar-primary-foreground: #080808;
-  --sidebar-accent: #F5F2EA;
-  --sidebar-accent-foreground: #171717;
-  --sidebar-border: #D9D3C7;
-  --sidebar-ring: #D4AF37;
+  --background: oklch(0.975 0.012 85);
+  --foreground: oklch(0.24 0.02 55);
+  --card: oklch(0.995 0.006 85);
+  --card-foreground: oklch(0.24 0.02 55);
+  --popover: oklch(0.995 0.006 85);
+  --popover-foreground: oklch(0.24 0.02 55);
+  --primary: oklch(0.58 0.13 74);
+  --primary-foreground: oklch(0.99 0.005 85);
+  --secondary: oklch(0.93 0.018 82);
+  --secondary-foreground: oklch(0.28 0.02 55);
+  --muted: oklch(0.93 0.018 82);
+  --muted-foreground: oklch(0.46 0.02 60);
+  --accent: oklch(0.58 0.13 74);
+  --accent-foreground: oklch(0.99 0.005 85);
+  --destructive: oklch(0.55 0.2 25);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.86 0.02 75);
+  --input: oklch(0.9 0.018 80);
+  --ring: oklch(0.58 0.13 74);
+  --gold: oklch(0.55 0.13 72);
+  --gold-soft: oklch(0.62 0.12 74);
+  --cream: oklch(0.26 0.02 55);
+  --sidebar: oklch(0.99 0.006 85);
+  --sidebar-foreground: oklch(0.24 0.02 55);
+  --sidebar-primary: oklch(0.58 0.13 74);
+  --sidebar-primary-foreground: oklch(0.99 0.005 85);
+  --sidebar-accent: oklch(0.93 0.018 82);
+  --sidebar-accent-foreground: oklch(0.28 0.02 55);
+  --sidebar-border: oklch(0.86 0.02 75);
+  --sidebar-ring: oklch(0.58 0.13 74);
 }
-
 @media (prefers-color-scheme: light) {
   :root:not(.dark):not(.light) {
     --background: oklch(0.975 0.012 85);
@@ -245,229 +232,4 @@
     radial-gradient(ellipse at top, oklch(0.22 0.03 78 / 0.35), transparent 60%),
     repeating-linear-gradient(45deg, oklch(0.82 0.16 78 / 0.04) 0 1px, transparent 1px 40px),
     repeating-linear-gradient(-45deg, oklch(0.82 0.16 78 / 0.04) 0 1px, transparent 1px 40px);
-}
-
-/* =========================================
-   THE WRITER'S FRAME
-   PAGE-SPECIFIC BACKGROUND SYSTEM
-========================================= */
-
-html,
-body {
-  background-color: #0B1630;
-}
-
-/* Shared background foundation */
-.site-page-background {
-  position: fixed;
-  inset: 0;
-  z-index: -20;
-  pointer-events: none;
-  transition: background 400ms ease;
-}
-
-/* HOME: cinematic deep navy */
-.site-bg-home {
-  background:
-    radial-gradient(ellipse at 50% 0%, #263C65 0%, transparent 55%),
-    linear-gradient(145deg, #0B1630, #142443 65%, #0B1630);
-}
-
-/* ABOUT: warm editorial atmosphere */
-.site-bg-about {
-  background:
-    radial-gradient(ellipse at 90% 15%, #263B5C 0%, transparent 45%),
-    linear-gradient(135deg, #0B1630, #172746);
-}
-
-/* PROJECTS: layered midnight blue */
-.site-bg-projects {
-  background:
-    radial-gradient(ellipse at 20% 20%, #263C65 0%, transparent 45%),
-    linear-gradient(160deg, #0B1630, #142443);
-}
-
-/* BOOKS: cinematic archive */
-.site-bg-books {
-  background:
-    radial-gradient(ellipse at 70% 10%, #283654 0%, transparent 45%),
-    linear-gradient(145deg, #101B32, #142443, #0B1630);
-}
-
-/* SCRIPTS: dramatic screenplay atmosphere */
-.site-bg-scripts {
-  background:
-    radial-gradient(ellipse at 50% 0%, #30405D 0%, transparent 40%),
-    linear-gradient(180deg, #101A30, #0B1630);
-}
-
-/* BLOG: calm reading atmosphere */
-.site-bg-blog {
-  background:
-    radial-gradient(ellipse at 80% 0%, #263B5C 0%, transparent 45%),
-    linear-gradient(160deg, #142443, #0B1630);
-}
-
-/* ADVOCACY: natural, warm atmosphere */
-.site-bg-advocacy {
-  background:
-    radial-gradient(ellipse at 15% 20%, #29453F 0%, transparent 40%),
-    linear-gradient(145deg, #0B1630, #142443);
-}
-
-/* EVENTS: energetic but restrained */
-.site-bg-events {
-  background:
-    radial-gradient(ellipse at 80% 10%, #4B3C35 0%, transparent 40%),
-    linear-gradient(145deg, #0B1630, #172746);
-}
-
-/* SPEECHES: elegant editorial atmosphere */
-.site-bg-speeches {
-  background:
-    radial-gradient(ellipse at 50% 0%, #33415C 0%, transparent 45%),
-    linear-gradient(180deg, #142443, #0B1630);
-}
-
-/* CONTACT: premium midnight blue */
-.site-bg-contact {
-  background:
-    radial-gradient(ellipse at 50% 0%, #263C65 0%, transparent 50%),
-    linear-gradient(145deg, #0B1630, #142443);
-}
-
-/* Gold details */
-.site-gold-glow {
-  box-shadow: 0 0 45px rgba(212, 175, 55, 0.08);
-}
-
-/* Respect accessibility preferences */
-@media (prefers-reduced-motion: reduce) {
-  .site-page-background {
-    transition: none;
-  }
-}
-/* =========================================
-   THE WRITER'S FRAME
-   MODERN EDITORIAL DESIGN SYSTEM
-========================================= */
-
-html,
-body {
-  font-family: 'DM Sans', sans-serif;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: 'Playfair Display', Georgia, serif;
-  letter-spacing: -0.025em;
-}
-
-nav,
-button,
-label,
-.editorial-label {
-  font-family: 'Montserrat', sans-serif;
-}
-
-/* Page background foundation */
-
-.site-page-background {
-  position: fixed;
-  inset: 0;
-  z-index: -20;
-  pointer-events: none;
-  background-color: #F5F2EA;
-  transition: background 0.3s ease;
-}
-
-.site-bg-home {
-  background:
-    radial-gradient(ellipse at 80% 10%, rgba(212,175,55,0.10), transparent 35%),
-    #F5F2EA;
-}
-
-.site-bg-about {
-  background: #FFFFFF;
-}
-
-.site-bg-projects {
-  background:
-    linear-gradient(135deg, #F5F2EA 0%, #FFFFFF 65%, #EEE8D9 100%);
-}
-
-.site-bg-books {
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.12), transparent 45%),
-    #111111;
-}
-
-.site-bg-scripts {
-  background:
-    linear-gradient(145deg, #080808, #222222);
-}
-
-.site-bg-blog {
-  background: #F5F2EA;
-}
-
-.site-bg-advocacy {
-  background:
-    linear-gradient(135deg, #FFFFFF, #F5F2EA);
-}
-
-.site-bg-events {
-  background:
-    radial-gradient(ellipse at 90% 10%, rgba(212,175,55,0.10), transparent 40%),
-    #FFFFFF;
-}
-
-.site-bg-speeches {
-  background: #F5F2EA;
-}
-
-.site-bg-contact {
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.12), transparent 45%),
-    #080808;
-}
-
-/* Elegant editorial dividers */
-
-.editorial-divider {
-  height: 2px;
-  width: 100%;
-  background: #D4AF37;
-}
-
-.editorial-kicker {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #A88935;
-}
-
-/* Gold hover details */
-
-.editorial-link {
-  transition: color 0.2s ease;
-}
-
-.editorial-link:hover {
-  color: #A88935;
-}
-
-/* Reduced motion accessibility */
-
-@media (prefers-reduced-motion: reduce) {
-  .site-page-background,
-  .editorial-link {
-    transition: none;
-  }
 }

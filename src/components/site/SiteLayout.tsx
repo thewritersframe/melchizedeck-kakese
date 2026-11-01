@@ -106,36 +106,6 @@ function useVerifiedBackground(url: string, fallback: string) {
 
 export function SiteLayout({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const backgroundPages: Record<string, string> = {
-  "/": "home",
-  "/about": "about",
-  "/projects": "projects",
-  "/books": "books",
-  "/scripts": "scripts",
-  "/blog": "blog",
-  "/advocacy": "advocacy",
-  "/events": "events",
-  "/speeches": "speeches",
-  "/contact": "contact",
-};
-
-const backgroundPage = backgroundPages[pathname] ?? "home";
-  
-const backgroundPages: Record<string, string> = {
-  "/": "home",
-  "/about": "about",
-  "/projects": "projects",
-  "/books": "books",
-  "/scripts": "scripts",
-  "/blog": "blog",
-  "/advocacy": "advocacy",
-  "/events": "events",
-  "/speeches": "speeches",
-  "/contact": "contact",
-};
-
-const backgroundPage = backgroundPages[pathname] ?? "home";
-
   const [open, setOpen] = useState(false);
   const { data: isAdmin } = useIsAdmin();
   useTypography();
@@ -159,11 +129,34 @@ const backgroundPage = backgroundPages[pathname] ?? "home";
 
   return (
     <div className="relative flex min-h-screen flex-col">
-     
       <div
-  aria-hidden="true"
-  className={`site-page-background site-bg-${backgroundPage}`}
-/>
+        aria-hidden
+        className="pointer-events-none fixed inset-0 -z-20 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url("${bgImage}")`, filter: "blur(6px) saturate(115%)", transform: "scale(1.08)" }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 -z-10"
+        style={{ backgroundImage: `url("${JUNGLE_SVG}")`, backgroundRepeat: "repeat", backgroundSize: "420px 420px", opacity: 0.35, mixBlendMode: "overlay" }}
+      />
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 bg-background/55" />
+
+<header className="sticky top-0 z-40 border-b border-border/40 bg-background/80 backdrop-blur-md">
+  <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-6 py-5 md:flex md:justify-between">
+    <Link to="/" className="min-w-0 shrink-0 truncate font-serif text-xl tracking-wide text-cream">
+      M.<span className="text-gold">Kakese</span>
+    </Link>
+    <nav aria-label="Main navigation" className="hidden min-w-0 items-center gap-3 md:flex xl:gap-6">
+      {navTree.map((item) =>
+        item.children && item.children.length > 0 ? (
+          <div key={item.label} className="group relative">
+            <Link
+              to={item.to}
+              className={cn(
+                "inline-flex items-center gap-1 text-sm transition-colors hover:text-gold",
+                item.children.some((c) => c.to === pathname) || pathname === item.to
+                  ? "text-gold"
+                  : "text-muted-foreground",
               )}
             >
               {item.label}
