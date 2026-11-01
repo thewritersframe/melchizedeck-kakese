@@ -116,20 +116,20 @@ const ICONS = [
 
 const DEFAULT_PILLARS: Pillars = {
   eyebrow: "What I Do",
-  title: "Ideas into words. Words into impact.",
+  title: "Writing, Advocacy & Community Impact",
   items: [
     {
-      title: "Writing & Publishing",
+      title: "Writing",
       body:
         "I write books, poetry, screenplays and essays that explore human experience, African stories and the questions that shape how we see the world.",
     },
     {
-      title: "Youth Advocacy",
+      title: "Advocacy",
       body:
         "I create platforms and opportunities that help young people discover their voices, express their ideas and take an active role in shaping their communities.",
     },
     {
-      title: "Leadership & Community Work",
+      title: "Community Impact",
       body:
         "I build and lead youth-centered initiatives that bring together creativity, communication, leadership and community action to turn ideas into meaningful work.",
     },
@@ -174,7 +174,7 @@ function Index() {
 
   const pillarItems = parseList<Pillars["items"][number]>(pillars?.content?.items).filter((i) => i && i.title);
   const p: Pillars = pillarItems.length
-    ? { ...DEFAULT_PILLARS, ...pillars!.content, items: pillarItems }
+    ? { ...DEFAULT_PILLARS, ...pillars?.content, items: pillarItems }
     : { ...DEFAULT_PILLARS, ...(pillars?.content ?? {}), items: DEFAULT_PILLARS.items };
 
   const featuredImage =
