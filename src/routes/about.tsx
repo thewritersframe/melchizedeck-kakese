@@ -1,5 +1,5 @@
 import { pageHead } from "@/lib/seo";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useCollection, useSection } from "@/lib/cms";
 import { AboutBlocks, parseBlocks, type AboutPhoto } from "@/components/site/AboutBlocks";
@@ -46,6 +46,15 @@ function About() {
         )}
       </section>
 
+
+      <section className="mx-auto max-w-6xl px-6 pb-20">
+        <div className="overflow-hidden rounded-xl border border-gold/30 bg-background/70 px-7 py-10 text-center shadow-lg md:px-12">
+          <p className="text-xs font-accent uppercase tracking-[0.3em] text-gold">A personal experience</p>
+          <h2 className="mt-3 font-serif text-3xl text-cream md:text-4xl">Inside My Mind</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">Step beyond the biography and explore the ideas, memories, ambitions and stories that shape my world.</p>
+          <Link to="/inside-my-mind" className="mt-7 inline-flex items-center justify-center rounded-md border border-gold/60 bg-gold px-6 py-3 text-sm font-medium text-background transition hover:bg-gold/90">Explore Inside My Mind</Link>
+        </div>
+      </section>
 
       <AboutGallery photos={galleryPhotos} title={c?.galleryTitle || "Photo Gallery"} />
 
