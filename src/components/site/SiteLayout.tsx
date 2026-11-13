@@ -38,6 +38,7 @@ type NavNode = { to: string; label: string; children?: NavChild[] };
 const NAV: NavNode[] = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
+  { to: "/inside-my-mind", label: "Inside My Mind" },
   { to: "/projects", label: "Projects" },
   {
     to: "/books",
@@ -63,6 +64,7 @@ const NAV: NavNode[] = [
 
 const FOOTER_LINKS: NavChild[] = [
   { to: "/about", label: "About" },
+  { to: "/inside-my-mind", label: "Inside My Mind" },
   { to: "/projects", label: "Projects" },
   { to: "/books", label: "Books" },
   { to: "/scripts", label: "Scripts" },
