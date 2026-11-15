@@ -34,7 +34,7 @@ function Events() {
                   <img src={ev.image_url} alt={ev.title} loading="lazy" className="aspect-[4/3] w-full rounded-lg object-cover" />
                 )}
                 <div>
-                  <h2 className="font-serif text-2xl text-cream">{ev.title}</h2>
+                  <h2 className="font-serif text-2xl text-cream"><a href={`/events/${ev.slug ?? ev.id}`} className="hover:text-gold transition-colors">{ev.title}</a></h2>
                   {ev.subtitle && <p className="mt-1 text-gold/80">{ev.subtitle}</p>}
                   <div className="mt-3 flex flex-wrap gap-4 text-sm text-muted-foreground">
                     {meta?.date && <span className="inline-flex items-center gap-1.5"><CalendarDays className="h-4 w-4 text-gold" /> {meta.date}</span>}
