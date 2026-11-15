@@ -41,7 +41,8 @@ async function buildSitemap(): Promise<string> {
   const { data, error } = await supabase
     .from("content_items")
     .select("id, collection, slug, updated_at, created_at")
-    .eq("published", true);
+    .eq("published", true)
+    .range(0, 49_999);
 
   if (error) {
     console.error("[sitemap] Could not load published content:", error.message);
