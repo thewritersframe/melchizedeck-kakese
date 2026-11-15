@@ -18,7 +18,7 @@ const STATIC_PATHS = [
 const COLLECTION_PATHS: Record<string, string> = {
   blog: "/blog",
   event: "/events",
-  script: "/scripts",
+  script: "/scripts",\n  book: "/library/book",\n  project: "/library/project",\n  speech: "/library/speech",
 };
 
 function escapeXml(value: string): string {
