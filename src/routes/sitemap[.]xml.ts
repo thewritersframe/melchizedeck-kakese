@@ -1,9 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { supabase } from "@/integrations/supabase/client";
+import { SITE_URL } from "@/lib/seo";
 
-const BASE_URL = "https://melchizedeck-kakese.vercel.app";
-
-// Publicly accessible pages only — no admin, auth, unlock, or utility routes.
-const PUBLIC_PATHS = [
+const STATIC_PATHS = [
   "/",
   "/about",
   "/advocacy",
@@ -16,33 +15,77 @@ const PUBLIC_PATHS = [
   "/speeches",
 ] as const;
 
-function buildSitemap(): string {
-  const lastmod = new Date().toISOString().split("T")[0];
-  const urls = PUBLIC_PATHS.map(
-    (path) => `  <url>
-    <loc>${BASE_URL}${path === "/" ? "/" : path}</loc>
-    <lastmod>${lastmod}</lastmod>
-    <changefreq>${path === "/" ? "weekly" : "monthly"}</changefreq>
-    <priority>${path === "/" ? "1.0" : "0.8"}</priority>
-  </url>`,
-  ).join("\n");
+const COLLECTION_PATHS: Record<string, string> = {
+  blog: "/blog",
+  event: "/events",
+  script: "/scripts",
+};
+
+function escapeXml(value: string): string {
+  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+}
+
+function urlEntry(path: string, lastmod?: string | null): string {
+  const date = lastmod ? new Date(lastmod) : null;
+  const validDate = date && !Number.isNaN(date.getTime()) ? date.toISOString().slice(0, 10) : null;
+  return `  <url>
+    <loc>${escapeXml(`${SITE_URL}${path}`)}</loc>
+    ${validDate ? `<lastmod>${validDate}</lastmod>` : ""}
+  </url>`;
+}
+
+async function buildSitemap(): Promise<string> {
+  const { data, error } = await supabase
+    .from("content_items")
+    .select("id, collection, slug, updated_at, created_at")
+    .eq("published", true);
+
+  if (error) {
+    console.error("[sitemap] Could not load published content:", error.message);
+    throw error;
+  }
+
+  const entries = new Map<string, string>();
+
+  for (const path of STATIC_PATHS) {
+    entries.set(path, urlEntry(path));
+  }
+
+  for (const item of data ?? []) {
+    const basePath = COLLECTION_PATHS[item.collection];
+    if (!basePath) continue;
+    const identifier = item.slug?.trim() || item.id;
+    if (!identifier) continue;
+    const path = `${basePath}/${encodeURIComponent(identifier)}`;
+    entries.set(path, urlEntry(path, item.updated_at || item.created_at));
+  }
+
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls}
+${Array.from(entries.values()).join("\n")}
 </urlset>`;
 }
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
-      GET: () =>
-        new Response(buildSitemap(), {
-          status: 200,
-          headers: {
-            "content-type": "application/xml; charset=utf-8",
-            "cache-control": "public, max-age=3600",
-          },
-        }),
+      GET: async () => {
+        try {
+          const xml = await buildSitemap();
+          return new Response(xml, {
+            status: 200,
+            headers: {
+              "content-type": "application/xml; charset=utf-8",
+              "cache-control": "public, max-age=900, stale-while-revalidate=3600",
+            },
+          });
+        } catch {
+          return new Response("Sitemap temporarily unavailable", {
+            status: 503,
+            headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" },
+          });
+        }
+      },
     },
   },
 });
