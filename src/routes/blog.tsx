@@ -101,7 +101,7 @@ function Blog() {
                 </p>
 
                 <h2 className="mt-2 font-serif text-3xl text-cream">
-                  {post.title}
+                  <a href={`/blog/${post.slug ?? post.id}`} className="transition-colors hover:text-gold">{post.title}</a>
                 </h2>
 
                 {post.subtitle && (
