@@ -139,7 +139,7 @@ function Blog() {
 
                   <ShareButtons
                     title={post.title}
-                    path={`/blog#${post.slug ?? post.id}`}
+                    path={`/blog/${post.slug ?? post.id}`}
                     text={post.subtitle ?? undefined}
                   />
                 </div>
