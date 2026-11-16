@@ -42,7 +42,7 @@ function Projects() {
                   </div>
                 )}
                 <div className="flex flex-1 flex-col p-6">
-                  <h2 className="font-serif text-2xl text-foreground">{p.title}</h2>
+                  <h2 className="font-serif text-2xl text-foreground"><a href={`/library/project/${p.slug ?? p.id}`} className="transition-colors hover:text-gold">{p.title}</a></h2>
                   {role && (
                     <p className="mt-1 text-xs uppercase tracking-[0.2em] text-gold/80">{role}</p>
                   )}

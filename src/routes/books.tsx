@@ -91,7 +91,7 @@ const { data: reviewSummaries } = useReviewSummaries(itemIds);
                 </div>
                 {statusLine && <p className="mt-4 text-xs uppercase tracking-widest text-gold">{statusLine}</p>}
                 <div className="mt-1 flex items-start justify-between gap-3">
-                  <h2 className="font-serif text-2xl text-cream">{b.title}</h2>
+                  <h2 className="font-serif text-2xl text-cream"><a href={`/library/book/${b.slug ?? b.id}`} className="transition-colors hover:text-gold">{b.title}</a></h2>
                   {itemPrice != null && !m.coming_soon && <PriceTag amount={itemPrice} currency={itemCurrency} className="shrink-0" />}
                 </div>
                 {b.subtitle && <p className="mt-1 text-sm text-gold/80">{b.subtitle}</p>}

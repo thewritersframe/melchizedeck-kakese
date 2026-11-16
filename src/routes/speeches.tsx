@@ -103,7 +103,7 @@ function Speeches() {
                   )}
                 </button>
                 <div className="p-5">
-                  <h2 className="font-serif text-xl text-cream">{item.title}</h2>
+                  <h2 className="font-serif text-xl text-cream"><a href={`/library/speech/${item.slug ?? item.id}`} className="transition-colors hover:text-gold">{item.title}</a></h2>
                   {item.subtitle && <p className="mt-1 text-sm text-gold/80">{item.subtitle}</p>}
                   <div className="mt-3 flex flex-wrap gap-4 text-xs text-muted-foreground">
                     {meta.date && <span className="inline-flex items-center gap-1.5"><CalendarDays className="h-3.5 w-3.5 text-gold" /> {meta.date}</span>}
